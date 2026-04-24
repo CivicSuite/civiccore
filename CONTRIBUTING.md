@@ -1,7 +1,7 @@
 # Contributing to CivicCore
 
 Thanks for considering a contribution. CivicCore is the shared platform
-package for the [CivicSuite](https://github.com/scottconverse/civicsuite)
+package for the [CivicSuite](https://github.com/CivicSuite/civicsuite)
 open-source municipal operations suite — every line of code here is
 consumed by every CivicSuite module, so the bar is high and the surface
 is deliberately small.
@@ -12,7 +12,7 @@ CivicCore is at v0.1 (Phase 0 — package skeleton). Functional code lands
 in Phase 1 and beyond per the CivicCore Extraction Spec section 12. If
 you want to contribute today, the most useful work is:
 
-- Reviewing the Extraction Spec (in scottconverse/civicsuite) and filing
+- Reviewing the Extraction Spec (in CivicSuite/civicsuite) and filing
   issues against ambiguous wording.
 - Building a Phase 1 prototype against the auth + audit subsystem
   contracts in Appendix A of the spec.
@@ -33,7 +33,7 @@ section 18 ("Contributor confusion about where to file a bug").
    notification service, onboarding, the municipal systems catalog, the
    50-state exemption engine, sovereignty verification scripts, shared
    ORM models, or shared-table Alembic migrations.
-   ➜ **File it here:** https://github.com/scottconverse/civiccore/issues
+   ➜ **File it here:** https://github.com/CivicSuite/civiccore/issues
 
 2. **Is the bug in records-request workflow, response-letter generation,
    fee schedules, the records dashboards, or any records-specific UI
@@ -49,7 +49,7 @@ section 18 ("Contributor confusion about where to file a bug").
 4. **Is the bug about how the modules fit together, the suite-wide
    roadmap, the module catalog, or cross-module documentation?**
    ➜ **File it in the CivicSuite umbrella:**
-   https://github.com/scottconverse/civicsuite/issues
+   https://github.com/CivicSuite/civicsuite/issues
 
 5. **Are you reporting a security vulnerability?**
    Do not file it as a public issue. See "Security advisories" below.
@@ -72,7 +72,7 @@ Requirements:
 Clone and install in editable mode with the dev extras:
 
 ```bash
-git clone https://github.com/scottconverse/civiccore.git
+git clone https://github.com/CivicSuite/civiccore.git
 cd civiccore
 python -m venv .venv
 # macOS / Linux:
@@ -142,7 +142,7 @@ commit (currently: `pyproject.toml` `[project].version` and
 Do not file security issues as public GitHub issues. Use GitHub's
 private vulnerability reporting on this repository (Security tab → Report
 a vulnerability), or email the maintainer listed on the
-[CivicSuite umbrella repo](https://github.com/scottconverse/civicsuite)
+[CivicSuite umbrella repo](https://github.com/CivicSuite/civicsuite)
 governance page. We will acknowledge within seven days and coordinate a
 fix and disclosure timeline with you.
 

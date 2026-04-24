@@ -80,9 +80,9 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/scottconverse/civiccore"
-Documentation = "https://github.com/scottconverse/civicsuite"
-Issues = "https://github.com/scottconverse/civiccore/issues"
+Homepage = "https://github.com/CivicSuite/civiccore"
+Documentation = "https://github.com/CivicSuite/civicsuite"
+Issues = "https://github.com/CivicSuite/civiccore/issues"
 
 [tool.setuptools.packages.find]
 where = ["."]

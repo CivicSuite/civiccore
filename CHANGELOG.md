@@ -5,7 +5,7 @@ All notable changes to **civiccore** are documented here. Format follows
 adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 CivicCore is the shared platform package for the
-[CivicSuite](https://github.com/scottconverse/civicsuite) open-source
+[CivicSuite](https://github.com/CivicSuite/civicsuite) open-source
 municipal operations suite. Per the CivicCore Extraction Spec section 16,
 breaking changes to the public API surface (Appendix A of that spec) ship
 as MAJOR releases; new symbols or backward-compatible behavior ship as
@@ -38,6 +38,7 @@ MINOR; bug fixes ship as PATCH.
 - `civiccore/migrations/alembic.ini` + `civiccore/migrations/env.py` — civiccore's own Alembic wiring (`alembic_version_civiccore` version table to avoid collision with consuming modules).
 - `civiccore_0001_baseline_v1` migration — idempotent snapshot of the 16 civiccore-owned shared tables at records HEAD `019_encrypt_connection_config`, per ADR-0003.
 - `tests/test_baseline_idempotency.py` — pytest asserting the baseline runs clean on an empty DB and is a no-op against an already-populated DB.
+- `.github/workflows/ci.yml` — CI workflow on `pull_request`/`push` to `main`. Runs `tests/test_smoke.py` and `tests/test_baseline_idempotency.py` on `ubuntu-latest`/Python 3.13; pre-pulls `pgvector/pgvector:pg17` so the testcontainers-managed Postgres starts cleanly. Makes the idempotency test an actual enforced merge gate (was claim-only before).
 
 ### Changed
 - License switched from MIT to Apache License 2.0 to match civicrecords-ai
@@ -45,6 +46,11 @@ MINOR; bug fixes ship as PATCH.
   section 6 are being updated in the umbrella repo in the same change.
 - `docs/index.html` landing page added to satisfy the project's pre-push
   documentation gate.
+- README, CONTRIBUTING, pyproject.toml, and CHANGELOG itself: stale
+  `scottconverse/civiccore` and `scottconverse/civicsuite` URLs corrected
+  to `CivicSuite/civiccore` and `CivicSuite/civicsuite` (org-hosted as of
+  2026-04-23). The `scottconverse/civicrecords-ai` URLs are unchanged —
+  records repo has not yet been transferred to the CivicSuite org.
 
 No release sections yet — `0.1.0` ships with Phase 1 of the CivicCore
 extraction (shared models + audit chain), per spec section 12.
