@@ -7,6 +7,8 @@
 #   3. Version lockstep between pyproject.toml and civiccore/__init__.py
 #   4. Required Rule 9 doc artifacts present on disk
 #   5. Build artifacts (sdist + wheel via python -m build)
+#   6. Fresh virtualenv install from the built wheel, exact version check,
+#      and import smoke for the migration runner
 #
 # Exit 0 when every check passes; exit 1 on any failure.
 
@@ -85,6 +87,78 @@ if "${PYTHON_CMD[@]}" -m build; then
     pass "python -m build succeeded"
 else
     fail "python -m build failed"
+fi
+
+# --- 6. wheel install in a clean virtualenv ---------------------------------
+info "6. clean virtualenv wheel install"
+if "${PYTHON_CMD[@]}" - <<'PY'
+from __future__ import annotations
+
+import glob
+import os
+import shutil
+import subprocess
+import sys
+import tempfile
+import venv
+from pathlib import Path
+
+
+def main() -> int:
+    wheels = sorted(glob.glob("dist/civiccore-*.whl"))
+    if not wheels:
+        print("missing built wheel in dist/", file=sys.stderr)
+        return 1
+
+    wheel_path = Path(wheels[0]).resolve()
+    temp_dir = Path(tempfile.mkdtemp(prefix="civiccore-release-"))
+
+    try:
+        builder = venv.EnvBuilder(with_pip=True)
+        builder.create(temp_dir)
+
+        candidates = [
+            temp_dir / "Scripts" / "python.exe",
+            temp_dir / "Scripts" / "python",
+            temp_dir / "bin" / "python",
+        ]
+        venv_python = next((path for path in candidates if path.exists()), None)
+        if venv_python is None:
+            print("could not locate virtualenv python executable", file=sys.stderr)
+            return 1
+
+        subprocess.run(
+            [str(venv_python), "-m", "pip", "install", "--upgrade", "pip", str(wheel_path)],
+            check=True,
+        )
+        subprocess.run(
+            [
+                str(venv_python),
+                "-c",
+                (
+                    "from importlib.metadata import version; "
+                    "import civiccore; "
+                    "from civiccore.migrations.runner import upgrade_to_head; "
+                    "assert version('civiccore') == '0.1.0'; "
+                    "assert civiccore.__version__ == '0.1.0'; "
+                    "assert callable(upgrade_to_head); "
+                    "print('fresh-venv import smoke OK')"
+                ),
+            ],
+            check=True,
+        )
+        print(f"fresh virtualenv install verified via {venv_python}")
+        return 0
+    finally:
+        shutil.rmtree(temp_dir, ignore_errors=True)
+
+
+raise SystemExit(main())
+PY
+then
+    pass "fresh virtualenv import + exact version verification succeeded"
+else
+    fail "fresh virtualenv import/version verification failed"
 fi
 
 # --- summary -----------------------------------------------------------------

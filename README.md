@@ -29,6 +29,10 @@ From the GitHub release wheel:
 pip install https://github.com/CivicSuite/civiccore/releases/download/v0.1.0/civiccore-0.1.0-py3-none-any.whl
 ```
 
+Each GitHub release also publishes `SHA256SUMS.txt` alongside the wheel and
+sdist. Verify the checksum before promoting a release artifact into a downstream
+module or internal package mirror.
+
 For development from a clone:
 
 ```bash
@@ -39,6 +43,10 @@ pip install -e .[dev]
 
 PyPI publication can come later; `v0.1.0` is distributed first as a versioned
 GitHub release artifact so CivicRecords AI can stop depending on a Git SHA pin.
+The tag-driven release workflow runs `scripts/verify-release.sh` before
+publishing so the shipped artifact has already passed pytest, ruff,
+docs/version checks, a local build, and a clean-virtualenv wheel-install smoke
+test.
 
 ## Public API surface
 
