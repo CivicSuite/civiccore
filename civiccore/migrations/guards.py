@@ -98,6 +98,86 @@ def idempotent_alter_column(
     op.alter_column(table, column, **alter_kwargs)
 
 
+def idempotent_create_index(
+    name: str,
+    table: str,
+    columns: list[str | Any],
+    *,
+    unique: bool = False,
+    **kwargs: Any,
+) -> None:
+    """op.create_index that no-ops if an index with this name already exists on the table.
+
+    Used by guarded records migrations whose ``op.create_index`` calls target shared
+    tables that civiccore's baseline migration already populated with indexes
+    (per pg_dump-derived DDL). If the named index is already present, skip the
+    create; otherwise create it normally.
+    """
+    inspector = _inspector()
+    if not inspector.has_table(table):
+        # Upstream migration will create the table; nothing to index against yet.
+        return
+    existing = {idx["name"] for idx in inspector.get_indexes(table)}
+    if name in existing:
+        return
+    op.create_index(name, table, columns, unique=unique, **kwargs)
+
+
+def idempotent_create_foreign_key(
+    constraint_name: str,
+    source_table: str,
+    referent_table: str,
+    local_cols: list[str],
+    remote_cols: list[str],
+    **kwargs: Any,
+) -> None:
+    """op.create_foreign_key that no-ops if a constraint with this name already exists.
+
+    Checks via Inspector.get_foreign_keys against the source table.
+    """
+    inspector = _inspector()
+    if not inspector.has_table(source_table):
+        return
+    existing = {fk["name"] for fk in inspector.get_foreign_keys(source_table) if fk.get("name")}
+    if constraint_name in existing:
+        return
+    op.create_foreign_key(
+        constraint_name, source_table, referent_table, local_cols, remote_cols, **kwargs
+    )
+
+
+def idempotent_create_unique_constraint(
+    constraint_name: str,
+    table: str,
+    columns: list[str],
+    **kwargs: Any,
+) -> None:
+    """op.create_unique_constraint that no-ops if the constraint already exists."""
+    inspector = _inspector()
+    if not inspector.has_table(table):
+        return
+    existing = {uc["name"] for uc in inspector.get_unique_constraints(table) if uc.get("name")}
+    if constraint_name in existing:
+        return
+    op.create_unique_constraint(constraint_name, table, columns, **kwargs)
+
+
+def idempotent_create_check_constraint(
+    constraint_name: str,
+    table: str,
+    condition: str,
+    **kwargs: Any,
+) -> None:
+    """op.create_check_constraint that no-ops if the constraint already exists."""
+    inspector = _inspector()
+    if not inspector.has_table(table):
+        return
+    existing = {cc["name"] for cc in inspector.get_check_constraints(table) if cc.get("name")}
+    if constraint_name in existing:
+        return
+    op.create_check_constraint(constraint_name, table, condition, **kwargs)
+
+
 def has_table(name: str) -> bool:
     """Thin public wrapper returning whether the named table exists in the current DB."""
     return _inspector().has_table(name)
