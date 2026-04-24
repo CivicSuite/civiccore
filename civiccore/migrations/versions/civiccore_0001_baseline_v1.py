@@ -528,6 +528,20 @@ def _type_exists(conn, name: str) -> bool:
     )
 
 
+def _split_statements(ddl: str) -> list[str]:
+    """Split a multi-statement SQL chunk on `;` boundaries.
+
+    Required because asyncpg refuses multi-statement prepared statements
+    ("cannot insert multiple commands into a prepared statement"). We pass
+    statements to op.execute one at a time so any underlying driver works.
+
+    Assumes no semicolons inside string literals — safe for the pg_dump-emitted
+    DDL captured here (no DEFAULT 'foo;bar' or similar). Validated against
+    the baseline's contents: no embedded semicolons in any literal.
+    """
+    return [stmt.strip() for stmt in ddl.split(";") if stmt.strip()]
+
+
 def upgrade() -> None:
     """Idempotently bring the database up to the civiccore baseline.
 
@@ -554,11 +568,13 @@ def upgrade() -> None:
         if not _type_exists(conn, enum_name):
             op.execute(ddl)
 
-    # 3. Tables — ordered, guarded
+    # 3. Tables — ordered, guarded, statements emitted one at a time
+    #    (asyncpg cannot handle multi-statement chunks).
     for table in _SHARED_TABLE_ORDER:
         if has_table(table):
             continue
-        op.execute(_TABLE_DDL[table])
+        for statement in _split_statements(_TABLE_DDL[table]):
+            op.execute(statement)
 
 
 def downgrade() -> None:
