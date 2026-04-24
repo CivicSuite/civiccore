@@ -13,16 +13,7 @@ MINOR; bug fixes ship as PATCH.
 
 ## [Unreleased]
 
-### Changed
-- Hardened the tag-driven release workflow so it runs
-  `scripts/verify-release.sh` before publishing GitHub release artifacts.
-- Release artifacts now include `SHA256SUMS.txt` so downstream modules can
-  verify the wheel and source distribution they consume.
-- `scripts/verify-release.sh` now creates a clean virtualenv, installs the
-  freshly built wheel, asserts the exact package version, and smoke-imports the
-  migration runner before a release can pass.
-- `tests/test_smoke.py` now asserts the exact `0.1.0` release version instead
-  of accepting any `0.1.x` prefix.
+No unreleased changes yet.
 
 ## [0.1.0] - 2026-04-24
 
@@ -69,3 +60,12 @@ MINOR; bug fixes ship as PATCH.
 - README, CONTRIBUTING, pyproject.toml, and CHANGELOG: stale
   `scottconverse/civiccore` and `scottconverse/civicsuite` URLs corrected
   to `CivicSuite/civiccore` and `CivicSuite/civicsuite`.
+- Hardened the tag-driven release workflow so it runs
+  `scripts/verify-release.sh` before publishing GitHub release artifacts.
+- Release artifacts now include `SHA256SUMS.txt` so downstream modules can
+  verify the wheel and source distribution they consume.
+- `scripts/verify-release.sh` now creates a clean virtualenv, installs the
+  freshly built wheel, asserts the exact package version, and smoke-imports the
+  migration runner before a release can pass.
+- `tests/test_smoke.py` now asserts the exact `0.1.0` release version instead
+  of accepting any `0.1.x` prefix.
