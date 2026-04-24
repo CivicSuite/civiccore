@@ -13,6 +13,10 @@ MINOR; bug fixes ship as PATCH.
 
 ## [Unreleased]
 
+No unreleased changes yet.
+
+## [0.1.0] - 2026-04-24
+
 ### Added
 - Initial package skeleton with empty subpackages for the 14 subsystems
   specified in CivicCore Extraction Spec Appendix B: `auth`, `audit`,
@@ -24,33 +28,35 @@ MINOR; bug fixes ship as PATCH.
   fastapi-users, pgvector, redis, celery, pydantic, uvicorn, ollama-stack
   ingest libs, etc.). Python `>=3.11` to support modules that have not yet
   moved to 3.12.
-- Smoke test asserting `import civiccore` succeeds and `__version__`
-  begins with `0.1.`.
-- Alembic `env.py` stub documenting the migration-ordering contract from
-  CivicCore Extraction Spec section 14: CivicCore migrations run first;
-  module migrations declare `depends_on` against the CivicCore baseline
-  revision; shared-table schema changes are MAJOR releases.
-- Apache 2.0 `LICENSE`, `README.md`, `CONTRIBUTING.md` (with the
-  bug-routing decision tree from spec section 18), `.gitignore`, and
+- Smoke test asserting `import civiccore` succeeds and the package exports
+  the release version.
+- Apache 2.0 `LICENSE`, `README.md`, `CONTRIBUTING.md`, `.gitignore`, and
   placeholder `civiccore-ui/` npm package directory.
-- `civiccore.migrations.guards` — three idempotent op wrappers (`idempotent_create_table`, `idempotent_add_column`, `idempotent_alter_column`) plus `has_table` helper.
-- `civiccore.migrations.runner` — `upgrade_to_head(connection)` and `current_revision(connection)` entry points for consuming modules' env.py.
-- `civiccore/migrations/alembic.ini` + `civiccore/migrations/env.py` — civiccore's own Alembic wiring (`alembic_version_civiccore` version table to avoid collision with consuming modules).
-- `civiccore_0001_baseline_v1` migration — idempotent snapshot of the 16 civiccore-owned shared tables at records HEAD `019_encrypt_connection_config`, per ADR-0003.
-- `tests/test_baseline_idempotency.py` — pytest asserting the baseline runs clean on an empty DB and is a no-op against an already-populated DB.
-- `.github/workflows/ci.yml` — CI workflow on `pull_request`/`push` to `main`. Runs `tests/test_smoke.py` and `tests/test_baseline_idempotency.py` on `ubuntu-latest`/Python 3.13; pre-pulls `pgvector/pgvector:pg17` so the testcontainers-managed Postgres starts cleanly. Makes the idempotency test an actual enforced merge gate (was claim-only before).
+- `civiccore.migrations.guards` — idempotent wrappers for table, column,
+  index, foreign-key, unique-constraint, and check-constraint creation,
+  plus `has_table`.
+- `civiccore.migrations.runner` — `upgrade_to_head()` and
+  `current_revision(connection)` entry points for consuming modules'
+  Alembic env.py wiring.
+- `civiccore/migrations/alembic.ini` + `civiccore/migrations/env.py` —
+  civiccore's own Alembic wiring (`alembic_version_civiccore` version table
+  to avoid collision with consuming modules).
+- `civiccore_0001_baseline_v1` migration — idempotent snapshot of the 16
+  civiccore-owned shared tables at CivicRecords AI HEAD
+  `019_encrypt_connection_config`, per ADR-0003.
+- `tests/test_baseline_idempotency.py` — pytest asserting the baseline runs
+  clean on an empty DB and is a no-op against an already-populated DB.
+- `.github/workflows/ci.yml` — CI workflow on `pull_request`/`push` to
+  `main` running smoke + baseline idempotency tests.
+- `.github/workflows/release.yml` — tag-driven build that publishes a
+  versioned wheel and source distribution to GitHub Releases so downstream
+  apps can depend on a release artifact instead of a Git SHA pin.
 
 ### Changed
-- License switched from MIT to Apache License 2.0 to match civicrecords-ai
-  (which is Apache-2.0). Spec doc 02 Appendix D and CONSISTENCY.md
-  section 6 are being updated in the umbrella repo in the same change.
+- License switched from MIT to Apache License 2.0 to match
+  civicrecords-ai.
 - `docs/index.html` landing page added to satisfy the project's pre-push
   documentation gate.
-- README, CONTRIBUTING, pyproject.toml, and CHANGELOG itself: stale
+- README, CONTRIBUTING, pyproject.toml, and CHANGELOG: stale
   `scottconverse/civiccore` and `scottconverse/civicsuite` URLs corrected
-  to `CivicSuite/civiccore` and `CivicSuite/civicsuite` (org-hosted as of
-  2026-04-23). The `scottconverse/civicrecords-ai` URLs are unchanged —
-  records repo has not yet been transferred to the CivicSuite org.
-
-No release sections yet — `0.1.0` ships with Phase 1 of the CivicCore
-extraction (shared models + audit chain), per spec section 12.
+  to `CivicSuite/civiccore` and `CivicSuite/civicsuite`.

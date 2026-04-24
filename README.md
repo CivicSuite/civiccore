@@ -16,27 +16,29 @@ will consume it as they ship.
 
 ## Status
 
-**Early scaffold.** This repository currently contains the v0.1 package
-skeleton (Phase 0 of the extraction). Subsystems are empty `__init__.py`
-files; nothing functional ships yet. The first functional release —
-**v0.1.0** — lands with **Phase 1** (shared models + audit chain). See
-the CivicCore Extraction Spec section 12 for the phased rollout.
+**Phase 1 shipped.** `v0.1.0` is the first functional CivicCore release:
+the migration runner, idempotent guards, and the `civiccore_0001_baseline_v1`
+shared-schema baseline extracted from CivicRecords AI. See the CivicCore
+Extraction Spec section 12 for the phased rollout.
 
 ## Install
 
-Once published to PyPI:
+From the GitHub release wheel:
 
 ```bash
-pip install civiccore
+pip install https://github.com/CivicSuite/civiccore/releases/download/v0.1.0/civiccore-0.1.0-py3-none-any.whl
 ```
 
-For now (pre-release), install from a clone:
+For development from a clone:
 
 ```bash
 git clone https://github.com/CivicSuite/civiccore.git
 cd civiccore
 pip install -e .[dev]
 ```
+
+PyPI publication can come later; `v0.1.0` is distributed first as a versioned
+GitHub release artifact so CivicRecords AI can stop depending on a Git SHA pin.
 
 ## Public API surface
 

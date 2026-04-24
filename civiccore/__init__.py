@@ -5,9 +5,10 @@ connector framework, notifications, onboarding, exemption engine, and sovereignt
 verification. Consumed by CivicRecords AI today; CivicClerk, CivicCode, and
 CivicZone in the future.
 
-This is the v0.1 skeleton — modules light up in Phase 1+. See the CivicCore
+This is the v0.1 release — the first functional surface shipped in Phase 1.
+See the CivicCore
 Extraction Spec (Appendix A) in scottconverse/civicsuite for the v0.1 public
 API surface.
 """
 
-__version__ = "0.1.0.dev0"
+__version__ = "0.1.0"
