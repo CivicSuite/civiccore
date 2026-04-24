@@ -33,6 +33,11 @@ MINOR; bug fixes ship as PATCH.
 - Apache 2.0 `LICENSE`, `README.md`, `CONTRIBUTING.md` (with the
   bug-routing decision tree from spec section 18), `.gitignore`, and
   placeholder `civiccore-ui/` npm package directory.
+- `civiccore.migrations.guards` — three idempotent op wrappers (`idempotent_create_table`, `idempotent_add_column`, `idempotent_alter_column`) plus `has_table` helper.
+- `civiccore.migrations.runner` — `upgrade_to_head(connection)` and `current_revision(connection)` entry points for consuming modules' env.py.
+- `civiccore/migrations/alembic.ini` + `civiccore/migrations/env.py` — civiccore's own Alembic wiring (`alembic_version_civiccore` version table to avoid collision with consuming modules).
+- `civiccore_0001_baseline_v1` migration — idempotent snapshot of the 16 civiccore-owned shared tables at records HEAD `019_encrypt_connection_config`, per ADR-0003.
+- `tests/test_baseline_idempotency.py` — pytest asserting the baseline runs clean on an empty DB and is a no-op against an already-populated DB.
 
 ### Changed
 - License switched from MIT to Apache License 2.0 to match civicrecords-ai
