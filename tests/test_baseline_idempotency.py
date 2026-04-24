@@ -2,6 +2,9 @@
 
 from __future__ import annotations
 
+import contextlib
+import os
+
 import pytest
 import sqlalchemy as sa
 
@@ -76,6 +79,26 @@ def engine(pg_container):
         eng.dispose()
 
 
+@contextlib.contextmanager
+def _database_url_env(pg_container):
+    """Set DATABASE_URL to the testcontainer URL for the scope of the block.
+
+    Civiccore's runner opens its own connection from DATABASE_URL (see
+    ``upgrade_to_head`` docstring re: nested EnvironmentContext fix), so the
+    test must export the testcontainer URL before invoking it. Restores the
+    prior value (or unsets) on exit so tests don't leak environment state.
+    """
+    old_url = os.environ.get("DATABASE_URL")
+    os.environ["DATABASE_URL"] = pg_container.get_connection_url()
+    try:
+        yield
+    finally:
+        if old_url is None:
+            os.environ.pop("DATABASE_URL", None)
+        else:
+            os.environ["DATABASE_URL"] = old_url
+
+
 def _snapshot_schema(connection: sa.Connection) -> list[tuple[str, list[str]]]:
     """Capture (table_name, sorted column_names) for every shared table present.
 
@@ -93,10 +116,10 @@ def _snapshot_schema(connection: sa.Connection) -> list[tuple[str, list[str]]]:
     return sorted(snapshot, key=lambda row: row[0])
 
 
-def test_baseline_runs_clean_on_empty_db(engine):
+def test_baseline_runs_clean_on_empty_db(engine, pg_container):
     """Baseline migration creates all 16 shared tables and stamps HEAD on an empty DB."""
-    with engine.begin() as connection:
-        upgrade_to_head(connection)
+    with _database_url_env(pg_container):
+        upgrade_to_head()
 
     with engine.connect() as connection:
         inspector = sa.inspect(connection)
@@ -109,7 +132,7 @@ def test_baseline_runs_clean_on_empty_db(engine):
         assert current_revision(connection) == EXPECTED_HEAD
 
 
-def test_baseline_is_idempotent(engine):
+def test_baseline_is_idempotent(engine, pg_container):
     """Re-running the baseline against an already-populated DB is a no-op.
 
     Proves the ``idempotent_*`` op wrappers (see ``civiccore.migrations.guards``)
@@ -117,16 +140,16 @@ def test_baseline_is_idempotent(engine):
     is what makes the extracted civiccore baseline safe to ship alongside
     already-deployed civicrecords databases (ADR-0003 §3).
     """
-    with engine.begin() as connection:
-        upgrade_to_head(connection)
+    with _database_url_env(pg_container):
+        upgrade_to_head()
 
     with engine.connect() as connection:
         first_snapshot = _snapshot_schema(connection)
         assert current_revision(connection) == EXPECTED_HEAD
 
     # Second upgrade on the same engine — must not raise, must not mutate schema.
-    with engine.begin() as connection:
-        upgrade_to_head(connection)
+    with _database_url_env(pg_container):
+        upgrade_to_head()
 
     with engine.connect() as connection:
         second_snapshot = _snapshot_schema(connection)
