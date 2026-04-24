@@ -1,7 +1,7 @@
 # CivicCore
 
 Shared platform package for the
-[CivicSuite](https://github.com/scottconverse/civicsuite) open-source
+[CivicSuite](https://github.com/CivicSuite/civicsuite) open-source
 municipal operations suite.
 
 ## What this is
@@ -33,7 +33,7 @@ pip install civiccore
 For now (pre-release), install from a clone:
 
 ```bash
-git clone https://github.com/scottconverse/civiccore.git
+git clone https://github.com/CivicSuite/civiccore.git
 cd civiccore
 pip install -e .[dev]
 ```
@@ -44,7 +44,7 @@ CivicCore's v0.1 public API is deliberately lean. The full list of
 exported symbols — which is **stable across the v0.x series** per the
 spec's semver policy — is published in **Appendix A of the CivicCore
 Extraction Spec** in
-[scottconverse/civicsuite](https://github.com/scottconverse/civicsuite).
+[CivicSuite/civicsuite](https://github.com/CivicSuite/civicsuite).
 Refer to that document; this README does not duplicate the list, so the
 two cannot drift.
 
@@ -54,7 +54,7 @@ Every CivicSuite module's README declares a CivicCore version range
 (e.g. `civiccore >= 0.1, < 0.2`). The suite-wide compatibility matrix —
 which module versions work with which CivicCore versions — is maintained
 at
-[scottconverse/civicsuite/docs/compatibility/](https://github.com/scottconverse/civicsuite/tree/main/docs/compatibility).
+[CivicSuite/civicsuite/docs/compatibility/](https://github.com/CivicSuite/civicsuite/tree/main/docs/compatibility).
 
 ## License
 

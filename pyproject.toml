@@ -71,17 +71,18 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = [
+    "psycopg2-binary>=2.9.0",
     "pytest>=9.0.0",
     "pytest-asyncio>=1.0.0",
     "respx>=0.22.0",
     "ruff>=0.11.0",
-    "psycopg2-binary>=2.9.0",
+    "testcontainers[postgres]>=4.9.0",
 ]
 
 [project.urls]
-Homepage = "https://github.com/scottconverse/civiccore"
-Documentation = "https://github.com/scottconverse/civicsuite"
-Issues = "https://github.com/scottconverse/civiccore/issues"
+Homepage = "https://github.com/CivicSuite/civiccore"
+Documentation = "https://github.com/CivicSuite/civicsuite"
+Issues = "https://github.com/CivicSuite/civiccore/issues"
 
 [tool.setuptools.packages.find]
 where = ["."]

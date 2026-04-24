@@ -64,3 +64,9 @@ desktop.ini
 *.sqlite3
 *.db
 .alembic-tmp/
+
+# Local Claude Code project tooling (hooks, settings) — machine-local, not project deliverables
+.claude/
+
+# Local schema dumps used during baseline authorship — regenerate with pg_dump if needed
+.schema-dump.sql
