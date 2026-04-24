@@ -149,4 +149,4 @@ fix and disclosure timeline with you.
 ## License
 
 By contributing, you agree your contribution is licensed under the
-project's MIT License. See [LICENSE](LICENSE).
+project's Apache License 2.0. See [LICENSE](LICENSE).

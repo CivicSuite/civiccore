@@ -58,7 +58,7 @@ at
 
 ## License
 
-[MIT](LICENSE). Plain text, unmodified — there is no "MIT 2.0".
+[Apache License 2.0](LICENSE).
 
 ## Contributing
 

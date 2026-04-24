@@ -8,7 +8,7 @@ version = "0.1.0.dev0"
 description = "CivicSuite shared platform package — auth, audit, LLM abstraction, ingestion, search, connectors, notifications, onboarding, exemptions, verification"
 readme = "README.md"
 requires-python = ">=3.11"
-license = { text = "MIT" }
+license = { text = "Apache-2.0" }
 authors = [
     { name = "Scott Converse" },
     { name = "CivicSuite contributors" },
@@ -28,7 +28,7 @@ classifiers = [
     "Development Status :: 2 - Pre-Alpha",
     "Intended Audience :: Developers",
     "Intended Audience :: Other Audience",
-    "License :: OSI Approved :: MIT License",
+    "License :: OSI Approved :: Apache Software License",
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.11",
