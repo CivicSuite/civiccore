@@ -1,0 +1,1 @@
+"""CivicCore: shared SQLAlchemy ORM models (User, Role, Department, ServiceAccount, AuditLog, Document, DocumentChunk, ModelRegistry, Connector, NotificationTemplate, CityProfile, ExemptionRule). Phase 1 extraction target for the auth/audit subset."""
