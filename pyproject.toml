@@ -88,6 +88,9 @@ Issues = "https://github.com/CivicSuite/civiccore/issues"
 where = ["."]
 include = ["civiccore*"]
 
+[tool.setuptools.package-data]
+civiccore = ["migrations/alembic.ini"]
+
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
 asyncio_default_fixture_loop_scope = "session"
