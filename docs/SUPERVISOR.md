@@ -1,3 +1,4 @@
+<!-- supervisor-card: generated (safe to overwrite; delete this line if you hand-edit) -->
 # CivicCore Supervisor Card
 
 One-page operating card for Scott. Keep this open when you supervise a session.
