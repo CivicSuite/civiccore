@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# civiccore/scripts/verify-release.sh - Phase 1 release gate.
+# civiccore/scripts/verify-release.sh - civiccore release gate.
 #
 # Read-only verification of civiccore's pre-push readiness. Checks:
 #   1. Test suite (pytest tests/)
