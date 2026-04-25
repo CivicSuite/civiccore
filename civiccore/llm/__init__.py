@@ -19,18 +19,25 @@ from __future__ import annotations
 # Providers (Step 3b)
 from civiccore.llm.providers import (
     PROVIDER_REGISTRY,
+    AnthropicConfig,
     AnthropicProvider,
     LLMProvider,
+    OllamaConfig,
     OllamaProvider,
+    OpenAIConfig,
     OpenAIProvider,
     get_provider,
     list_providers,
     register_provider,
 )
 
+# Provider factory (Step 3 audit fix — PROVIDER-CONFIG-001)
+from civiccore.llm.factory import CONFIG_SCHEMAS, build_provider
+
 # Templates (Step 3a + 3c)
 from civiccore.llm.templates import (
     CIVICCORE_DEFAULT_APP,
+    OVERRIDE_REGISTRY,
     PromptTemplate,
     PromptTemplateCreate,
     PromptTemplateError,
@@ -38,8 +45,10 @@ from civiccore.llm.templates import (
     PromptTemplateRead,
     PromptTemplateRenderError,
     RenderedPrompt,
+    register_template_override,
     render_template,
     resolve_template,
+    unregister_template_override,
 )
 
 # Registry (Step 3a + 3d)
@@ -85,6 +94,12 @@ __all__ = [
     "OllamaProvider",
     "OpenAIProvider",
     "AnthropicProvider",
+    "OllamaConfig",
+    "OpenAIConfig",
+    "AnthropicConfig",
+    # Provider factory
+    "build_provider",
+    "CONFIG_SCHEMAS",
     # Templates
     "PromptTemplate",
     "PromptTemplateCreate",
@@ -96,6 +111,9 @@ __all__ = [
     "PromptTemplateError",
     "PromptTemplateNotFoundError",
     "PromptTemplateRenderError",
+    "OVERRIDE_REGISTRY",
+    "register_template_override",
+    "unregister_template_override",
     # Registry
     "ModelRegistry",
     "ModelRegistryCreate",

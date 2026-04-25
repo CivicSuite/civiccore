@@ -1,0 +1,50 @@
+=== grep: httpx.AsyncClient calls in tests/ ===
+tests/test_llm_registry_service.py:229:    async with httpx.AsyncClient(transport=transport, base_url="http://test") as c:
+tests/test_llm_registry_service.py:301:    async with httpx.AsyncClient(transport=transport, base_url="http://test") as c:
+
+=== grep: openai SDK direct calls in tests/ ===
+(no matches — all openai usage is via provider classes which are mocked)
+
+=== grep: anthropic SDK direct calls in tests/ ===
+(no matches)
+
+=== grep: _FakeProvider usage in test_llm_structured.py ===
+17:class _FakeProvider(LLMProvider):
+57:    provider = _FakeProvider(['{"name": "Alice", "age": 30}'])
+72:    provider = _FakeProvider([fenced])
+84:    provider = _FakeProvider(["not json", '{"name":"Carol","age":50}'])
+100:    provider = _FakeProvider(
+117:    provider = _FakeProvider(["bad", "still bad", "nope"])
+134:    provider = _FakeProvider(['{"name":"X","age":1}'])
+147:    provider = _FakeProvider(['{"name":"Y","age":2}'])
+168:    The fact that every other test uses _FakeProvider is the real proof;
+
+=== grep: respx / AsyncMock / monkeypatch usage (top 30) ===
+tests/test_llm_providers.py:3:No live HTTP, no real API keys. httpx-based providers are mocked with respx;
+tests/test_llm_providers.py:9:ImportError branch is exercised via monkeypatched sys.modules entries.
+tests/test_llm_providers.py:14:from unittest.mock import AsyncMock
+tests/test_llm_providers.py:18:import respx
+tests/test_llm_providers.py:108:# Ollama provider tests (httpx + respx)
+tests/test_llm_providers.py:116:    async with respx.mock(base_url=base_url, assert_all_called=True) as mock:
+tests/test_llm_providers.py:137:    async with respx.mock(base_url=base_url, assert_all_called=True) as mock:
+tests/test_llm_providers.py:158:    async with respx.mock(base_url=base_url) as mock:
+tests/test_llm_providers.py:178:    async with respx.mock(base_url=base_url) as mock:
+tests/test_llm_providers.py:190:    async with respx.mock(base_url=base_url) as mock:
+tests/test_llm_providers.py:204:    async with respx.mock(base_url=base_url, assert_all_called=False) as mock:
+tests/test_llm_providers.py:224:def test_openai_provider_raises_clear_error_without_sdk(monkeypatch):
+tests/test_llm_providers.py:233:    monkeypatch.delitem(sys.modules, "openai", raising=False)
+tests/test_llm_providers.py:234:    monkeypatch.setitem(sys.modules, "openai", None)
+tests/test_llm_providers.py:239:def test_anthropic_provider_raises_clear_error_without_sdk(monkeypatch):
+tests/test_llm_providers.py:244:    monkeypatch.delitem(sys.modules, "anthropic", raising=False)
+tests/test_llm_providers.py:245:    monkeypatch.setitem(sys.modules, "anthropic", None)
+tests/test_llm_providers.py:251:async def test_openai_generate_mocked(monkeypatch):
+tests/test_llm_providers.py:256:    fake_create = AsyncMock(return_value=fake_resp)
+tests/test_llm_providers.py:258:    monkeypatch.setattr(
+tests/test_llm_providers.py:272:async def test_anthropic_generate_mocked(monkeypatch):
+tests/test_llm_providers.py:275:    fake_create = AsyncMock(return_value=fake_resp)
+tests/test_llm_providers.py:276:    monkeypatch.setattr(
+
+=== Summary ===
+All provider tests use either respx (HTTP mocking for httpx-based Ollama),
+AsyncMock (for openai/anthropic SDK), or _FakeProvider (subclass of LLMProvider).
+No live provider HTTP traffic at any point in CI or local test runs.

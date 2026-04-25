@@ -20,6 +20,12 @@ from civiccore.llm.providers.ollama import OllamaProvider  # noqa: F401, E402
 from civiccore.llm.providers.openai import OpenAIProvider  # noqa: F401, E402
 from civiccore.llm.providers.anthropic import AnthropicProvider  # noqa: F401, E402
 
+from civiccore.llm.providers.config import (
+    AnthropicConfig,
+    OllamaConfig,
+    OpenAIConfig,
+)
+
 __all__ = [
     "LLMProvider",
     "PROVIDER_REGISTRY",
@@ -29,4 +35,7 @@ __all__ = [
     "OllamaProvider",
     "OpenAIProvider",
     "AnthropicProvider",
+    "OllamaConfig",
+    "OpenAIConfig",
+    "AnthropicConfig",
 ]

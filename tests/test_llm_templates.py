@@ -40,6 +40,10 @@ from civiccore.llm.templates.exceptions import (  # noqa: E402
     PromptTemplateRenderError,
 )
 from civiccore.llm.templates.models import PromptTemplate  # noqa: E402
+from civiccore.llm.templates.overrides import (  # noqa: E402
+    register_template_override,
+    unregister_template_override,
+)
 from civiccore.llm.templates.resolver import (  # noqa: E402
     CIVICCORE_DEFAULT_APP,
     resolve_template,
@@ -454,6 +458,158 @@ async def test_resolver_uses_consumer_app_not_null_fallback(session):
     assert found.consumer_app == CIVICCORE_DEFAULT_APP
     # Belt-and-suspenders: the column value is non-null.
     assert found.consumer_app is not None
+
+
+# ---------------------------------------------------------------------------
+# Code-level override resolution (ADR-0004 §7 step 2)
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.asyncio
+async def test_resolver_db_override_wins_over_code_override(session):
+    """Per ADR-0004 §7: DB app override takes precedence over code-level
+    override (operators must hot-fix prompts in production without redeploy)."""
+    # Register code override
+    code_tmpl = _make_template(
+        template_name="contested",
+        consumer_app="civicrecords-ai",
+        is_override=True,
+        system_prompt="CODE OVERRIDE",
+        user_prompt_template="from code",
+    )
+    register_template_override(
+        consumer_app="civicrecords-ai",
+        template_name="contested",
+        template=code_tmpl,
+    )
+    try:
+        # Persist DB override (different prompt body)
+        db_override = _make_template(
+            template_name="contested",
+            consumer_app="civicrecords-ai",
+            is_override=True,
+            is_active=True,
+            system_prompt="DB OVERRIDE",
+            user_prompt_template="from db",
+        )
+        session.add(db_override)
+        await session.commit()
+        # Resolver returns the DB row, not the code override
+        resolved = await resolve_template(
+            session,
+            template_name="contested",
+            consumer_app="civicrecords-ai",
+        )
+        assert resolved.system_prompt == "DB OVERRIDE"
+    finally:
+        unregister_template_override(
+            consumer_app="civicrecords-ai", template_name="contested"
+        )
+
+
+@pytest.mark.asyncio
+async def test_resolver_code_override_wins_over_civiccore_default(session):
+    """No DB app override; code-level override beats civiccore default."""
+    code_tmpl = _make_template(
+        template_name="t1",
+        consumer_app="civicrecords-ai",
+        is_override=True,
+        system_prompt="CODE OVERRIDE",
+        user_prompt_template="x",
+    )
+    register_template_override(
+        consumer_app="civicrecords-ai",
+        template_name="t1",
+        template=code_tmpl,
+    )
+    try:
+        # civiccore default in DB
+        civiccore_default = _make_template(
+            template_name="t1",
+            consumer_app="civiccore",
+            is_override=False,
+            is_active=True,
+            system_prompt="CIVICCORE DEFAULT",
+            user_prompt_template="y",
+        )
+        session.add(civiccore_default)
+        await session.commit()
+        resolved = await resolve_template(
+            session,
+            template_name="t1",
+            consumer_app="civicrecords-ai",
+        )
+        assert resolved.system_prompt == "CODE OVERRIDE"
+    finally:
+        unregister_template_override(
+            consumer_app="civicrecords-ai", template_name="t1"
+        )
+
+
+@pytest.mark.asyncio
+async def test_resolver_civiccore_app_skips_code_override(session):
+    """consumer_app='civiccore' skips both step 1 (DB override) and step 2
+    (code override). civiccore owns its own defaults."""
+    code_tmpl = _make_template(
+        template_name="t2",
+        consumer_app="civiccore",
+        system_prompt="CODE",
+        user_prompt_template="x",
+    )
+    # Register a code override under civiccore (operator could theoretically
+    # do this; resolver must ignore it for consumer_app='civiccore' callers).
+    register_template_override(
+        consumer_app="civiccore",
+        template_name="t2",
+        template=code_tmpl,
+    )
+    try:
+        # civiccore DB default
+        db_default = _make_template(
+            template_name="t2",
+            consumer_app="civiccore",
+            is_active=True,
+            system_prompt="DB DEFAULT",
+            user_prompt_template="y",
+        )
+        session.add(db_default)
+        await session.commit()
+        resolved = await resolve_template(
+            session, template_name="t2", consumer_app="civiccore"
+        )
+        # Returns DB default; ignores any registered code override under civiccore
+        assert resolved.system_prompt == "DB DEFAULT"
+    finally:
+        unregister_template_override(
+            consumer_app="civiccore", template_name="t2"
+        )
+
+
+@pytest.mark.asyncio
+async def test_resolver_code_override_alone_is_resolvable(session):
+    """No DB row at all; code override is the only source. Resolver returns it."""
+    code_tmpl = _make_template(
+        template_name="solo",
+        consumer_app="civicrecords-ai",
+        is_override=True,
+        system_prompt="ONLY IN CODE",
+        user_prompt_template="x",
+    )
+    register_template_override(
+        consumer_app="civicrecords-ai",
+        template_name="solo",
+        template=code_tmpl,
+    )
+    try:
+        # Empty DB; only the code override exists.
+        resolved = await resolve_template(
+            session, template_name="solo", consumer_app="civicrecords-ai"
+        )
+        assert resolved.system_prompt == "ONLY IN CODE"
+    finally:
+        unregister_template_override(
+            consumer_app="civicrecords-ai", template_name="solo"
+        )
 
 
 # ---------------------------------------------------------------------------

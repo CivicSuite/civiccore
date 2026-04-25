@@ -36,6 +36,8 @@ MINOR; bug fixes ship as PATCH.
   - `civiccore.llm.registry.router`: FastAPI APIRouter for ModelRegistry admin CRUD (list / get / post / patch / delete). Mountable; consumers override `get_session` dependency.
   - Single import surface: `from civiccore.llm import ...` exposes the full public API for records-ai Step 5 consumption.
 - Per ADR-0004 §3: NO cost tracking, NO spend logging, NO `llm_call_log` table introduced. Token budgeting is context-window math only.
+- **Audit fix (RESOLVER-001):** template resolver upgraded from 2-step to 3-step per ADR-0004 §7. Added `civiccore.llm.templates.overrides` module with `OVERRIDE_REGISTRY`, `register_template_override`, and `unregister_template_override`. Resolution order is now: app DB override → app code-level override → civiccore DB default → `PromptTemplateNotFoundError`. DB overrides win over code overrides (operators retain production hot-fix capability).
+- **Audit fix (PROVIDER-CONFIG-001):** added Pydantic config schemas (`OllamaConfig`, `OpenAIConfig`, `AnthropicConfig`) and `civiccore.llm.factory.build_provider(name, config)` per ADR-0004 §6. Validates config type matches the registered provider before construction. Direct provider constructor calls remain supported for backwards compatibility.
 
 ## [0.1.0] - 2026-04-24
 
