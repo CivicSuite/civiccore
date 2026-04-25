@@ -29,6 +29,13 @@ MINOR; bug fixes ship as PATCH.
   - New exceptions: `PromptTemplateError` (base), `PromptTemplateNotFoundError`, `PromptTemplateRenderError` (names the missing variable).
   - Uses stdlib `string.Template` per ADR-0004 (no Jinja2; `$name` syntax avoids JSON-brace collisions).
   - In-memory code-level override step from ADR-0004 §7 deferred to a later release; the DB path satisfies the primary use case (operators hot-fix prompts in production without redeploy).
+- `civiccore.llm` (Step 3d): finalized public API surface for downstream consumption.
+  - Context utilities ported from records-ai: `TokenBudget`, `ContextBlock`, `estimate_tokens`, `count_tokens`, `sanitize_for_llm` (3-pattern prompt-injection defense), `assemble_context`, `blocks_to_prompt`, `DEFAULT_CONTEXT_WINDOW=8192`.
+  - `civiccore.llm.structured`: `StructuredOutput[ModelT]` Pydantic-validated LLM-call helper with retry-on-malformed (default 3 attempts); `StructuredOutputFailure` exception. Provider-agnostic.
+  - `civiccore.llm.registry.service`: async `get_active_model`, `require_active_model` (raises `MissingModelError`), `get_active_model_context_window` (defaults to 8192). Library-friendly: takes `AsyncSession` parameter, no hardcoded session_maker.
+  - `civiccore.llm.registry.router`: FastAPI APIRouter for ModelRegistry admin CRUD (list / get / post / patch / delete). Mountable; consumers override `get_session` dependency.
+  - Single import surface: `from civiccore.llm import ...` exposes the full public API for records-ai Step 5 consumption.
+- Per ADR-0004 §3: NO cost tracking, NO spend logging, NO `llm_call_log` table introduced. Token budgeting is context-window math only.
 
 ## [0.1.0] - 2026-04-24
 

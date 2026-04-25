@@ -123,15 +123,71 @@ from civiccore.llm.templates import (
 
 `render_template(template, {"key": "value", ...})` substitutes `string.Template` placeholders (`$key` or `${key}`). Missing variables raise `PromptTemplateRenderError` naming the missing key.
 
+## LLM context utilities and structured output
+
+CivicCore exposes context-budgeting and structured-output helpers at the package root:
+
+```python
+from civiccore.llm import (
+    TokenBudget, ContextBlock,
+    estimate_tokens, count_tokens, sanitize_for_llm,
+    assemble_context, blocks_to_prompt, DEFAULT_CONTEXT_WINDOW,
+    StructuredOutput, StructuredOutputFailure,
+)
+
+# Token-budgeted prompt assembly with prompt-injection defense
+blocks = assemble_context(
+    system_prompt="You are a helpful assistant.",
+    chunks=[document_text],
+    max_context_tokens=4096,
+)
+prompt = blocks_to_prompt(blocks)
+
+# Pydantic-validated structured output with retry-on-malformed
+class ExtractedFields(BaseModel):
+    name: str
+    confidence: float
+
+result = await StructuredOutput(ExtractedFields).generate(
+    provider=get_provider("ollama"),
+    system_prompt="Extract fields from the document.",
+    user_content=document_text,
+    max_attempts=3,
+)
+```
+
+Per ADR-0004: token counting is context-window math; no cost tracking, no spend limits.
+
 ## Public API surface
 
-CivicCore's v0.1 public API is deliberately lean. The full list of
-exported symbols — which is **stable across the v0.x series** per the
-spec's semver policy — is published in **Appendix A of the CivicCore
+After Step 3, `civiccore.llm` exposes a single import surface for downstream apps:
+
+```python
+from civiccore.llm import (
+    # Providers
+    LLMProvider, register_provider, get_provider, list_providers,
+    OllamaProvider, OpenAIProvider, AnthropicProvider,
+    # Templates
+    PromptTemplate, PromptTemplateCreate, PromptTemplateRead,
+    RenderedPrompt, render_template, resolve_template,
+    CIVICCORE_DEFAULT_APP, PromptTemplateError,
+    PromptTemplateNotFoundError, PromptTemplateRenderError,
+    # Model registry
+    ModelRegistry, ModelRegistryCreate, ModelRegistryRead, ModelRegistryUpdate,
+    model_registry_router, MissingModelError, ModelRegistryServiceError,
+    get_active_model, require_active_model, get_active_model_context_window,
+    # Context utilities
+    TokenBudget, ContextBlock, estimate_tokens, count_tokens, sanitize_for_llm,
+    assemble_context, blocks_to_prompt, DEFAULT_CONTEXT_WINDOW,
+    # Structured output
+    StructuredOutput, StructuredOutputFailure, DEFAULT_MAX_ATTEMPTS,
+)
+```
+
+The full enumerated list — stable across the v0.x series per the spec's
+semver policy — is also published in **Appendix A of the CivicCore
 Extraction Spec** in
 [CivicSuite/civicsuite](https://github.com/CivicSuite/civicsuite).
-Refer to that document; this README does not duplicate the list, so the
-two cannot drift.
 
 ## Compatibility
 
