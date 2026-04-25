@@ -13,7 +13,11 @@ MINOR; bug fixes ship as PATCH.
 
 ## [Unreleased]
 
-No unreleased changes yet.
+### Added
+- `civiccore_0002_llm` migration: evolves `prompt_templates` for Phase 2 override-resolution columns (`template_name` rename, `consumer_app`, `is_override`); adds `idempotent_drop_constraint` guard helper
+- `civiccore.llm.registry`: `ModelRegistry` ORM + Pydantic schemas (`ModelRegistryCreate`, `ModelRegistryRead`, `ModelRegistryUpdate`)
+- `civiccore.llm.templates`: `PromptTemplate` ORM + Pydantic schemas (`PromptTemplateCreate`, `PromptTemplateRead`, `PromptTemplateUpdate`)
+- `civiccore.db.Base`: shared SQLAlchemy declarative base for civiccore ORM models
 
 ## [0.1.0] - 2026-04-24
 

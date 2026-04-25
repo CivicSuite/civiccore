@@ -178,6 +178,37 @@ def idempotent_create_check_constraint(
     op.create_check_constraint(constraint_name, table, condition, **kwargs)
 
 
+def idempotent_drop_constraint(
+    constraint_name: str,
+    table: str,
+    *,
+    type_: str = "unique",
+) -> None:
+    """Drop a named constraint, no-op if the constraint or table does not exist.
+
+    Supports type_='unique' (checks get_unique_constraints) and
+    type_='foreignkey' (checks get_foreign_keys). For other type_ values,
+    delegates directly to op.drop_constraint — caller is responsible for
+    guarding those cases.
+
+    Used by civiccore_0002_llm to idempotently drop the old
+    prompt_templates_name_key UNIQUE constraint before adding the
+    replacement composite unique constraint.
+    """
+    inspector = _inspector()
+    if not inspector.has_table(table):
+        return
+    if type_ == "unique":
+        existing = {uc["name"] for uc in inspector.get_unique_constraints(table) if uc.get("name")}
+        if constraint_name not in existing:
+            return
+    elif type_ == "foreignkey":
+        existing = {fk["name"] for fk in inspector.get_foreign_keys(table) if fk.get("name")}
+        if constraint_name not in existing:
+            return
+    op.drop_constraint(constraint_name, table, type_=type_)
+
+
 def has_table(name: str) -> bool:
     """Thin public wrapper returning whether the named table exists in the current DB."""
     return _inspector().has_table(name)
