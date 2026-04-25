@@ -3,7 +3,7 @@
 Public API entry point for downstream apps (records-ai, civicclerk). Exposes:
 
 - Provider abstraction (LLMProvider ABC, registry, built-in Ollama/OpenAI/Anthropic).
-- Prompt template ORM, rendering, and 2-step DB override resolution.
+- Prompt template ORM, rendering, and 3-step override resolution (DB override → code-level override → civiccore default).
 - Model registry ORM, Pydantic schemas, async service, and FastAPI admin router.
 - Token-budgeted context assembly and prompt-injection defense.
 - Structured-output helper (Pydantic-validated, retry-on-malformed).
