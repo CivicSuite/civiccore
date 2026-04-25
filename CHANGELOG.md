@@ -13,6 +13,16 @@ MINOR; bug fixes ship as PATCH.
 
 ## [Unreleased]
 
+No unreleased changes.
+
+## [0.2.0] - 2026-04-25
+
+This release ships the `civiccore.llm` module — provider abstraction
+(Ollama / OpenAI / Anthropic), prompt template engine with a 3-step
+override resolver, model registry service + admin router, context
+utilities with prompt-injection defense, structured-output helper, and the
+full public `civiccore.llm` import surface.
+
 ### Added
 - `civiccore_0002_llm` migration: evolves `prompt_templates` for Phase 2 override-resolution columns (`template_name` rename, `consumer_app`, `is_override`); adds `idempotent_drop_constraint` guard helper
 - `civiccore.llm.registry`: `ModelRegistry` ORM + Pydantic schemas (`ModelRegistryCreate`, `ModelRegistryRead`, `ModelRegistryUpdate`)
