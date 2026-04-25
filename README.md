@@ -48,6 +48,50 @@ publishing so the shipped artifact has already passed pytest, ruff,
 docs/version checks, a local build, and a clean-virtualenv wheel-install smoke
 test.
 
+## LLM providers
+
+CivicCore exposes a pluggable LLM provider abstraction for downstream apps. Three providers ship built-in:
+
+```python
+from civiccore.llm.providers import (
+    LLMProvider,         # ABC
+    register_provider,   # decorator for adding new providers
+    get_provider,        # construct a provider by name
+    list_providers,      # introspection
+    OllamaProvider,
+    OpenAIProvider,
+    AnthropicProvider,
+)
+
+# Built-in usage
+provider = get_provider("ollama", base_url="http://localhost:11434")
+text = await provider.generate(system_prompt="...", user_content="...")
+```
+
+Optional cloud-provider SDKs are needed only if you instantiate the corresponding provider:
+
+```bash
+# Direct install (works today, including GitHub wheel installs):
+pip install openai      # required for OpenAIProvider
+pip install anthropic   # required for AnthropicProvider
+
+# Extras shorthand (works once civiccore is published to PyPI):
+pip install civiccore[openai]
+pip install civiccore[anthropic]
+```
+
+Ollama needs no extra (uses httpx, already a base dependency).
+
+Third-party providers register via the public decorator without modifying civiccore source:
+
+```python
+from civiccore.llm.providers import LLMProvider, register_provider
+
+@register_provider("my_provider")
+class MyProvider(LLMProvider):
+    ...
+```
+
 ## Public API surface
 
 CivicCore's v0.1 public API is deliberately lean. The full list of

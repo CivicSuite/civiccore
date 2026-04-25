@@ -38,3 +38,6 @@ jobs:
 
       - name: Run LLM migration 0002 test
         run: pytest tests/test_llm_migration_0002.py -v --tb=short
+
+      - name: Run LLM provider tests
+        run: pytest tests/test_llm_providers.py -v --tb=short
