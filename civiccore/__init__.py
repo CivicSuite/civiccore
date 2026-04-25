@@ -11,4 +11,4 @@ Extraction Spec (Appendix A) in scottconverse/civicsuite for the v0.1 public
 API surface.
 """
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"

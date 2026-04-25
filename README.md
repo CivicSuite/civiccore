@@ -16,9 +16,13 @@ will consume it as they ship.
 
 ## Status
 
-**Phase 1 shipped.** `v0.1.0` is the first functional CivicCore release:
-the migration runner, idempotent guards, and the `civiccore_0001_baseline_v1`
-shared-schema baseline extracted from CivicRecords AI. See the CivicCore
+**Phase 2 shipped.** `v0.2.0` ships the `civiccore.llm` module — provider
+abstraction (Ollama / OpenAI / Anthropic), prompt template engine with a
+3-step override resolver, model registry service + admin router, context
+utilities with prompt-injection defense, and a Pydantic-validated
+structured-output helper. `v0.1.0` was the Phase 1 baseline (migration
+runner, idempotent guards, and the `civiccore_0001_baseline_v1`
+shared-schema baseline extracted from CivicRecords AI). See the CivicCore
 Extraction Spec section 12 for the phased rollout.
 
 ## Install
@@ -26,7 +30,7 @@ Extraction Spec section 12 for the phased rollout.
 From the GitHub release wheel:
 
 ```bash
-pip install https://github.com/CivicSuite/civiccore/releases/download/v0.1.0/civiccore-0.1.0-py3-none-any.whl
+pip install https://github.com/CivicSuite/civiccore/releases/download/v0.2.0/civiccore-0.2.0-py3-none-any.whl
 ```
 
 Each GitHub release also publishes `SHA256SUMS.txt` alongside the wheel and
@@ -41,8 +45,8 @@ cd civiccore
 pip install -e .[dev]
 ```
 
-PyPI publication can come later; `v0.1.0` is distributed first as a versioned
-GitHub release artifact so CivicRecords AI can stop depending on a Git SHA pin.
+PyPI publication can come later; CivicCore is distributed as versioned
+GitHub release artifacts so CivicRecords AI can stop depending on a Git SHA pin.
 The tag-driven release workflow runs `scripts/verify-release.sh` before
 publishing so the shipped artifact has already passed pytest, ruff,
 docs/version checks, a local build, and a clean-virtualenv wheel-install smoke

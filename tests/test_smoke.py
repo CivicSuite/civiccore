@@ -8,4 +8,4 @@ stage is `import civiccore` succeeds and exposes the exact release version.
 def test_import_civiccore() -> None:
     import civiccore
 
-    assert civiccore.__version__ == "0.1.0"
+    assert civiccore.__version__ == "0.2.0"
