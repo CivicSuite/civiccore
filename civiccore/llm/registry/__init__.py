@@ -1,5 +1,5 @@
 """
-civiccore.llm.registry — ORM model and Pydantic schemas for model_registry.
+civiccore.llm.registry — ORM model, Pydantic schemas, service, and router.
 
 Public exports:
 
@@ -7,16 +7,27 @@ Public exports:
 - ``ModelRegistryCreate``  — Pydantic schema for POST (create).
 - ``ModelRegistryRead``    — Pydantic schema for GET responses (ORM-compatible).
 - ``ModelRegistryUpdate``  — Pydantic schema for PATCH (partial update).
-
-Service-layer helpers (``get_active_model``, ``get_active_model_context_window``)
-will be added in Phase 2 Step 3d via ``civiccore.llm.registry.service``.
+- ``model_registry_router``         — FastAPI APIRouter for admin CRUD.
+- ``get_active_model``              — Async service: fetch active model row or None.
+- ``require_active_model``          — Async service: fetch or raise MissingModelError.
+- ``get_active_model_context_window`` — Async service: active context_window_size or default.
+- ``ModelRegistryServiceError``     — Service exception base.
+- ``MissingModelError``             — Raised when a required active model is absent.
 """
 
 from civiccore.llm.registry.models import ModelRegistry
+from civiccore.llm.registry.router import router as model_registry_router
 from civiccore.llm.registry.schemas import (
     ModelRegistryCreate,
     ModelRegistryRead,
     ModelRegistryUpdate,
+)
+from civiccore.llm.registry.service import (
+    MissingModelError,
+    ModelRegistryServiceError,
+    get_active_model,
+    get_active_model_context_window,
+    require_active_model,
 )
 
 __all__ = [
@@ -24,4 +35,10 @@ __all__ = [
     "ModelRegistryCreate",
     "ModelRegistryRead",
     "ModelRegistryUpdate",
+    "model_registry_router",
+    "MissingModelError",
+    "ModelRegistryServiceError",
+    "get_active_model",
+    "require_active_model",
+    "get_active_model_context_window",
 ]

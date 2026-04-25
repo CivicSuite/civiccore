@@ -44,3 +44,15 @@ jobs:
 
       - name: Run LLM template tests
         run: pytest tests/test_llm_templates.py -v --tb=short
+
+      - name: Run LLM context tests
+        run: pytest tests/test_llm_context.py -v --tb=short
+
+      - name: Run LLM structured output tests
+        run: pytest tests/test_llm_structured.py -v --tb=short
+
+      - name: Run LLM registry service tests
+        run: pytest tests/test_llm_registry_service.py -v --tb=short
+
+      - name: Run LLM public API smoke tests
+        run: pytest tests/test_llm_public_api.py -v --tb=short
