@@ -103,7 +103,7 @@ from civiccore.llm.templates import (
     PromptTemplateRead,
     RenderedPrompt,             # render() result dataclass
     render_template,            # string.Template renderer
-    resolve_template,           # async DB resolver (2-step override)
+    resolve_template,           # async DB resolver (3-step: app DB → code-level → civiccore default)
     CIVICCORE_DEFAULT_APP,      # "civiccore" namespace constant
     PromptTemplateError,        # exceptions
     PromptTemplateNotFoundError,
@@ -115,9 +115,12 @@ from civiccore.llm.templates import (
 
 `resolve_template(session, template_name=..., consumer_app=...)` returns the active `PromptTemplate` row using:
 
-1. **App override** — `consumer_app=<requesting app>`, `is_override=True`, `is_active=True`, highest `version`.
-2. **CivicCore default** — `consumer_app="civiccore"`, `is_override=False`, `is_active=True`, highest `version`.
-3. Otherwise raises `PromptTemplateNotFoundError`.
+1. **App DB override** — `consumer_app=<requesting app>`, `is_override=True`, `is_active=True`, highest `version`.
+2. **App code-level override** — in-memory `OVERRIDE_REGISTRY` populated via `register_template_override` (per ADR-0004 §7). DB overrides win over code overrides so operators retain production hot-fix capability.
+3. **CivicCore default** — `consumer_app="civiccore"`, `is_override=False`, `is_active=True`, highest `version`.
+4. Otherwise raises `PromptTemplateNotFoundError`.
+
+Callers passing `consumer_app="civiccore"` skip both override steps (1 and 2) and resolve directly to the civiccore default.
 
 ### Rendering
 

@@ -25,10 +25,9 @@ MINOR; bug fixes ship as PATCH.
   - Optional cloud SDKs: install `openai` or `anthropic` directly (e.g. `pip install openai`); the `civiccore[openai]` and `civiccore[anthropic]` extras shorthand becomes available once civiccore is published to PyPI.
 - `civiccore.llm.templates`: rendering and override resolution (Step 3c).
   - `render_template(template, variables)` returns a `RenderedPrompt` dataclass with `system` / `user` / `template_name` / `consumer_app` / `version`.
-  - `resolve_template(session, *, template_name, consumer_app)` async helper implements the 2-step DB resolution: app-override (consumer_app + is_override=true + is_active + highest version) → civiccore default (consumer_app='civiccore' + is_override=false + is_active + highest version) → `PromptTemplateNotFoundError`.
+  - `resolve_template(session, *, template_name, consumer_app)` async helper implements the 3-step resolution per ADR-0004 §7: app DB override (consumer_app + is_override=true + is_active + highest version) → app code-level override (`OVERRIDE_REGISTRY`) → civiccore default (consumer_app='civiccore' + is_override=false + is_active + highest version) → `PromptTemplateNotFoundError`.
   - New exceptions: `PromptTemplateError` (base), `PromptTemplateNotFoundError`, `PromptTemplateRenderError` (names the missing variable).
   - Uses stdlib `string.Template` per ADR-0004 (no Jinja2; `$name` syntax avoids JSON-brace collisions).
-  - In-memory code-level override step from ADR-0004 §7 deferred to a later release; the DB path satisfies the primary use case (operators hot-fix prompts in production without redeploy).
 - `civiccore.llm` (Step 3d): finalized public API surface for downstream consumption.
   - Context utilities ported from records-ai: `TokenBudget`, `ContextBlock`, `estimate_tokens`, `count_tokens`, `sanitize_for_llm` (3-pattern prompt-injection defense), `assemble_context`, `blocks_to_prompt`, `DEFAULT_CONTEXT_WINDOW=8192`.
   - `civiccore.llm.structured`: `StructuredOutput[ModelT]` Pydantic-validated LLM-call helper with retry-on-malformed (default 3 attempts); `StructuredOutputFailure` exception. Provider-agnostic.
