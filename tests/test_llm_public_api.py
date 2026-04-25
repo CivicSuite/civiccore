@@ -22,12 +22,17 @@ def test_public_api_surface_is_complete():
         "LLMProvider", "PROVIDER_REGISTRY", "register_provider",
         "get_provider", "list_providers",
         "OllamaProvider", "OpenAIProvider", "AnthropicProvider",
+        "OllamaConfig", "OpenAIConfig", "AnthropicConfig",
+        # Provider factory
+        "build_provider", "CONFIG_SCHEMAS",
         # Templates
         "PromptTemplate", "PromptTemplateCreate", "PromptTemplateRead",
         "RenderedPrompt", "render_template", "resolve_template",
         "CIVICCORE_DEFAULT_APP",
         "PromptTemplateError", "PromptTemplateNotFoundError",
         "PromptTemplateRenderError",
+        "OVERRIDE_REGISTRY", "register_template_override",
+        "unregister_template_override",
         # Registry
         "ModelRegistry", "ModelRegistryCreate", "ModelRegistryRead",
         "ModelRegistryUpdate", "model_registry_router",

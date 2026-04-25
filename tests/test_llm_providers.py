@@ -304,3 +304,90 @@ def test_supports_images_property():
     assert OllamaProvider(base_url="http://x").supports_images is True
     assert OpenAIProvider(api_key="k").supports_images is True
     assert AnthropicProvider(api_key="k").supports_images is True
+
+
+# ---------------------------------------------------------------------------
+# Factory + Pydantic config schema tests (ADR-0004 §6 / PROVIDER-CONFIG-001)
+# ---------------------------------------------------------------------------
+
+
+def test_ollama_config_defaults():
+    """OllamaConfig builds with no fields supplied; sensible defaults."""
+    from civiccore.llm.providers import OllamaConfig
+    cfg = OllamaConfig()
+    assert cfg.base_url == "http://localhost:11434"
+    assert cfg.default_model == "gemma4:e4b"
+
+
+def test_openai_config_requires_api_key():
+    """OpenAIConfig.api_key is required and must be non-empty."""
+    from civiccore.llm.providers import OpenAIConfig
+    from pydantic import ValidationError
+    with pytest.raises(ValidationError):
+        OpenAIConfig()  # missing api_key
+    with pytest.raises(ValidationError):
+        OpenAIConfig(api_key="")  # empty api_key
+
+
+def test_anthropic_config_requires_api_key_and_positive_max_tokens():
+    """AnthropicConfig validates api_key and max_tokens > 0."""
+    from civiccore.llm.providers import AnthropicConfig
+    from pydantic import ValidationError
+    with pytest.raises(ValidationError):
+        AnthropicConfig()  # missing api_key
+    with pytest.raises(ValidationError):
+        AnthropicConfig(api_key="k", max_tokens=0)  # not > 0
+
+
+@pytest.mark.asyncio
+async def test_build_provider_validates_config_type():
+    """build_provider raises TypeError when given the wrong config schema."""
+    from civiccore.llm.factory import build_provider
+    from civiccore.llm.providers import OpenAIConfig
+    # Pass OpenAIConfig to ollama; should be rejected
+    with pytest.raises(TypeError, match="ollama.*expects config type OllamaConfig"):
+        build_provider("ollama", OpenAIConfig(api_key="k"))
+
+
+@pytest.mark.asyncio
+async def test_build_provider_unknown_name_raises_key_error():
+    """build_provider raises KeyError naming available providers."""
+    from civiccore.llm.factory import build_provider
+    from civiccore.llm.providers import OllamaConfig
+    with pytest.raises(KeyError, match="not registered"):
+        build_provider("nonexistent_provider", OllamaConfig())
+
+
+@pytest.mark.asyncio
+async def test_build_provider_constructs_ollama_with_valid_config():
+    """build_provider with valid OllamaConfig returns a working provider instance."""
+    from civiccore.llm.factory import build_provider
+    from civiccore.llm.providers import OllamaConfig, OllamaProvider
+    cfg = OllamaConfig(base_url="http://test:11434", default_model="custom")
+    provider = build_provider("ollama", cfg)
+    assert isinstance(provider, OllamaProvider)
+    assert provider.base_url == "http://test:11434"
+    assert provider.default_model == "custom"
+    assert provider.name == "ollama"
+
+
+@pytest.mark.asyncio
+async def test_build_provider_constructs_openai_with_valid_config():
+    """build_provider with valid OpenAIConfig returns OpenAIProvider."""
+    from civiccore.llm.factory import build_provider
+    from civiccore.llm.providers import OpenAIConfig, OpenAIProvider
+    cfg = OpenAIConfig(api_key="dummy")
+    provider = build_provider("openai", cfg)
+    assert isinstance(provider, OpenAIProvider)
+    assert provider.name == "openai"
+
+
+@pytest.mark.asyncio
+async def test_build_provider_constructs_anthropic_with_valid_config():
+    """build_provider with valid AnthropicConfig returns AnthropicProvider."""
+    from civiccore.llm.factory import build_provider
+    from civiccore.llm.providers import AnthropicConfig, AnthropicProvider
+    cfg = AnthropicConfig(api_key="dummy")
+    provider = build_provider("anthropic", cfg)
+    assert isinstance(provider, AnthropicProvider)
+    assert provider.name == "anthropic"

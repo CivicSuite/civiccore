@@ -18,6 +18,11 @@ from civiccore.llm.templates.exceptions import (
     PromptTemplateRenderError,
 )
 from civiccore.llm.templates.models import PromptTemplate
+from civiccore.llm.templates.overrides import (
+    OVERRIDE_REGISTRY,
+    register_template_override,
+    unregister_template_override,
+)
 from civiccore.llm.templates.resolver import CIVICCORE_DEFAULT_APP, resolve_template
 from civiccore.llm.templates.schemas import (
     PromptTemplateCreate,
@@ -25,6 +30,9 @@ from civiccore.llm.templates.schemas import (
 )
 
 __all__ = [
+    "OVERRIDE_REGISTRY",
+    "register_template_override",
+    "unregister_template_override",
     "PromptTemplate",
     "PromptTemplateCreate",
     "PromptTemplateRead",

@@ -1,23 +1,26 @@
-"""Prompt template resolution per ADR-0004 §7 (2-step DB algorithm).
+"""Prompt template resolution per ADR-0004 §7 (3-step algorithm).
 
-Step 1 — App override:
+Step 1 — App DB override:
     Look for an active row in prompt_templates with consumer_app=<requesting app>,
     template_name=<requested>, is_override=true, is_active=true.
-    Highest version wins.
+    Highest version wins. DB overrides win over code overrides so that
+    operators can hot-fix prompts in production without redeploy.
 
-Step 2 — CivicCore default:
+Step 2 — App code-level override:
+    Look up (consumer_app, template_name) in OVERRIDE_REGISTRY (in-memory map
+    populated at import time via @register_template_override). Code overrides
+    beat civiccore defaults so that consumer apps can ship Python-level
+    defaults that supersede civiccore's defaults when no DB override exists.
+
+Step 3 — CivicCore DB default:
     Fall back to consumer_app='civiccore', template_name=<requested>,
     is_override=false, is_active=true. Highest version wins.
 
-Step 3 — Missing:
+Step 4 — Missing:
     Raise PromptTemplateNotFoundError. No silent default.
 
-Note: ADR-0004 §7 originally specified a 3-step algorithm with an in-memory
-code-level override step between (1) and (2). That code-override layer is
-deferred to a later release — the DB path satisfies the primary use case
-(operators hot-fix prompts in production without redeploy). When a concrete
-need for in-process overrides arises, this resolver will gain a third step
-WITHOUT changing the existing two-step behavior.
+When consumer_app == 'civiccore', steps 1 AND 2 are skipped — civiccore can't
+override its own template; it owns the default.
 """
 from __future__ import annotations
 
@@ -26,6 +29,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from civiccore.llm.templates.exceptions import PromptTemplateNotFoundError
 from civiccore.llm.templates.models import PromptTemplate
+from civiccore.llm.templates.overrides import OVERRIDE_REGISTRY
 
 CIVICCORE_DEFAULT_APP = "civiccore"
 
@@ -36,23 +40,23 @@ async def resolve_template(
     template_name: str,
     consumer_app: str,
 ) -> PromptTemplate:
-    """Resolve a prompt template per the 2-step override algorithm.
+    """Resolve a prompt template per the 3-step override algorithm.
 
     Args:
         session: Active SQLAlchemy AsyncSession.
         template_name: Logical template name (e.g., "exemption_review.system").
         consumer_app: Requesting application namespace (e.g., "civicrecords-ai").
-            When set to "civiccore", step 1 is skipped (no self-override).
+            When set to "civiccore", steps 1 and 2 are skipped (no self-override).
 
     Returns:
-        The resolved PromptTemplate ORM row.
+        The resolved PromptTemplate ORM row (or in-memory instance for code overrides).
 
     Raises:
-        PromptTemplateNotFoundError: When neither an app override nor a
+        PromptTemplateNotFoundError: When no DB app override, code override, or
             civiccore default is found. The error names both fields and tells
             the caller how to add the missing template.
     """
-    # Step 1: App-specific override (skip if requester is civiccore itself)
+    # Step 1: App-specific DB override (skip if requester is civiccore itself)
     if consumer_app != CIVICCORE_DEFAULT_APP:
         stmt = (
             select(PromptTemplate)
@@ -70,7 +74,13 @@ async def resolve_template(
         if row is not None:
             return row
 
-    # Step 2: CivicCore default
+        # Step 2: App code-level override (in-memory registry).
+        # Skipped for consumer_app='civiccore' along with step 1.
+        code_override = OVERRIDE_REGISTRY.get((consumer_app, template_name))
+        if code_override is not None:
+            return code_override
+
+    # Step 3: CivicCore default
     stmt = (
         select(PromptTemplate)
         .where(
@@ -87,7 +97,7 @@ async def resolve_template(
     if row is not None:
         return row
 
-    # Step 3: Missing
+    # Step 4: Missing
     raise PromptTemplateNotFoundError(
         template_name=template_name,
         consumer_app=consumer_app,
