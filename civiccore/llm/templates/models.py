@@ -75,9 +75,14 @@ class PromptTemplate(Base):
     is_active: Mapped[bool] = mapped_column(
         Boolean, nullable=False, server_default="true"
     )
+    # NOTE: DB-level FK to users(id) ON DELETE SET NULL is created by the
+    # 0001 baseline migration. The ORM-level ForeignKey reference is omitted
+    # because civiccore has no User ORM model — users.id lives in records-ai
+    # and is not part of civiccore.db.Base.metadata. Including the ORM-level
+    # ForeignKey here causes NoReferencedTableError at mapper config time.
+    # The DB constraint is unaffected.
     created_by: Mapped[uuid.UUID | None] = mapped_column(
         PG_UUID(as_uuid=True),
-        ForeignKey("users.id", ondelete="SET NULL"),
         nullable=True,
     )
     created_at: Mapped[datetime] = mapped_column(

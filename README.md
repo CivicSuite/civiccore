@@ -92,6 +92,37 @@ class MyProvider(LLMProvider):
     ...
 ```
 
+## LLM templates
+
+CivicCore exposes a prompt-template rendering and override-resolution layer for downstream apps.
+
+```python
+from civiccore.llm.templates import (
+    PromptTemplate,             # ORM
+    PromptTemplateCreate,       # Pydantic schemas
+    PromptTemplateRead,
+    RenderedPrompt,             # render() result dataclass
+    render_template,            # string.Template renderer
+    resolve_template,           # async DB resolver (2-step override)
+    CIVICCORE_DEFAULT_APP,      # "civiccore" namespace constant
+    PromptTemplateError,        # exceptions
+    PromptTemplateNotFoundError,
+    PromptTemplateRenderError,
+)
+```
+
+### Resolution order
+
+`resolve_template(session, template_name=..., consumer_app=...)` returns the active `PromptTemplate` row using:
+
+1. **App override** — `consumer_app=<requesting app>`, `is_override=True`, `is_active=True`, highest `version`.
+2. **CivicCore default** — `consumer_app="civiccore"`, `is_override=False`, `is_active=True`, highest `version`.
+3. Otherwise raises `PromptTemplateNotFoundError`.
+
+### Rendering
+
+`render_template(template, {"key": "value", ...})` substitutes `string.Template` placeholders (`$key` or `${key}`). Missing variables raise `PromptTemplateRenderError` naming the missing key.
+
 ## Public API surface
 
 CivicCore's v0.1 public API is deliberately lean. The full list of
