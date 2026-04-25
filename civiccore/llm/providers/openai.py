@@ -46,8 +46,8 @@ class OpenAIProvider(LLMProvider):
             from openai import AsyncOpenAI
         except ImportError as e:
             raise ImportError(
-                "openai SDK is required for OpenAIProvider. "
-                "Install with: pip install 'civiccore[openai]'"
+                "openai SDK is required for OpenAIProvider. Install it: pip install openai "
+                "(or pip install 'civiccore[openai]' once civiccore is published to PyPI)."
             ) from e
         self._client = AsyncOpenAI(api_key=api_key)
         self.default_model = default_model

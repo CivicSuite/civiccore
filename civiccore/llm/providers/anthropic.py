@@ -48,8 +48,8 @@ class AnthropicProvider(LLMProvider):
             from anthropic import AsyncAnthropic
         except ImportError as e:
             raise ImportError(
-                "anthropic SDK is required for AnthropicProvider. "
-                "Install with: pip install 'civiccore[anthropic]'"
+                "anthropic SDK is required for AnthropicProvider. Install it: pip install anthropic "
+                "(or pip install 'civiccore[anthropic]' once civiccore is published to PyPI)."
             ) from e
         self._client = AsyncAnthropic(api_key=api_key)
         self.default_model = default_model

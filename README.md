@@ -68,11 +68,16 @@ provider = get_provider("ollama", base_url="http://localhost:11434")
 text = await provider.generate(system_prompt="...", user_content="...")
 ```
 
-Optional install extras pull in cloud SDKs:
+Optional cloud-provider SDKs are needed only if you instantiate the corresponding provider:
 
 ```bash
-pip install civiccore[openai]      # adds openai SDK for OpenAIProvider
-pip install civiccore[anthropic]   # adds anthropic SDK for AnthropicProvider
+# Direct install (works today, including GitHub wheel installs):
+pip install openai      # required for OpenAIProvider
+pip install anthropic   # required for AnthropicProvider
+
+# Extras shorthand (works once civiccore is published to PyPI):
+pip install civiccore[openai]
+pip install civiccore[anthropic]
 ```
 
 Ollama needs no extra (uses httpx, already a base dependency).

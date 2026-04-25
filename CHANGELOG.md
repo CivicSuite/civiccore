@@ -22,7 +22,7 @@ MINOR; bug fixes ship as PATCH.
   - `LLMProvider` ABC with `generate`, `embed`, `embed_batch`, `name`, `supports_images` (per ADR-0004 §6).
   - Decorator-based registry: `@register_provider`, `get_provider`, `list_providers`.
   - Built-in providers: `OllamaProvider` (uses httpx, default model `gemma4:e4b`), `OpenAIProvider` (optional extra `civiccore[openai]`), `AnthropicProvider` (optional extra `civiccore[anthropic]`; embeddings raise `NotImplementedError` since Anthropic has no native embed endpoint).
-  - Optional install extras: `pip install civiccore[openai]`, `pip install civiccore[anthropic]`.
+  - Optional cloud SDKs: install `openai` or `anthropic` directly (e.g. `pip install openai`); the `civiccore[openai]` and `civiccore[anthropic]` extras shorthand becomes available once civiccore is published to PyPI.
 
 ## [0.1.0] - 2026-04-24
 
