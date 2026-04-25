@@ -23,6 +23,12 @@ MINOR; bug fixes ship as PATCH.
   - Decorator-based registry: `@register_provider`, `get_provider`, `list_providers`.
   - Built-in providers: `OllamaProvider` (uses httpx, default model `gemma4:e4b`), `OpenAIProvider` (optional extra `civiccore[openai]`), `AnthropicProvider` (optional extra `civiccore[anthropic]`; embeddings raise `NotImplementedError` since Anthropic has no native embed endpoint).
   - Optional cloud SDKs: install `openai` or `anthropic` directly (e.g. `pip install openai`); the `civiccore[openai]` and `civiccore[anthropic]` extras shorthand becomes available once civiccore is published to PyPI.
+- `civiccore.llm.templates`: rendering and override resolution (Step 3c).
+  - `render_template(template, variables)` returns a `RenderedPrompt` dataclass with `system` / `user` / `template_name` / `consumer_app` / `version`.
+  - `resolve_template(session, *, template_name, consumer_app)` async helper implements the 2-step DB resolution: app-override (consumer_app + is_override=true + is_active + highest version) → civiccore default (consumer_app='civiccore' + is_override=false + is_active + highest version) → `PromptTemplateNotFoundError`.
+  - New exceptions: `PromptTemplateError` (base), `PromptTemplateNotFoundError`, `PromptTemplateRenderError` (names the missing variable).
+  - Uses stdlib `string.Template` per ADR-0004 (no Jinja2; `$name` syntax avoids JSON-brace collisions).
+  - In-memory code-level override step from ADR-0004 §7 deferred to a later release; the DB path satisfies the primary use case (operators hot-fix prompts in production without redeploy).
 
 ## [0.1.0] - 2026-04-24
 
