@@ -18,6 +18,11 @@ MINOR; bug fixes ship as PATCH.
 - `civiccore.llm.registry`: `ModelRegistry` ORM + Pydantic schemas (`ModelRegistryCreate`, `ModelRegistryRead`, `ModelRegistryUpdate`)
 - `civiccore.llm.templates`: `PromptTemplate` ORM + Pydantic schemas (`PromptTemplateCreate`, `PromptTemplateRead`, `PromptTemplateUpdate`)
 - `civiccore.db.Base`: shared SQLAlchemy declarative base for civiccore ORM models
+- `civiccore.llm.providers`: pluggable provider abstraction.
+  - `LLMProvider` ABC with `generate`, `embed`, `embed_batch`, `name`, `supports_images` (per ADR-0004 §6).
+  - Decorator-based registry: `@register_provider`, `get_provider`, `list_providers`.
+  - Built-in providers: `OllamaProvider` (uses httpx, default model `gemma4:e4b`), `OpenAIProvider` (optional extra `civiccore[openai]`), `AnthropicProvider` (optional extra `civiccore[anthropic]`; embeddings raise `NotImplementedError` since Anthropic has no native embed endpoint).
+  - Optional install extras: `pip install civiccore[openai]`, `pip install civiccore[anthropic]`.
 
 ## [0.1.0] - 2026-04-24
 

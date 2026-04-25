@@ -69,6 +69,12 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+anthropic = [
+    "anthropic>=0.40.0",
+]
+openai = [
+    "openai>=1.50.0",
+]
 dev = [
     "build>=1.2.0",
     "psycopg2-binary>=2.9.0",
@@ -77,6 +83,11 @@ dev = [
     "respx>=0.22.0",
     "ruff>=0.11.0",
     "testcontainers[postgres]>=4.9.0",
+    # LLM provider SDKs included in dev so test_llm_providers runs without
+    # skips per Hard Rule 4a. End users still install [openai]/[anthropic]
+    # extras separately for production use.
+    "openai>=1.50.0",
+    "anthropic>=0.40.0",
 ]
 
 [project.urls]
