@@ -35,3 +35,6 @@ jobs:
 
       - name: Run baseline idempotency test
         run: pytest tests/test_baseline_idempotency.py -v --tb=short
+
+      - name: Run LLM migration 0002 test
+        run: pytest tests/test_llm_migration_0002.py -v --tb=short

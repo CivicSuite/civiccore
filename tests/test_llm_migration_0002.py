@@ -45,7 +45,7 @@ def _docker_available() -> bool:
         return False
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="function")
 def pg_container():
     """Ephemeral Postgres 17 + pgvector container shared across this module's tests."""
     if not _docker_available():

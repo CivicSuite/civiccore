@@ -25,7 +25,7 @@ from __future__ import annotations
 import uuid
 from datetime import datetime
 
-from sqlalchemy import ForeignKey, Integer, String, Text, UniqueConstraint
+from sqlalchemy import Boolean, ForeignKey, Integer, String, Text, UniqueConstraint
 from sqlalchemy.dialects.postgresql import JSONB, TIMESTAMP
 from sqlalchemy.dialects.postgresql import UUID as PG_UUID
 from sqlalchemy.orm import Mapped, mapped_column
@@ -58,7 +58,7 @@ class PromptTemplate(Base):
         String(100), nullable=False, server_default="civiccore"
     )
     is_override: Mapped[bool] = mapped_column(
-        nullable=False, server_default="false"
+        Boolean, nullable=False, server_default="false"
     )
     purpose: Mapped[str] = mapped_column(String(50), nullable=False)
     system_prompt: Mapped[str] = mapped_column(Text, nullable=False)
@@ -73,7 +73,7 @@ class PromptTemplate(Base):
         Integer, nullable=False, server_default="1"
     )
     is_active: Mapped[bool] = mapped_column(
-        nullable=False, server_default="true"
+        Boolean, nullable=False, server_default="true"
     )
     created_by: Mapped[uuid.UUID | None] = mapped_column(
         PG_UUID(as_uuid=True),
