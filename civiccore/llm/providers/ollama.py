@@ -7,9 +7,9 @@ Default generation model is ``gemma4:e4b``, which matches the current
 records-ai production default. Default embedding model is
 ``nomic-embed-text``.
 
-Note: Ollama's embeddings endpoint accepts a single ``prompt`` per request,
-so :meth:`OllamaProvider.embed_batch` loops sequentially. Parallel batching
-is a v0.3.0 candidate; records-ai today does the same.
+Embeddings use Ollama's ``/api/embed`` endpoint, which accepts either a
+single string or a list of strings via the ``input`` field. This matches
+records-ai's ``embedder.py`` contract verbatim.
 """
 
 from __future__ import annotations
@@ -89,12 +89,17 @@ class OllamaProvider(LLMProvider):
         model = model or self.default_embed_model
         async with httpx.AsyncClient(timeout=60.0) as client:
             resp = await client.post(
-                f"{self.base_url}/api/embeddings",
-                json={"model": model, "prompt": text},
+                f"{self.base_url}/api/embed",
+                json={"model": model, "input": text},
             )
             resp.raise_for_status()
             data = resp.json()
-            return list(data.get("embedding", []))
+            embeddings = data.get("embeddings", [])
+            if embeddings and len(embeddings) > 0:
+                return embeddings[0]
+            raise ValueError(
+                f"No embedding returned from Ollama for model {model}"
+            )
 
     async def embed_batch(
         self,
@@ -102,12 +107,23 @@ class OllamaProvider(LLMProvider):
         *,
         model: str | None = None,
     ) -> list[list[float]]:
-        # Ollama's embeddings API is single-text; loop sequentially.
-        # Records-ai today does the same; batch parallelism is a v0.3.0 candidate.
-        results: list[list[float]] = []
-        for text in texts:
-            results.append(await self.embed(text, model=model))
-        return results
+        # Ollama's /api/embed accepts a list via `input`; one request per batch.
+        model = model or self.default_embed_model
+        if not texts:
+            return []
+        async with httpx.AsyncClient(timeout=120.0) as client:
+            resp = await client.post(
+                f"{self.base_url}/api/embed",
+                json={"model": model, "input": texts},
+            )
+            resp.raise_for_status()
+            data = resp.json()
+            embeddings = data.get("embeddings", [])
+            if len(embeddings) != len(texts):
+                raise ValueError(
+                    f"Expected {len(texts)} embeddings, got {len(embeddings)}"
+                )
+            return embeddings
 
 
 __all__ = ["OllamaProvider"]

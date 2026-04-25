@@ -135,27 +135,79 @@ async def test_ollama_embed_mocked():
     base_url = "http://test-ollama"
     provider = OllamaProvider(base_url=base_url)
     async with respx.mock(base_url=base_url, assert_all_called=True) as mock:
-        mock.post("/api/embeddings").mock(
-            return_value=httpx.Response(200, json={"embedding": [0.1, 0.2, 0.3]})
+        route = mock.post("/api/embed").mock(
+            return_value=httpx.Response(
+                200, json={"embeddings": [[0.1, 0.2, 0.3]]}
+            )
         )
         vec = await provider.embed("hello")
     assert vec == [0.1, 0.2, 0.3]
+    assert route.called
+    request_payload = route.calls[0].request.read()
+    import json
+
+    body = json.loads(request_payload)
+    assert "model" in body
+    assert body.get("input") == "hello"
 
 
 @pytest.mark.asyncio
-async def test_ollama_embed_batch_loops():
+async def test_ollama_embed_batch_single_request():
     base_url = "http://test-ollama"
     provider = OllamaProvider(base_url=base_url)
-    responses = [
-        httpx.Response(200, json={"embedding": [1.0]}),
-        httpx.Response(200, json={"embedding": [2.0]}),
-        httpx.Response(200, json={"embedding": [3.0]}),
-    ]
     async with respx.mock(base_url=base_url) as mock:
-        route = mock.post("/api/embeddings").mock(side_effect=responses)
+        route = mock.post("/api/embed").mock(
+            return_value=httpx.Response(
+                200, json={"embeddings": [[1.0], [2.0], [3.0]]}
+            )
+        )
         vectors = await provider.embed_batch(["a", "b", "c"])
     assert vectors == [[1.0], [2.0], [3.0]]
-    assert route.call_count == 3
+    assert route.call_count == 1
+    request_payload = route.calls[0].request.read()
+    import json
+
+    body = json.loads(request_payload)
+    assert body.get("input") == ["a", "b", "c"]
+
+
+@pytest.mark.asyncio
+async def test_ollama_embed_raises_on_empty_response():
+    base_url = "http://test-ollama"
+    provider = OllamaProvider(base_url=base_url)
+    async with respx.mock(base_url=base_url) as mock:
+        mock.post("/api/embed").mock(
+            return_value=httpx.Response(200, json={"embeddings": []})
+        )
+        with pytest.raises(ValueError, match="No embedding returned"):
+            await provider.embed("text")
+
+
+@pytest.mark.asyncio
+async def test_ollama_embed_batch_raises_on_count_mismatch():
+    base_url = "http://test-ollama"
+    provider = OllamaProvider(base_url=base_url)
+    async with respx.mock(base_url=base_url) as mock:
+        mock.post("/api/embed").mock(
+            return_value=httpx.Response(
+                200, json={"embeddings": [[1.0], [2.0]]}
+            )
+        )
+        with pytest.raises(ValueError, match="Expected 3 embeddings"):
+            await provider.embed_batch(["a", "b", "c"])
+
+
+@pytest.mark.asyncio
+async def test_ollama_embed_batch_empty_returns_empty_no_http():
+    base_url = "http://test-ollama"
+    provider = OllamaProvider(base_url=base_url)
+    async with respx.mock(base_url=base_url, assert_all_called=False) as mock:
+        route = mock.post("/api/embed").mock(
+            return_value=httpx.Response(200, json={"embeddings": []})
+        )
+        result = await provider.embed_batch([])
+    assert result == []
+    assert route.call_count == 0
 
 
 # ---------------------------------------------------------------------------
