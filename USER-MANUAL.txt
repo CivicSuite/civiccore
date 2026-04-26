@@ -12,9 +12,10 @@ This manual has three audiences. Read the section for your role.
 2. Technical guide for module developers and IT integrators — install,
    consume the public API, run civiccore migrations from a downstream
    alembic chain.
-3. Architecture reference — submodules, the migration runner, the
-   prompt-template engine, the provider registry, context utilities, and
-   structured output, with a text diagram of how they fit together.
+3. Architecture reference — shipped submodules (migration runner,
+   shared Base, LLM provider registry, prompt-template engine, model
+   registry, context utilities, structured output), the list of planned
+   placeholder namespaces, and a text diagram of how they fit together.
 
 ---
 
@@ -29,11 +30,31 @@ municipal operations applications — the first one shipped is CivicRecords AI,
 a public-records request management app for city governments. Future
 modules (CivicClerk, CivicCode, CivicZone) will follow.
 
-Rather than each of those apps re-inventing the same plumbing —
-authentication, audit logging, LLM provider integration, document
-ingestion, prompt templates, model registries, sovereignty verification —
-CivicCore provides one shared, audited, semver-stable implementation that
-each module imports.
+Rather than each of those apps re-inventing the same plumbing, CivicCore
+provides one shared, audited, semver-stable implementation that each
+module imports.
+
+What v0.2.0 actually ships:
+
+- civiccore.migrations — migration runner with idempotent guards plus
+  the civiccore_0001_baseline_v1 shared-schema baseline and the
+  civiccore_0002_llm Phase 2 ALTER.
+- civiccore.db — shared SQLAlchemy declarative Base.
+- civiccore.llm — LLM provider abstraction (Ollama / OpenAI /
+  Anthropic), prompt template engine with 3-step override resolver, model
+  registry service + admin router, context utilities with prompt-injection
+  defense, and Pydantic-validated structured output.
+
+Planned extraction targets (not yet implemented). The following
+namespaces have placeholder __init__.py files reserving the import path
+but ship no implementation in v0.2.0: civiccore.audit, civiccore.auth,
+civiccore.catalog, civiccore.connectors, civiccore.exemptions
+(50-state public-records exemption engine), civiccore.ingest (document
+ingestion), civiccore.notifications, civiccore.onboarding,
+civiccore.scaffold, civiccore.search (hybrid search), and
+civiccore.verification (sovereignty verification). These will land in
+future Phase releases and must not be relied on by downstream modules
+until they do.
 
   What CivicCore is not
 
@@ -206,9 +227,12 @@ it is the reference integration.
 
   Submodules
 
+Shipped (have implementation in v0.2.0):
+
 civiccore/
 ├── db/                  # Shared SQLAlchemy declarative Base
 ├── migrations/          # Migration runner + civiccore_0001_baseline_v1
+│                        # + civiccore_0002_llm Phase 2 ALTER
 └── llm/                 # The civiccore.llm module (Phase 2)
     ├── providers/       # LLMProvider ABC + Ollama / OpenAI / Anthropic
     ├── factory.py       # build_provider() + CONFIG_SCHEMAS
@@ -216,6 +240,25 @@ civiccore/
     ├── registry/        # ModelRegistry ORM + service + admin router
     ├── context.py       # TokenBudget, assemble_context, sanitize_for_llm
     └── structured.py    # StructuredOutput (Pydantic-validated retry)
+
+Planned (placeholder packages exist; implementation is future Phase work):
+
+civiccore/
+├── audit/               # placeholder — future audit logging
+├── auth/                # placeholder — future authentication
+├── catalog/             # placeholder — future catalog primitives
+├── connectors/          # placeholder — future external connectors
+├── exemptions/          # placeholder — future 50-state exemption engine
+├── ingest/              # placeholder — future document ingestion
+├── notifications/       # placeholder — future notification primitives
+├── onboarding/          # placeholder — future onboarding flows
+├── scaffold/            # placeholder — future scaffolding helpers
+├── search/              # placeholder — future hybrid search
+└── verification/        # placeholder — future sovereignty verification
+
+Each placeholder directory contains only an __init__.py docstring stub.
+These namespaces are reserved import paths, not capability — do not
+import from them in downstream code until they ship.
 
   How CivicCore fits with downstream consumers
 

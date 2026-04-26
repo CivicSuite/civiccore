@@ -8,12 +8,32 @@ What this is
 ------------
 
 CivicCore is the Python library every CivicSuite module depends on for
-authentication, audit logging, LLM access, document ingestion, hybrid
-search, connectors, notifications, onboarding, the 50-state public-records
-exemption engine, and sovereignty verification. It is extracted from the
-production CivicRecords AI codebase per the CivicCore Extraction Spec and is
-consumed today by CivicRecords AI v1.4.0; CivicClerk, CivicCode, and
-CivicZone will consume it as they ship.
+shared platform plumbing.
+
+What ships in v0.2.0:
+
+  - civiccore.migrations - migration runner with idempotent guards plus
+    the civiccore_0001_baseline_v1 shared-schema baseline and the
+    civiccore_0002_llm Phase 2 ALTER.
+  - civiccore.db        - shared SQLAlchemy declarative Base.
+  - civiccore.llm       - LLM provider abstraction (Ollama / OpenAI /
+    Anthropic), prompt template engine with 3-step override resolver,
+    model registry service + admin router, context utilities with
+    prompt-injection defense, and Pydantic-validated structured output.
+
+Planned extraction targets (placeholder packages exist; not yet
+implemented in v0.2.0): civiccore.audit, civiccore.auth, civiccore.catalog,
+civiccore.connectors, civiccore.exemptions (50-state public-records
+exemption engine), civiccore.ingest (document ingestion),
+civiccore.notifications, civiccore.onboarding, civiccore.scaffold,
+civiccore.search (hybrid search), and civiccore.verification (sovereignty
+verification). These namespaces are reserved import paths only and must
+not be relied on by downstream modules until they ship in future Phase
+releases.
+
+CivicCore is being extracted from the production CivicRecords AI codebase
+per the CivicCore Extraction Spec and is consumed today by CivicRecords AI
+v1.4.0; CivicClerk, CivicCode, and CivicZone will consume it as they ship.
 
 CivicCore is a library, not an end-user municipal app.
 

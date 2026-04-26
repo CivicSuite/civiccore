@@ -129,6 +129,28 @@
         <li>Pluggable LLM abstraction targeting local-first deployment via Ollama, with no vendor lock-in.</li>
         <li>Migration runner, prompt template engine with 3-step override resolver, and model registry — designed to be consumed by downstream modules without tight coupling.</li>
       </ul>
+      <h3>Shipped in v0.2.0</h3>
+      <ul>
+        <li><code>civiccore.migrations</code> — migration runner + idempotent guards + <code>civiccore_0001_baseline_v1</code> + <code>civiccore_0002_llm</code>.</li>
+        <li><code>civiccore.db</code> — shared SQLAlchemy declarative <code>Base</code>.</li>
+        <li><code>civiccore.llm</code> — providers (Ollama / OpenAI / Anthropic), templates, model registry, context utilities, structured output.</li>
+      </ul>
+      <h3>Planned extraction targets (not yet implemented)</h3>
+      <p>These namespaces have placeholder <code>__init__.py</code> files reserving the import path but ship no implementation in v0.2.0. They will land in future Phase releases:</p>
+      <ul>
+        <li><code>civiccore.audit</code> — audit logging</li>
+        <li><code>civiccore.auth</code> — authentication</li>
+        <li><code>civiccore.catalog</code> — catalog primitives</li>
+        <li><code>civiccore.connectors</code> — external connectors</li>
+        <li><code>civiccore.exemptions</code> — 50-state public-records exemption engine</li>
+        <li><code>civiccore.ingest</code> — document ingestion</li>
+        <li><code>civiccore.notifications</code> — notification primitives</li>
+        <li><code>civiccore.onboarding</code> — onboarding flows</li>
+        <li><code>civiccore.scaffold</code> — scaffolding helpers</li>
+        <li><code>civiccore.search</code> — hybrid search</li>
+        <li><code>civiccore.verification</code> — sovereignty verification</li>
+      </ul>
+      <p>Do not import from these namespaces in downstream code until they ship.</p>
     </section>
 
     <section aria-labelledby="install">
