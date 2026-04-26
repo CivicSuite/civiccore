@@ -5,8 +5,8 @@ One-page operating card for Scott. Keep this open when you supervise a session.
 Everything here is grounded in what actually exists in this repo today.
 
 Current state at the time this card was written:
-- Branch: `phase1/migrations-scaffold` (civicsuite Phase 1-A, migrations scaffold landed)
-- Version: `civiccore 0.1.0.dev0` (pyproject.toml + civiccore/__init__.py agree)
+- Branch: `docs/phase2-closeout-standardization` (Phase 1 complete, Phase 2 closeout / standardization in flight)
+- Version: `civiccore 0.2.0` (pyproject.toml + civiccore/__init__.py agree)
 - Rule 11 hook wired locally in `.claude/hooks/` (untracked in git after 6fb2c6f)
 - civiccore is the validation project for Hard Rule 11 (Commit-Size Acknowledgment Gate)
 
@@ -40,7 +40,7 @@ Five things, in order of how often you'll need them:
    - `--amend`, `-F`, editor commits → fail-open (bypass). This is intentional.
    - You say the literal phrase `override rule 11` → 60-second one-shot bypass.
    If you see a false positive (small commit blocked, or tag-present commit blocked), that's the bug you're hunting. Save the stderr output.
-5. **Keep civiccore and civiccore-ui aligned** — if a schema, token, or shell component changes in `civiccore/` (models, auth, catalog) or `civiccore-ui/` (components, shell, tokens), make sure the agent touches both sides in the same commit. Phase 1 is explicitly about extraction-in-sync.
+5. **Keep civiccore and civiccore-ui aligned** — if a schema, token, or shell component changes in `civiccore/` (models, auth, catalog) or `civiccore-ui/` (components, shell, tokens), make sure the agent touches both sides in the same commit. Extraction-in-sync was the Phase 1 contract and still applies through Phase 2 closeout.
 
 ---
 
@@ -78,6 +78,6 @@ A session on civiccore is done when all of these are true:
 - Version matches across `pyproject.toml` (line 7) and `civiccore/__init__.py` (line 13). Bump both together or neither.
 - `CHANGELOG.md` `## [Unreleased]` has an entry for every user-visible change made this session.
 - No false-positive Rule 11 blocks during the session. If the gate blocked a commit, one of three things is true and you can say which: (a) the commit genuinely was ≥800 lines and deserved a tag, (b) it was a known bypass surface, (c) it's a bug and you've captured stderr + the staged diff size for the post-mortem.
-- If the session touched anything in both `civiccore/` and `civiccore-ui/`, the two sides agree — shared schemas, tokens, or interfaces are in sync. Phase 1-A is extraction-in-sync; drift between core and UI is a regression.
-- Branch is still `phase1/migrations-scaffold` (or a child of it) unless we explicitly cut a new one. No surprise branch moves.
+- If the session touched anything in both `civiccore/` and `civiccore-ui/`, the two sides agree — shared schemas, tokens, or interfaces are in sync. Extraction-in-sync remains the contract through Phase 2 closeout; drift between core and UI is a regression.
+- Branch is still `docs/phase2-closeout-standardization` (or a child of it) unless we explicitly cut a new one. No surprise branch moves.
 - No files created outside scope: no `tasks.md`, no `lessons-learned.md`, no `handoff.md`, no `tests/uat/`, no `private/`, no new hook scripts. If the agent wrote any of those, delete them before closing.
