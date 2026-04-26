@@ -211,10 +211,10 @@ Extraction Spec** in
 
 ## Compatibility
 
-Every CivicSuite module's README declares a CivicCore version range
-(e.g. `civiccore >= 0.1, < 0.2`). The suite-wide compatibility matrix —
-which module versions work with which CivicCore versions — is maintained
-at
+Every CivicSuite module's README declares its CivicCore dependency contract.
+For the current shipped module, CivicRecords AI v1.4.0 pins civiccore exactly
+to `==0.2.0`. The suite-wide compatibility matrix — which module versions
+work with which CivicCore versions — is maintained at
 [CivicSuite/civicsuite/docs/compatibility/](https://github.com/CivicSuite/civicsuite/tree/main/docs/compatibility).
 
 ## License
