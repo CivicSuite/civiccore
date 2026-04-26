@@ -4,14 +4,17 @@ Pandoc-free; uses python-docx + reportlab. Minimal markdown subset:
 H1/H2/H3 headings, paragraphs, bullet lists, fenced code blocks.
 """
 from __future__ import annotations
+import re
 from pathlib import Path
 
 from docx import Document
-from docx.shared import Pt
+from docx.shared import Pt, Inches
 from reportlab.lib.pagesizes import LETTER
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.units import inch
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Preformatted
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Preformatted, Image as RLImage
+
+IMAGE_RE = re.compile(r"^!\[([^\]]*)\]\(([^)]+)\)\s*$")
 
 ROOT = Path(__file__).resolve().parent.parent
 SRC = ROOT / "USER-MANUAL.md"
@@ -43,6 +46,10 @@ def parse_blocks(md: str):
                 i += 1
             i += 1  # skip closing fence
             yield "code", "\n".join(buf)
+        elif IMAGE_RE.match(line):
+            m = IMAGE_RE.match(line)
+            yield "image", f"{m.group(1)}|{m.group(2)}"
+            i += 1
         elif line.lstrip().startswith(("- ", "* ")):
             yield "bullet", line.lstrip()[2:].strip()
             i += 1
@@ -69,6 +76,14 @@ def gen_docx(md: str, dest: Path) -> None:
             run.font.size = Pt(9)
         elif kind == "bullet":
             doc.add_paragraph(text, style="List Bullet")
+        elif kind == "image":
+            alt, path = text.split("|", 1)
+            # Prefer .png variant for python-docx (no SVG support)
+            png_path = ROOT / path.replace(".svg", ".png")
+            if png_path.exists():
+                doc.add_picture(str(png_path), width=Inches(6))
+            else:
+                doc.add_paragraph(f"[image: {alt} ({path})]")
         else:
             doc.add_paragraph(text)
     doc.save(str(dest))
@@ -96,6 +111,18 @@ def gen_pdf(md: str, dest: Path) -> None:
             story.append(Preformatted(text, code_style))
         elif kind == "bullet":
             story.append(Paragraph("• " + _escape(text), styles["BodyText"]))
+        elif kind == "image":
+            alt, path = text.split("|", 1)
+            png_path = ROOT / path.replace(".svg", ".png")
+            if png_path.exists():
+                from PIL import Image as PILImage
+                with PILImage.open(str(png_path)) as im:
+                    iw, ih = im.size
+                target_w = 6.0 * inch
+                target_h = target_w * (ih / iw)
+                story.append(RLImage(str(png_path), width=target_w, height=target_h))
+            else:
+                story.append(Paragraph(f"[image: {_escape(alt)} ({_escape(path)})]", styles["BodyText"]))
         else:
             story.append(Paragraph(_escape(text), styles["BodyText"]))
         story.append(Spacer(1, 4))

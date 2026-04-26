@@ -1,0 +1,23 @@
+graph TB
+    subgraph SHIPPED["civiccore v0.2.0 — SHIPPING TODAY"]
+        Mig["civiccore.migrations<br/>runner + idempotent guards<br/>civiccore_0001_baseline_v1<br/>civiccore_0002_llm"]
+        DB["civiccore.db.Base<br/>shared SQLAlchemy<br/>declarative base"]
+        LLM["civiccore.llm<br/>providers + templates +<br/>registry + context +<br/>structured output"]
+    end
+    subgraph PLANNED["Planned extraction targets — placeholder __init__.py only, no implementation"]
+        Auth["civiccore.auth"]
+        Audit["civiccore.audit"]
+        Catalog["civiccore.catalog"]
+        Connectors["civiccore.connectors"]
+        Exemptions["civiccore.exemptions"]
+        Ingest["civiccore.ingest"]
+        Notif["civiccore.notifications"]
+        Onboard["civiccore.onboarding"]
+        Scaffold["civiccore.scaffold"]
+        Search["civiccore.search"]
+        Verify["civiccore.verification"]
+    end
+    classDef shipping fill:#d4f4dd,stroke:#3a7a4a,stroke-width:2px,color:#000
+    classDef placeholder fill:#fff4e1,stroke:#a08040,stroke-width:1px,stroke-dasharray:5 5,color:#000
+    class Mig,DB,LLM shipping
+    class Auth,Audit,Catalog,Connectors,Exemptions,Ingest,Notif,Onboard,Scaffold,Search,Verify placeholder

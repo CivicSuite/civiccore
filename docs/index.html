@@ -151,6 +151,10 @@
         <li><code>civiccore.verification</code> — sovereignty verification</li>
       </ul>
       <p>Do not import from these namespaces in downstream code until they ship.</p>
+      <figure style="margin: 2em 0;">
+        <img src="diagrams/civiccore-extraction-map.svg" alt="civiccore v0.2.0 ships migrations, db.Base, and llm. Other namespaces are placeholder __init__.py files marking future extraction targets." style="max-width: 100%; height: auto; display: block; margin: 0 auto;">
+        <figcaption style="text-align: center; color: #666; font-size: 0.9em; margin-top: 0.5em;">Shipped vs placeholder — civiccore v0.2.0 namespaces.</figcaption>
+      </figure>
     </section>
 
     <section aria-labelledby="install">
@@ -162,6 +166,10 @@
 cd civiccore
 pip install -e .[dev]</code></pre>
       <p>Each release publishes <code>SHA256SUMS.txt</code> alongside the wheel and sdist. Verify the checksum before promoting an artifact downstream.</p>
+      <figure style="margin: 2em 0;">
+        <img src="diagrams/migration-order.svg" alt="Consumer apps invoke civiccore.migrations.runner.upgrade_to_head() before their own alembic chain. Two separate version tables prevent revision-name collisions." style="max-width: 100%; height: auto; display: block; margin: 0 auto;">
+        <figcaption style="text-align: center; color: #666; font-size: 0.9em; margin-top: 0.5em;">Migration order — civiccore runs first, consumer chain runs second; two separate version tables.</figcaption>
+      </figure>
     </section>
 
     <section aria-labelledby="status">
@@ -192,6 +200,10 @@ pip install -e .[dev]</code></pre>
         <li><strong>Context utilities</strong> — <code>TokenBudget</code>, <code>ContextBlock</code>, <code>assemble_context</code>, <code>blocks_to_prompt</code>, <code>sanitize_for_llm</code>.</li>
         <li><strong>Structured output</strong> — <code>StructuredOutput</code>, <code>StructuredOutputFailure</code>, retry-on-malformed.</li>
       </ul>
+      <figure style="margin: 2em 0;">
+        <img src="diagrams/provider-abstraction.svg" alt="LLMProvider ABC with decorator-registered Ollama (local), OpenAI/Anthropic (cloud, optional extras), and third-party providers via @register_provider." style="max-width: 100%; height: auto; display: block; margin: 0 auto;">
+        <figcaption style="text-align: center; color: #666; font-size: 0.9em; margin-top: 0.5em;">civiccore.llm.providers — ABC + decorator registry + factory + 3 built-in implementations.</figcaption>
+      </figure>
     </section>
 
     <section aria-labelledby="compat">

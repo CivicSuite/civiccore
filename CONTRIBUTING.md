@@ -39,7 +39,7 @@ section 18 ("Contributor confusion about where to file a bug").
    fee schedules, the records dashboards, or any records-specific UI
    page?**
    ➜ **File it in CivicRecords AI:**
-   https://github.com/scottconverse/civicrecords-ai/issues
+   https://github.com/CivicSuite/civicrecords-ai/issues
 
 3. **Is the bug in meeting agendas, minutes, voting, or the clerk
    workflow?**

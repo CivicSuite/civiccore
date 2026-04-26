@@ -38,6 +38,20 @@ runner, idempotent guards, and the `civiccore_0001_baseline_v1`
 shared-schema baseline extracted from CivicRecords AI). See the CivicCore
 Extraction Spec section 12 for the phased rollout.
 
+## Architecture
+
+### Shipped vs placeholder
+
+![civiccore extraction map](docs/diagrams/civiccore-extraction-map.svg)
+
+### Migration order (consumer chain)
+
+![Migration order](docs/diagrams/migration-order.svg)
+
+### LLM provider abstraction
+
+![Provider abstraction](docs/diagrams/provider-abstraction.svg)
+
 ## Install
 
 From the GitHub release wheel:
