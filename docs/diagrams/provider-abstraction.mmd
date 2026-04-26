@@ -1,0 +1,33 @@
+graph LR
+    Caller["Consumer code<br/>(records-ai, future modules)"]
+    subgraph PROVIDERS["civiccore.llm.providers"]
+        ABC["LLMProvider ABC<br/>generate / embed /<br/>embed_batch / name /<br/>supports_images"]
+        Reg["PROVIDER_REGISTRY<br/>+ register_provider"]
+        Factory["build_provider(name, config)"]
+        OConf["OllamaConfig"]
+        OAIConf["OpenAIConfig"]
+        AnthConf["AnthropicConfig"]
+        Ollama["OllamaProvider<br/>local /api/generate"]
+        OpenAI["OpenAIProvider<br/>cloud, optional extra"]
+        Anthropic["AnthropicProvider<br/>cloud, optional extra"]
+    end
+    Ext["Third-party<br/>@register_provider('custom')"]
+    Caller --> Factory
+    Factory --> OConf
+    Factory --> OAIConf
+    Factory --> AnthConf
+    OConf --> Ollama
+    OAIConf --> OpenAI
+    AnthConf --> Anthropic
+    Ollama -.implements.-> ABC
+    OpenAI -.implements.-> ABC
+    Anthropic -.implements.-> ABC
+    Ext -.implements.-> ABC
+    Ext --> Reg
+    Reg --> Factory
+    classDef local fill:#d4f4dd,stroke:#3a7a4a,stroke-width:2px,color:#000
+    classDef cloud fill:#d4e1f4,stroke:#4a6aa0,stroke-width:2px,stroke-dasharray:3 3,color:#000
+    classDef thirdparty fill:#fff4e1,stroke:#a08040,stroke-width:1px,stroke-dasharray:5 5,color:#000
+    class Ollama local
+    class OpenAI,Anthropic cloud
+    class Ext thirdparty

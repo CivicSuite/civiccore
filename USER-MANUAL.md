@@ -267,6 +267,8 @@ Each placeholder directory contains only an `__init__.py` docstring stub.
 These namespaces are reserved import paths, not capability — do not
 import from them in downstream code until they ship.
 
+![civiccore extraction map](docs/diagrams/civiccore-extraction-map.svg)
+
 ### How CivicCore fits with downstream consumers
 
 ```
@@ -311,6 +313,8 @@ civiccore revision) as a `down_revision`.
 The migration runner uses idempotent guards — re-running a migration that
 has already been applied is a no-op, not a failure.
 
+![Migration order](docs/diagrams/migration-order.svg)
+
 ### Provider abstraction
 
 ```
@@ -326,6 +330,8 @@ Construction goes through `build_provider(config)` (the factory) or
 `get_provider(name, **kwargs)` (the registry shortcut). The ABC defines an
 async `generate(system_prompt, user_content, **kwargs)` contract; concrete
 providers implement transport, auth, and serialization details.
+
+![Provider abstraction](docs/diagrams/provider-abstraction.svg)
 
 ### Prompt template 3-step resolver
 
