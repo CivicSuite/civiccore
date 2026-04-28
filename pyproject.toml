@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "civiccore"
-version = "0.2.0"
-description = "CivicSuite shared platform package — migrations, shared SQLAlchemy base, and LLM abstraction for CivicSuite modules"
+version = "0.3.0"
+description = "CivicSuite shared platform package — migrations, shared SQLAlchemy base, LLM abstraction, audit/provenance, manifests, exports, and city profile primitives"
 readme = "README.md"
 requires-python = ">=3.11"
 license = "Apache-2.0"

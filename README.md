@@ -7,36 +7,33 @@ municipal operations suite.
 ## What this is
 
 CivicCore is the Python package every CivicSuite module depends on for
-shared platform plumbing. **What ships in v0.2.0:** the migration runner
+shared platform plumbing. **What ships in v0.3.0:** the migration runner
 plus `civiccore_0001_baseline_v1` shared-schema baseline, a shared
-SQLAlchemy declarative `Base`, and the `civiccore.llm` module (provider
-abstraction, prompt templates, model registry, context utilities,
-structured output). It is being extracted from the production CivicRecords
-AI codebase per the CivicCore Extraction Spec and is consumed today by
-CivicRecords AI; CivicClerk, CivicCode, and CivicZone will consume it as
-they ship.
+SQLAlchemy declarative `Base`, the `civiccore.llm` module, hash-chained
+audit primitives, source/provenance metadata contracts, offline
+import/export manifest schemas, static export-bundle helpers, and local
+city profile configuration.
 
-**Planned extraction targets (placeholder packages exist; not yet
-implemented in v0.2.0):** `civiccore.audit`, `civiccore.auth`,
-`civiccore.catalog`, `civiccore.connectors`, `civiccore.exemptions`
-(50-state public-records exemption engine), `civiccore.ingest` (document
-ingestion), `civiccore.notifications`, `civiccore.onboarding`,
-`civiccore.scaffold`, `civiccore.search` (hybrid search), and
-`civiccore.verification` (sovereignty verification). These namespaces are
-reserved for future Phase work — the directories contain only placeholder
-`__init__.py` files today and must not be relied on by downstream modules
-until they ship.
+**Still planned extraction targets (placeholder packages exist; not yet
+implemented in v0.3.0):** `civiccore.auth`, `civiccore.catalog`,
+`civiccore.exemptions` (50-state public-records exemption engine),
+`civiccore.ingest` (document ingestion), `civiccore.notifications`,
+`civiccore.onboarding` (web onboarding flows), `civiccore.scaffold`,
+`civiccore.search` (hybrid search), and `civiccore.verification`
+(sovereignty verification). These namespaces are reserved for future Phase
+work and must not be relied on by downstream modules until they ship.
 
 ## Status
 
-**Phase 2 shipped.** `v0.2.0` ships the `civiccore.llm` module — provider
-abstraction (Ollama / OpenAI / Anthropic), prompt template engine with a
-3-step override resolver, model registry service + admin router, context
-utilities with prompt-injection defense, and a Pydantic-validated
+**v0.3.0 shipped.** This release adds shared audit, provenance, manifest,
+export-bundle, and city profile primitives for the first production-depth
+CivicSuite workflows. `v0.2.0` shipped the `civiccore.llm` module:
+provider abstraction (Ollama / OpenAI / Anthropic), prompt template engine
+with a 3-step override resolver, model registry service + admin router,
+context utilities with prompt-injection defense, and a Pydantic-validated
 structured-output helper. `v0.1.0` was the Phase 1 baseline (migration
 runner, idempotent guards, and the `civiccore_0001_baseline_v1`
-shared-schema baseline extracted from CivicRecords AI). See the CivicCore
-Extraction Spec section 12 for the phased rollout.
+shared-schema baseline extracted from CivicRecords AI).
 
 ## Architecture
 
@@ -57,7 +54,7 @@ Extraction Spec section 12 for the phased rollout.
 From the GitHub release wheel:
 
 ```bash
-pip install https://github.com/CivicSuite/civiccore/releases/download/v0.2.0/civiccore-0.2.0-py3-none-any.whl
+pip install https://github.com/CivicSuite/civiccore/releases/download/v0.3.0/civiccore-0.3.0-py3-none-any.whl
 ```
 
 Each GitHub release also publishes `SHA256SUMS.txt` alongside the wheel and
@@ -192,9 +189,37 @@ result = await StructuredOutput(ExtractedFields).generate(
 
 Per ADR-0004: token counting is context-window math; no cost tracking, no spend limits.
 
+## Audit, provenance, manifests, exports, and city profiles
+
+CivicCore v0.3.0 adds storage-neutral primitives for production-depth
+municipal workflows:
+
+```python
+from civiccore import (
+    AuditActor, AuditSubject, AuditHashChain,
+    SourceReference, SourceKind, CitationTarget, ProvenanceBundle,
+    ImportManifest, ExportManifest, ManifestFile, validate_manifest,
+    ExportBundle, BundleFile, write_manifest, build_sha256sums, validate_bundle,
+    CityProfile, load_city_profile,
+)
+
+chain = AuditHashChain()
+chain.record_event(
+    actor=AuditActor(actor_id="clerk-1", actor_type="staff"),
+    action="packet_exported",
+    subject=AuditSubject(subject_id="meeting-42", subject_type="meeting"),
+    source_module="civicclerk",
+)
+assert chain.verify()
+```
+
+These APIs are deliberately offline-first. They do not provide auth/RBAC,
+live connector sync, credential storage, document ingestion, search indexing,
+legal determinations, or vendor write-back.
+
 ## Public API surface
 
-After Step 3, `civiccore.llm` exposes a single import surface for downstream apps:
+`civiccore.llm` exposes a single import surface for downstream apps:
 
 ```python
 from civiccore.llm import (
@@ -226,8 +251,9 @@ Extraction Spec** in
 ## Compatibility
 
 Every CivicSuite module's README declares its CivicCore dependency contract.
-For the current shipped module, CivicRecords AI v1.4.0 pins civiccore exactly
-to `==0.2.0`. The suite-wide compatibility matrix — which module versions
+Current v0.1.0 module foundations pin civiccore `==0.2.0`. Production-depth
+consumers can move to `==0.3.0` after the release and compatibility matrix are
+updated. The suite-wide compatibility matrix — which module versions
 work with which CivicCore versions — is maintained at
 [CivicSuite/civicsuite/docs/compatibility/](https://github.com/CivicSuite/civicsuite/tree/main/docs/compatibility).
 

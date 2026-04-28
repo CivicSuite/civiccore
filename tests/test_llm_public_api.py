@@ -64,7 +64,7 @@ def test_public_api_has_no_cost_tracking():
         # "budget" alone is fine (TokenBudget). Forbid the more loaded terms.
         assert sub not in surface, (
             f"Forbidden cost-tracking surface present in civiccore.llm: {sub}. "
-            f"Per ADR-0004, no cost tracking in v0.2.0."
+            "Per ADR-0004, no cost tracking in civiccore."
         )
 
 

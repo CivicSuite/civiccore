@@ -1,1 +1,21 @@
-"""CivicCore: hash-chained append-only audit log. Every module writes; CivicCore owns the schema. Phase 1 extraction target."""
+"""CivicCore hash-chained audit primitives."""
+
+from __future__ import annotations
+
+from .primitives import (
+    AuditActor,
+    AuditEvent,
+    AuditHashChain,
+    AuditSubject,
+    record_event,
+    verify_chain,
+)
+
+__all__ = [
+    "AuditActor",
+    "AuditEvent",
+    "AuditHashChain",
+    "AuditSubject",
+    "record_event",
+    "verify_chain",
+]

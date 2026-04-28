@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="CivicCore v0.2.0 — shared platform library for the open-source CivicSuite municipal operations suite. Not an end-user app. Apache 2.0.">
-  <title>CivicCore v0.2.0 — CivicSuite shared platform library</title>
+  <meta name="description" content="CivicCore v0.3.0 - shared platform library for the open-source CivicSuite municipal operations suite. Not an end-user app. Apache 2.0.">
+  <title>CivicCore v0.3.0 - CivicSuite shared platform library</title>
   <style>
     :root {
       --text: #1f2328;
@@ -27,7 +27,7 @@
       -webkit-font-smoothing: antialiased;
     }
     main {
-      max-width: 720px;
+      max-width: 760px;
       margin: 0 auto;
       padding: 48px 24px 80px;
     }
@@ -64,7 +64,7 @@
     a { color: var(--accent); text-decoration: none; }
     a:hover, a:focus { text-decoration: underline; }
     code {
-      font-family: ui-monospace, "SF Mono", "Cascadia Mono", "Roboto Mono", Consolas, "Liberation Mono", Menlo, monospace;
+      font-family: ui-monospace, "SF Mono", "Cascadia Mono", Consolas, monospace;
       font-size: 0.9em;
       background: var(--code-bg);
       padding: 2px 5px;
@@ -115,9 +115,8 @@
       <h1>CivicCore</h1>
       <p class="tagline">
         Shared platform <strong>library</strong> for the open-source CivicSuite
-        municipal operations suite. CivicCore is consumed by CivicSuite modules
-        (records-ai, future modules) — it is not an end-user municipal app.
-        Apache 2.0.
+        municipal operations suite. CivicCore is consumed by CivicSuite modules;
+        it is not an end-user municipal app. Apache 2.0.
       </p>
     </header>
 
@@ -125,50 +124,56 @@
       <h2 id="what">What it is</h2>
       <ul>
         <li>A shared Python library every CivicSuite module depends on. Not an end-user product.</li>
-        <li>Distributed as versioned GitHub release wheels, versioned with strict SemVer against a documented public API surface.</li>
-        <li>Pluggable LLM abstraction targeting local-first deployment via Ollama, with no vendor lock-in.</li>
-        <li>Migration runner, prompt template engine with 3-step override resolver, and model registry — designed to be consumed by downstream modules without tight coupling.</li>
+        <li>Distributed as versioned GitHub release wheels with strict SemVer against the documented public API.</li>
+        <li>Local-first by default: Ollama, PostgreSQL, and offline export primitives stay operator-controlled.</li>
+        <li>Designed for downstream modules without tight coupling: migrations, LLMs, audit chains, provenance, manifests, export bundles, and city profiles.</li>
       </ul>
-      <h3>Shipped in v0.2.0</h3>
+
+      <h3>Shipped in v0.3.0</h3>
       <ul>
-        <li><code>civiccore.migrations</code> — migration runner + idempotent guards + <code>civiccore_0001_baseline_v1</code> + <code>civiccore_0002_llm</code>.</li>
-        <li><code>civiccore.db</code> — shared SQLAlchemy declarative <code>Base</code>.</li>
-        <li><code>civiccore.llm</code> — providers (Ollama / OpenAI / Anthropic), templates, model registry, context utilities, structured output.</li>
+        <li><code>civiccore.migrations</code> - migration runner + idempotent guards + <code>civiccore_0001_baseline_v1</code> + <code>civiccore_0002_llm</code>.</li>
+        <li><code>civiccore.db</code> - shared SQLAlchemy declarative <code>Base</code>.</li>
+        <li><code>civiccore.llm</code> - providers, templates, model registry, context utilities, and structured output.</li>
+        <li><code>civiccore.audit</code> - hash-chained audit primitives.</li>
+        <li><code>civiccore.provenance</code> - source, citation, document, and provenance metadata contracts.</li>
+        <li><code>civiccore.connectors</code> - offline import/export manifest schemas.</li>
+        <li><code>civiccore.exports</code> - static export-bundle manifest and checksum helpers.</li>
+        <li><code>civiccore.city_profile</code> - local city/deployment configuration models.</li>
       </ul>
-      <h3>Planned extraction targets (not yet implemented)</h3>
-      <p>These namespaces have placeholder <code>__init__.py</code> files reserving the import path but ship no implementation in v0.2.0. They will land in future Phase releases:</p>
+
+      <h3>Planned extraction targets</h3>
+      <p>These namespaces or behaviors are not shipped in v0.3.0:</p>
       <ul>
-        <li><code>civiccore.audit</code> — audit logging</li>
-        <li><code>civiccore.auth</code> — authentication</li>
-        <li><code>civiccore.catalog</code> — catalog primitives</li>
-        <li><code>civiccore.connectors</code> — external connectors</li>
-        <li><code>civiccore.exemptions</code> — 50-state public-records exemption engine</li>
-        <li><code>civiccore.ingest</code> — document ingestion</li>
-        <li><code>civiccore.notifications</code> — notification primitives</li>
-        <li><code>civiccore.onboarding</code> — onboarding flows</li>
-        <li><code>civiccore.scaffold</code> — scaffolding helpers</li>
-        <li><code>civiccore.search</code> — hybrid search</li>
-        <li><code>civiccore.verification</code> — sovereignty verification</li>
+        <li><code>civiccore.auth</code> - authentication and RBAC.</li>
+        <li><code>civiccore.catalog</code> - catalog primitives.</li>
+        <li><code>civiccore.exemptions</code> - 50-state public-records exemption engine.</li>
+        <li><code>civiccore.ingest</code> - document ingestion.</li>
+        <li><code>civiccore.notifications</code> - notification delivery.</li>
+        <li><code>civiccore.onboarding</code> - web onboarding flows.</li>
+        <li><code>civiccore.scaffold</code> - scaffolding helpers.</li>
+        <li><code>civiccore.search</code> - hybrid search.</li>
+        <li><code>civiccore.verification</code> - sovereignty verification.</li>
+        <li>Live connector sync, credential storage, vendor write-back, and legal determinations.</li>
       </ul>
-      <p>Do not import from these namespaces in downstream code until they ship.</p>
+
       <figure style="margin: 2em 0;">
-        <img src="diagrams/civiccore-extraction-map.svg" alt="civiccore v0.2.0 ships migrations, db.Base, and llm. Other namespaces are placeholder __init__.py files marking future extraction targets." style="max-width: 100%; height: auto; display: block; margin: 0 auto;">
-        <figcaption style="text-align: center; color: #666; font-size: 0.9em; margin-top: 0.5em;">Shipped vs placeholder — civiccore v0.2.0 namespaces.</figcaption>
+        <img src="diagrams/civiccore-extraction-map.svg" alt="CivicCore extraction map showing shipped and planned namespaces." style="max-width: 100%; height: auto; display: block; margin: 0 auto;">
+        <figcaption style="text-align: center; color: #666; font-size: 0.9em; margin-top: 0.5em;">Shipped vs planned - civiccore v0.3.0 namespaces.</figcaption>
       </figure>
     </section>
 
     <section aria-labelledby="install">
       <h2 id="install">Install</h2>
-      <p>From the GitHub release wheel (canonical distribution — civiccore is GitHub-wheel-only, not on PyPI):</p>
-      <pre><code>pip install https://github.com/CivicSuite/civiccore/releases/download/v0.2.0/civiccore-0.2.0-py3-none-any.whl</code></pre>
+      <p>From the GitHub release wheel (canonical distribution - civiccore is GitHub-wheel-only, not on PyPI):</p>
+      <pre><code>pip install https://github.com/CivicSuite/civiccore/releases/download/v0.3.0/civiccore-0.3.0-py3-none-any.whl</code></pre>
       <p>For development from a clone:</p>
       <pre><code>git clone https://github.com/CivicSuite/civiccore.git
 cd civiccore
 pip install -e .[dev]</code></pre>
       <p>Each release publishes <code>SHA256SUMS.txt</code> alongside the wheel and sdist. Verify the checksum before promoting an artifact downstream.</p>
       <figure style="margin: 2em 0;">
-        <img src="diagrams/migration-order.svg" alt="Consumer apps invoke civiccore.migrations.runner.upgrade_to_head() before their own alembic chain. Two separate version tables prevent revision-name collisions." style="max-width: 100%; height: auto; display: block; margin: 0 auto;">
-        <figcaption style="text-align: center; color: #666; font-size: 0.9em; margin-top: 0.5em;">Migration order — civiccore runs first, consumer chain runs second; two separate version tables.</figcaption>
+        <img src="diagrams/migration-order.svg" alt="Consumer apps invoke civiccore migrations before their own Alembic chain." style="max-width: 100%; height: auto; display: block; margin: 0 auto;">
+        <figcaption style="text-align: center; color: #666; font-size: 0.9em; margin-top: 0.5em;">Migration order - civiccore runs first; consumer chain runs second.</figcaption>
       </figure>
     </section>
 
@@ -176,68 +181,50 @@ pip install -e .[dev]</code></pre>
       <h2 id="status">Status</h2>
       <div class="status">
         <p>
-          <strong>v0.2.0 — Phase 2 shipped.</strong>
-          Ships the <code>civiccore.llm</code> module: provider abstraction
-          (Ollama / OpenAI / Anthropic with ABC + factory), prompt template
-          engine with 3-step override resolver, model registry service +
-          admin router, context utilities with prompt-injection defense, and
-          a Pydantic-validated structured-output helper. v0.1.0 was the
-          Phase 1 baseline (migration runner + idempotent guards +
-          <code>civiccore_0001_baseline_v1</code> shared schema).
+          <strong>v0.3.0 - production-depth primitives shipped.</strong>
+          Adds hash-chained audit primitives, source/provenance contracts,
+          offline import/export manifest schemas, export-bundle helpers, and
+          local city profile configuration. v0.2.0 shipped the
+          <code>civiccore.llm</code> module; v0.1.0 shipped the migration baseline.
         </p>
       </div>
     </section>
 
     <section aria-labelledby="api">
       <h2 id="api">Public API overview</h2>
-      <p>The full surface lives in <code>civiccore.llm.__init__</code> and the CivicCore Extraction Spec Appendix A. High-level shape:</p>
+      <p>High-level public surface:</p>
       <ul>
-        <li><strong>Migrations</strong> — <code>civiccore.migrations</code> runner + idempotent <code>civiccore_0001_baseline_v1</code> for downstream alembic chains.</li>
-        <li><strong>db.Base</strong> — shared SQLAlchemy declarative base.</li>
-        <li><strong>LLM providers</strong> — <code>LLMProvider</code> ABC, <code>register_provider</code>, <code>get_provider</code>, <code>list_providers</code>, <code>build_provider</code>, plus Ollama / OpenAI / Anthropic built-ins.</li>
-        <li><strong>Prompt templates</strong> — <code>PromptTemplate</code> ORM + Pydantic schemas, <code>render_template</code>, <code>resolve_template</code> (3-step: app DB override → code-level override → civiccore default).</li>
-        <li><strong>Model registry</strong> — <code>ModelRegistry</code> ORM + <code>model_registry_router</code>, <code>get_active_model</code>, <code>require_active_model</code>.</li>
-        <li><strong>Context utilities</strong> — <code>TokenBudget</code>, <code>ContextBlock</code>, <code>assemble_context</code>, <code>blocks_to_prompt</code>, <code>sanitize_for_llm</code>.</li>
-        <li><strong>Structured output</strong> — <code>StructuredOutput</code>, <code>StructuredOutputFailure</code>, retry-on-malformed.</li>
+        <li><strong>Migrations</strong> - <code>civiccore.migrations</code> runner + idempotent guards.</li>
+        <li><strong>db.Base</strong> - shared SQLAlchemy declarative base.</li>
+        <li><strong>LLM</strong> - providers, prompt templates, model registry, context utilities, structured output.</li>
+        <li><strong>Audit chains</strong> - <code>AuditActor</code>, <code>AuditSubject</code>, <code>AuditEvent</code>, <code>AuditHashChain</code>.</li>
+        <li><strong>Provenance</strong> - <code>SourceReference</code>, <code>SourceKind</code>, <code>CitationTarget</code>, <code>DocumentMetadata</code>, <code>ProvenanceBundle</code>.</li>
+        <li><strong>Manifests and exports</strong> - <code>ImportManifest</code>, <code>ExportManifest</code>, <code>validate_manifest</code>, <code>ExportBundle</code>, <code>write_manifest</code>, <code>validate_bundle</code>.</li>
+        <li><strong>City profiles</strong> - <code>CityProfile</code>, <code>DepartmentProfile</code>, <code>DeploymentProfile</code>, <code>ModuleEnablement</code>, <code>load_city_profile</code>.</li>
       </ul>
       <figure style="margin: 2em 0;">
-        <img src="diagrams/provider-abstraction.svg" alt="LLMProvider ABC with decorator-registered Ollama (local), OpenAI/Anthropic (cloud, optional extras), and third-party providers via @register_provider." style="max-width: 100%; height: auto; display: block; margin: 0 auto;">
-        <figcaption style="text-align: center; color: #666; font-size: 0.9em; margin-top: 0.5em;">civiccore.llm.providers — ABC + decorator registry + factory + 3 built-in implementations.</figcaption>
+        <img src="diagrams/provider-abstraction.svg" alt="LLMProvider ABC with decorator-registered Ollama, OpenAI, Anthropic, and third-party providers." style="max-width: 100%; height: auto; display: block; margin: 0 auto;">
+        <figcaption style="text-align: center; color: #666; font-size: 0.9em; margin-top: 0.5em;">civiccore.llm.providers - ABC + decorator registry + factory.</figcaption>
       </figure>
     </section>
 
     <section aria-labelledby="compat">
       <h2 id="compat">Compatibility</h2>
       <p>
-        <strong>civicrecords-ai v1.4.0 consumes civiccore v0.2.0.</strong>
-        Every CivicSuite module's README declares a CivicCore version range.
-        The suite-wide compatibility matrix lives at
-        <a href="https://github.com/CivicSuite/civicsuite/tree/main/docs/compatibility">CivicSuite/civicsuite/docs/compatibility/</a>.
+        <strong>Current v0.1.0 module foundations still pin civiccore v0.2.0.</strong>
+        Production-depth consumers can move to civiccore v0.3.0 after this release
+        and the compatibility matrix are updated. Every CivicSuite module's README
+        declares a CivicCore version range.
       </p>
     </section>
 
     <section aria-labelledby="docs">
       <h2 id="docs">Documentation</h2>
       <ul>
-        <li>
-          <a href="https://github.com/CivicSuite/civicsuite/blob/main/specs/02_CivicCore.md">CivicCore Extraction Spec (spec doc 02)</a>
-          — canonical reference, migration ordering contract, public API surface (Appendix A).
-        </li>
-        <li>
-          <a href="https://github.com/CivicSuite/civiccore/blob/main/README.md">README</a> — quick start, public API surface, install from release wheel.
-        </li>
-        <li>
-          <a href="https://github.com/CivicSuite/civiccore/blob/main/USER-MANUAL.md">USER-MANUAL</a> — non-technical overview, integrator guide, architecture reference.
-        </li>
-        <li>
-          <a href="https://github.com/CivicSuite/civiccore/blob/main/CONTRIBUTING.md">CONTRIBUTING</a> — bug-routing decision tree across the CivicSuite multi-repo layout.
-        </li>
-        <li>
-          <a href="https://github.com/CivicSuite/civiccore/blob/main/CHANGELOG.md">CHANGELOG</a> — Keep a Changelog format.
-        </li>
-        <li>
-          <a href="https://github.com/CivicSuite/civiccore/blob/main/SECURITY.md">SECURITY</a> · <a href="https://github.com/CivicSuite/civiccore/blob/main/SUPPORT.md">SUPPORT</a> · <a href="https://github.com/CivicSuite/civiccore/blob/main/CODE_OF_CONDUCT.md">CODE_OF_CONDUCT</a>
-        </li>
+        <li><a href="https://github.com/CivicSuite/civicsuite/blob/main/docs/CivicSuiteUnifiedSpec.md">CivicSuite Unified Spec</a> - canonical suite reference.</li>
+        <li><a href="https://github.com/CivicSuite/civiccore/blob/main/README.md">README</a> - quick start and public API surface.</li>
+        <li><a href="https://github.com/CivicSuite/civiccore/blob/main/USER-MANUAL.md">USER-MANUAL</a> - non-technical overview, integrator guide, architecture reference.</li>
+        <li><a href="https://github.com/CivicSuite/civiccore/blob/main/CHANGELOG.md">CHANGELOG</a> - Keep a Changelog format.</li>
       </ul>
     </section>
 

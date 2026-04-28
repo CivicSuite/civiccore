@@ -7,64 +7,55 @@ suite. https://github.com/CivicSuite/civicsuite
 What this is
 ------------
 
-CivicCore is the Python library every CivicSuite module depends on for
-shared platform plumbing.
+CivicCore is the Python library every CivicSuite module depends on for shared
+platform plumbing. It is not an end-user municipal app.
 
-What ships in v0.2.0:
+What ships in v0.3.0:
 
-  - civiccore.migrations - migration runner with idempotent guards plus
-    the civiccore_0001_baseline_v1 shared-schema baseline and the
-    civiccore_0002_llm Phase 2 ALTER.
-  - civiccore.db        - shared SQLAlchemy declarative Base.
-  - civiccore.llm       - LLM provider abstraction (Ollama / OpenAI /
-    Anthropic), prompt template engine with 3-step override resolver,
-    model registry service + admin router, context utilities with
-    prompt-injection defense, and Pydantic-validated structured output.
+  - civiccore.migrations - migration runner with idempotent guards plus the
+    civiccore_0001_baseline_v1 shared-schema baseline and civiccore_0002_llm.
+  - civiccore.db - shared SQLAlchemy declarative Base.
+  - civiccore.llm - providers, prompt templates, model registry, context
+    utilities, and structured output.
+  - civiccore.audit - hash-chained audit primitives.
+  - civiccore.provenance - source/provenance metadata contracts.
+  - civiccore.connectors - offline import/export manifest schemas.
+  - civiccore.exports - static export-bundle manifest and checksum helpers.
+  - civiccore.city_profile - local city/deployment configuration models.
 
-Planned extraction targets (placeholder packages exist; not yet
-implemented in v0.2.0): civiccore.audit, civiccore.auth, civiccore.catalog,
-civiccore.connectors, civiccore.exemptions (50-state public-records
-exemption engine), civiccore.ingest (document ingestion),
-civiccore.notifications, civiccore.onboarding, civiccore.scaffold,
-civiccore.search (hybrid search), and civiccore.verification (sovereignty
-verification). These namespaces are reserved import paths only and must
-not be relied on by downstream modules until they ship in future Phase
-releases.
+Still planned extraction targets in v0.3.0:
 
-CivicCore is being extracted from the production CivicRecords AI codebase
-per the CivicCore Extraction Spec and is consumed today by CivicRecords AI
-v1.4.0; CivicClerk, CivicCode, and CivicZone will consume it as they ship.
+  civiccore.auth, civiccore.catalog, civiccore.exemptions, civiccore.ingest,
+  civiccore.notifications, civiccore.onboarding (web onboarding flows),
+  civiccore.scaffold, civiccore.search, and civiccore.verification.
 
-CivicCore is a library, not an end-user municipal app.
+Live connector sync, credential storage, vendor write-back, document ingestion,
+search indexing, notification delivery, auth/RBAC, and legal determinations are
+not shipped in v0.3.0.
 
 Status
 ------
 
-Phase 2 shipped. v0.2.0 ships the civiccore.llm module: provider abstraction
-(Ollama / OpenAI / Anthropic with ABC + factory), prompt template engine
-with a 3-step override resolver, model registry service + admin router,
-context utilities with prompt-injection defense, and a Pydantic-validated
-structured-output helper. v0.1.0 was the Phase 1 baseline (migration runner,
-idempotent guards, and the civiccore_0001_baseline_v1 shared-schema baseline
-extracted from CivicRecords AI).
+v0.3.0 adds offline-first audit, provenance, manifest, export-bundle, and city
+profile primitives for production-depth CivicSuite workflows. v0.2.0 shipped
+the civiccore.llm module. v0.1.0 shipped the migration baseline.
 
 Install
 -------
 
 From the GitHub release wheel:
 
-    pip install https://github.com/CivicSuite/civiccore/releases/download/v0.2.0/civiccore-0.2.0-py3-none-any.whl
+    pip install https://github.com/CivicSuite/civiccore/releases/download/v0.3.0/civiccore-0.3.0-py3-none-any.whl
 
 CivicCore is distributed as versioned GitHub release artifacts (not on PyPI).
+Each release publishes SHA256SUMS.txt alongside the wheel and sdist. Verify
+checksums before promoting an artifact downstream.
 
 For development from a clone:
 
     git clone https://github.com/CivicSuite/civiccore.git
     cd civiccore
     pip install -e .[dev]
-
-Each release publishes SHA256SUMS.txt alongside the wheel and sdist. Verify
-checksums before promoting an artifact downstream.
 
 Public API surface (high level)
 -------------------------------
@@ -77,21 +68,33 @@ Public API surface (high level)
     TokenBudget, ContextBlock, assemble_context, blocks_to_prompt
     sanitize_for_llm, StructuredOutput, StructuredOutputFailure
 
-  civiccore.migrations
-    Migration runner + civiccore_0001_baseline_v1 shared schema
+  civiccore.audit
+    AuditActor, AuditSubject, AuditEvent, AuditHashChain
 
-  civiccore.db
-    Base (shared SQLAlchemy declarative base)
+  civiccore.provenance
+    SourceKind, SourceReference, CitationTarget, DocumentMetadata,
+    ProvenanceBundle
 
-The full enumerated list lives in civiccore/llm/__init__.py and Appendix A
-of the CivicCore Extraction Spec. Anything not in Appendix A is internal and
-subject to change.
+  civiccore.connectors / civiccore.exports
+    ImportManifest, ExportManifest, ManifestFile, validate_manifest,
+    ExportBundle, BundleFile, write_manifest, build_sha256sums,
+    validate_bundle
+
+  civiccore.city_profile
+    CityProfile, DepartmentProfile, DeploymentProfile, ModuleEnablement,
+    load_city_profile
+
+  civiccore.migrations / civiccore.db
+    Migration runner, civiccore_0001_baseline_v1 shared schema, and Base
 
 Compatibility
 -------------
 
-civicrecords-ai v1.4.0 consumes civiccore v0.2.0. The suite-wide
-compatibility matrix is maintained at
+Current v0.1.0 module foundations still pin civiccore ==0.2.0. Production-depth
+consumers can move to civiccore ==0.3.0 after this release and the suite
+compatibility matrix are updated.
+
+The suite-wide compatibility matrix is maintained at:
 https://github.com/CivicSuite/civicsuite/tree/main/docs/compatibility
 
 License
