@@ -15,6 +15,34 @@ MINOR; bug fixes ship as PATCH.
 
 No unreleased changes.
 
+## [0.3.0] - 2026-04-28
+
+This release adds the shared offline primitives needed for CivicSuite's first
+production-depth municipal workflows. It is backward-compatible with v0.2.0
+and does not introduce auth/RBAC, live connector sync, document ingestion,
+search indexing, notification delivery, or vendor write-back.
+
+### Added
+- `civiccore.audit`: storage-neutral hash-chained audit primitives
+  (`AuditActor`, `AuditSubject`, `AuditEvent`, `AuditHashChain`) for downstream
+  modules that need tamper-evident local audit trails.
+- `civiccore.provenance`: source/provenance metadata contracts
+  (`SourceKind`, `SourceReference`, `CitationTarget`, `DocumentMetadata`,
+  `ProvenanceBundle`) for citations, source manifests, and export metadata.
+- `civiccore.connectors`: offline import/export manifest schemas
+  (`ImportManifest`, `ExportManifest`, `ManifestFile`, `validate_manifest`)
+  with path, size, and SHA-256 validation.
+- `civiccore.exports`: static export-bundle helpers (`ExportBundle`,
+  `BundleFile`, `write_manifest`, `build_sha256sums`, `validate_bundle`) for
+  reproducible offline bundles.
+- `civiccore.city_profile`: local city/deployment configuration models
+  (`CityProfile`, `DepartmentProfile`, `DeploymentProfile`,
+  `ModuleEnablement`, `load_city_profile`) with JSON support and optional YAML
+  loading when PyYAML is installed.
+- Package-root exports for the v0.3.0 primitives, plus public API smoke tests
+  proving shipped symbols are exposed and planned symbols are not accidentally
+  promoted.
+
 ## [0.2.0] - 2026-04-25
 
 This release ships the `civiccore.llm` module — provider abstraction

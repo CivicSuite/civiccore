@@ -1,388 +1,235 @@
 # CivicCore User Manual
 
-Version: v0.2.0
+Version: v0.3.0
 Repository: https://github.com/CivicSuite/civiccore
 License: Apache 2.0
 
-This manual has three audiences. Read the section for your role.
+This manual has three audiences:
 
-1. **Non-technical overview for evaluators** — what civiccore is and why it
-   exists.
-2. **Technical guide for module developers and IT integrators** — install,
-   consume the public API, run civiccore migrations from a downstream
-   alembic chain.
-3. **Architecture reference** — shipped submodules (migration runner,
-   shared `Base`, LLM provider registry, prompt-template engine, model
-   registry, context utilities, structured output), the list of planned
-   placeholder namespaces, and a text diagram of how they fit together.
+1. **Non-technical evaluators** - what CivicCore is and why it matters.
+2. **IT and module developers** - how to install it and consume the public API.
+3. **Architecture reviewers** - what ships today, what is planned, and how the library fits into the CivicSuite stack.
 
 ---
 
-## 1. Non-technical overview for evaluators
+## 1. Non-Technical Overview
 
-### What is CivicCore?
+### What CivicCore Is
 
-CivicCore is a **shared platform library** that sits underneath every product
-in the CivicSuite family. The CivicSuite family is a set of open-source
-municipal operations applications — the first one shipped is **CivicRecords AI**,
-a public-records request management app for city governments. Future
-modules (CivicClerk, CivicCode, CivicZone) will follow.
+CivicCore is the shared platform library underneath CivicSuite. It is the common
+Python package that CivicSuite modules use for migrations, LLM plumbing,
+provenance metadata, audit-chain primitives, export manifests, and local city
+configuration.
 
-Rather than each of those apps re-inventing the same plumbing, CivicCore
-provides one shared, audited, semver-stable implementation that each
-module imports.
+It is **not** an app a clerk or resident logs into. End users interact with
+module applications such as CivicRecords AI or CivicClerk. CivicCore is the
+shared foundation those applications import.
 
-**What v0.2.0 actually ships:**
+### What v0.3.0 Ships
 
-- `civiccore.migrations` — migration runner with idempotent guards plus
-  the `civiccore_0001_baseline_v1` shared-schema baseline and the
-  `civiccore_0002_llm` Phase 2 ALTER.
-- `civiccore.db` — shared SQLAlchemy declarative `Base`.
-- `civiccore.llm` — LLM provider abstraction (Ollama / OpenAI /
-  Anthropic), prompt template engine with 3-step override resolver, model
-  registry service + admin router, context utilities with prompt-injection
-  defense, and Pydantic-validated structured output.
+- `civiccore.migrations` - migration runner, idempotent guards, and the shared
+  schema baseline.
+- `civiccore.db` - shared SQLAlchemy declarative `Base`.
+- `civiccore.llm` - provider registry, prompt templates, model registry,
+  context utilities, and structured-output helpers.
+- `civiccore.audit` - hash-chained audit primitives for tamper-evident local
+  event streams.
+- `civiccore.provenance` - source, citation, document, and provenance metadata
+  contracts.
+- `civiccore.connectors` - offline import/export manifest schemas.
+- `civiccore.exports` - static export-bundle manifest and checksum helpers.
+- `civiccore.city_profile` - local city/deployment configuration models.
 
-**Planned extraction targets (not yet implemented).** The following
-namespaces have placeholder `__init__.py` files reserving the import path
-but ship no implementation in v0.2.0: `civiccore.audit`, `civiccore.auth`,
-`civiccore.catalog`, `civiccore.connectors`, `civiccore.exemptions`
-(50-state public-records exemption engine), `civiccore.ingest` (document
-ingestion), `civiccore.notifications`, `civiccore.onboarding`,
-`civiccore.scaffold`, `civiccore.search` (hybrid search), and
-`civiccore.verification` (sovereignty verification). These will land in
-future Phase releases and must not be relied on by downstream modules
-until they do.
+### What v0.3.0 Does Not Ship Yet
 
-### What CivicCore is not
+The following namespaces remain planned extraction targets: `civiccore.auth`,
+`civiccore.catalog`, `civiccore.exemptions`, `civiccore.ingest`,
+`civiccore.notifications`, `civiccore.onboarding`, `civiccore.scaffold`,
+`civiccore.search`, and `civiccore.verification`.
 
-CivicCore is **not** an end-user application. A city clerk does not "install
-CivicCore." A resident does not "log in to CivicCore." CivicCore is a
-library that the actual end-user apps depend on.
+Live connector sync, credential storage, vendor write-back, document ingestion,
+search indexing, notification delivery, auth/RBAC, and legal determinations are
+also not shipped in v0.3.0. Downstream modules must not promote those behaviors
+as shipped CivicCore capability.
 
-### Who consumes CivicCore today
+### Why Municipal Teams Should Care
 
-- **CivicRecords AI v1.4.0** — public-records request management app. Uses
-  civiccore v0.2.0 for LLM provider access, prompt templates, model
-  registry, and the shared migration baseline.
-
-### Who will consume CivicCore next
-
-- **CivicClerk** — meeting management and agenda packets.
-- **CivicCode** — code enforcement.
-- **CivicZone** — zoning and permits.
-
-These modules are on the CivicSuite roadmap; civiccore's API is designed so
-they can plug in without civiccore changing shape.
-
-### Why this exists
-
-Three reasons:
-
-1. **Sovereignty.** Cities can run the entire stack on their own
-   infrastructure (Ollama, local PostgreSQL) without vendor lock-in.
-   CivicCore's LLM abstraction makes the local-first deployment the default
-   path; cloud providers (OpenAI, Anthropic) are opt-in.
-2. **Reuse without coupling.** Each CivicSuite module gets a stable,
-   versioned dependency surface — not a tangle of cross-imports.
-3. **Audit and compliance.** Plumbing that touches resident data
-   (logging, sanitization, prompt-injection defense) lives in one place
-   where it can be reviewed and tested.
-
-### Where CivicCore is in its lifecycle
-
-Phase 2 has shipped. v0.2.0 is the second public release. There is no PyPI
-release yet — civiccore is distributed as GitHub release wheels, signed
-with SHA-256 checksums.
+- **Sovereignty:** Local-first defaults keep cities in control of their data and
+  infrastructure.
+- **Reuse without coupling:** Each CivicSuite module depends on the same
+  versioned primitives rather than copying logic.
+- **Auditability:** Shared contracts for provenance, export bundles, and audit
+  chains make compliance evidence more consistent across modules.
 
 ---
 
-## 2. Technical guide for module developers and IT integrators
+## 2. Technical Guide for IT and Module Developers
 
-### Audience
+### Install from a Release Wheel
 
-You are writing or operating a CivicSuite module (an app like records-ai),
-or you are an IT integrator standing one up for a city. You need to install
-civiccore as a dependency, consume its public API, and run its migrations.
+CivicCore is distributed as GitHub release artifacts, not PyPI packages:
 
-### Install (from a release wheel)
+```bash
+pip install https://github.com/CivicSuite/civiccore/releases/download/v0.3.0/civiccore-0.3.0-py3-none-any.whl
+```
 
-CivicCore is distributed as versioned GitHub release wheels — **not on
-PyPI**. Pin the exact wheel URL in your downstream project:
+Each release publishes `SHA256SUMS.txt` next to the wheel and source
+distribution. Verify checksums before promoting a release artifact:
 
-    pip install https://github.com/CivicSuite/civiccore/releases/download/v0.2.0/civiccore-0.2.0-py3-none-any.whl
+```bash
+curl -L -o SHA256SUMS.txt \
+  https://github.com/CivicSuite/civiccore/releases/download/v0.3.0/SHA256SUMS.txt
+sha256sum -c SHA256SUMS.txt
+```
 
-Each release publishes `SHA256SUMS.txt` alongside the wheel and sdist:
+For local development:
 
-    curl -L -o SHA256SUMS.txt \
-      https://github.com/CivicSuite/civiccore/releases/download/v0.2.0/SHA256SUMS.txt
-    sha256sum -c SHA256SUMS.txt
+```bash
+git clone https://github.com/CivicSuite/civiccore.git
+cd civiccore
+pip install -e .[dev]
+```
 
-Always verify the checksum before promoting an artifact into a downstream
-module or an internal package mirror.
-
-### Optional cloud-provider SDKs
-
-The Ollama provider is built in and uses `httpx` (already a base dependency).
-OpenAI and Anthropic providers require their respective SDKs and are
-installed only if you intend to use them:
-
-    pip install openai      # only if instantiating OpenAIProvider
-    pip install anthropic   # only if instantiating AnthropicProvider
-
-### Consuming the LLM provider abstraction
+### Use LLM Providers
 
 ```python
-from civiccore.llm import (
-    get_provider,
-    register_provider,
-    LLMProvider,
-)
+from civiccore.llm import get_provider
 
 provider = get_provider("ollama", base_url="http://localhost:11434")
 text = await provider.generate(
-    system_prompt="You summarize public-records requests.",
+    system_prompt="You summarize municipal records.",
     user_content="Summarize this request: ...",
 )
 ```
 
-Register a custom provider without modifying civiccore source:
+Ollama uses the base dependency set. OpenAI and Anthropic require their SDKs
+only if those providers are instantiated:
 
-```python
-from civiccore.llm import LLMProvider, register_provider
-
-@register_provider("my_provider")
-class MyProvider(LLMProvider):
-    async def generate(self, *, system_prompt, user_content, **kwargs):
-        ...
+```bash
+pip install openai
+pip install anthropic
 ```
 
-### Consuming the prompt template engine
+### Use Prompt Templates
 
 ```python
-from civiccore.llm import (
-    resolve_template,
-    render_template,
-)
+from civiccore.llm import render_template, resolve_template
 
-# 3-step resolver: app DB override → code-level override → civiccore default
 template = await resolve_template(
     session,
     template_name="extract_request_fields",
     consumer_app="records-ai",
 )
-rendered = render_template(template, {"document_text": doc})
+rendered = render_template(template, {"document_text": document_text})
 ```
 
-The 3-step resolver lets operators hot-fix a prompt in production via the
-DB without re-deploying code, while preserving a code-level override for
-deterministic test environments and a civiccore default as a safe fallback.
+The resolver checks app DB overrides first, code-level overrides second, and
+CivicCore defaults third. Missing variables produce actionable render errors.
 
-### Consuming the model registry
+### Use Audit, Provenance, Manifest, Export, and City Profile Primitives
 
 ```python
-from civiccore.llm import (
-    get_active_model,
-    require_active_model,
-    model_registry_router,
+from civiccore import (
+    AuditActor,
+    AuditHashChain,
+    AuditSubject,
+    CityProfile,
+    ExportBundle,
+    ImportManifest,
+    SourceReference,
+    validate_bundle,
+    validate_manifest,
 )
-from fastapi import FastAPI
 
-app = FastAPI()
-app.include_router(model_registry_router, prefix="/admin/models")
-
-active = await require_active_model(session, role="extraction")
+chain = AuditHashChain()
+chain.record_event(
+    actor=AuditActor(actor_id="clerk-1", actor_type="staff"),
+    action="packet_exported",
+    subject=AuditSubject(subject_id="meeting-42", subject_type="meeting"),
+    source_module="civicclerk",
+)
+assert chain.verify()
 ```
 
-### Running civiccore migrations from a downstream alembic chain
+These primitives are storage-neutral. They give downstream modules a consistent
+contract without dictating where records are stored.
 
-CivicCore ships a baseline migration `civiccore_0001_baseline_v1` that
-creates the shared schema (prompt_templates, model_registry, llm_audit
-tables, etc.). Downstream consumers run civiccore's migrations as part of
-their own alembic chain by depending on civiccore's version table.
+### Run Migrations from a Consumer
 
-Pattern:
+CivicCore migrations run before a downstream module's migrations. Consumer
+modules use CivicCore's migration runner and keep their own version table so
+revision names do not collide.
 
-    # In your downstream module's alembic env.py:
-    from civiccore.migrations import include_civiccore_migrations
-    include_civiccore_migrations(context)
-
-    # Then your module's revisions can list civiccore_0001_baseline_v1 as
-    # a `down_revision` dependency, ensuring civiccore's tables exist
-    # before your module's tables reference them.
-
-For the canonical pattern, look at `civicrecords-ai`'s `alembic/env.py` —
-it is the reference integration.
-
-### Operating notes
-
-- **Idempotent.** Migration application is idempotent; safe to re-run.
-- **No network at import time.** Importing `civiccore.llm` does not make
-  any LLM calls. Provider construction is the first network event.
-- **No cost tracking.** Per ADR-0004, civiccore does not track LLM spend.
-  Token counting in `civiccore.llm` is for context-window math only.
-- **Sovereignty default.** Ollama is the default provider in the registry.
-  OpenAI and Anthropic must be explicitly enabled by the operator.
+The release gate verifies the CivicCore migration chain, including
+`civiccore_0001_baseline_v1` and `civiccore_0002_llm`.
 
 ---
 
-## 3. Architecture reference
+## 3. Architecture Reference
 
-### Submodules
+### Shipped vs Planned
 
-Shipped (have implementation in v0.2.0):
+![CivicCore extraction map](docs/diagrams/civiccore-extraction-map.svg)
 
-```
+Shipped implementation in v0.3.0:
+
+```text
 civiccore/
-├── db/                  # Shared SQLAlchemy declarative Base
-├── migrations/          # Migration runner + civiccore_0001_baseline_v1
-│                        # + civiccore_0002_llm Phase 2 ALTER
-└── llm/                 # The civiccore.llm module (Phase 2)
-    ├── providers/       # LLMProvider ABC + Ollama / OpenAI / Anthropic
-    ├── factory.py       # build_provider() + CONFIG_SCHEMAS
-    ├── templates/       # PromptTemplate ORM + render + 3-step resolver
-    ├── registry/        # ModelRegistry ORM + service + admin router
-    ├── context.py       # TokenBudget, assemble_context, sanitize_for_llm
-    └── structured.py    # StructuredOutput (Pydantic-validated retry)
+  audit/        hash-chained audit primitives
+  city_profile/ local city/deployment configuration models
+  connectors/   offline import/export manifest schemas
+  db/           shared SQLAlchemy declarative Base
+  exports/      static export-bundle helpers
+  llm/          providers, templates, registry, context, structured output
+  migrations/   migration runner and shared schema baseline
+  provenance/   source/citation/provenance metadata contracts
 ```
 
-Planned (placeholder packages exist; implementation is future Phase work):
+Planned namespaces in v0.3.0:
 
-```
+```text
 civiccore/
-├── audit/               # placeholder — future audit logging
-├── auth/                # placeholder — future authentication
-├── catalog/             # placeholder — future catalog primitives
-├── connectors/          # placeholder — future external connectors
-├── exemptions/          # placeholder — future 50-state exemption engine
-├── ingest/              # placeholder — future document ingestion
-├── notifications/       # placeholder — future notification primitives
-├── onboarding/          # placeholder — future onboarding flows
-├── scaffold/            # placeholder — future scaffolding helpers
-├── search/              # placeholder — future hybrid search
-└── verification/        # placeholder — future sovereignty verification
+  auth/          future auth/RBAC extraction
+  catalog/       future catalog primitives
+  exemptions/    future 50-state public-records exemption engine
+  ingest/        future document ingestion
+  notifications/ future notification primitives
+  onboarding/    future web onboarding flows
+  scaffold/      future scaffolding helpers
+  search/        future hybrid search
+  verification/  future sovereignty verification
 ```
 
-Each placeholder directory contains only an `__init__.py` docstring stub.
-These namespaces are reserved import paths, not capability — do not
-import from them in downstream code until they ship.
-
-![civiccore extraction map](docs/diagrams/civiccore-extraction-map.svg)
-
-### How CivicCore fits with downstream consumers
-
-```
-+---------------------------------------------------------------+
-|                  Downstream consumer (e.g. records-ai)        |
-|                                                               |
-|   FastAPI app   alembic chain   business logic   UI           |
-|        |              |               |                       |
-+--------|--------------|---------------|-----------------------+
-         |              |               |
-         |              |               |  imports
-         v              v               v
-+---------------------------------------------------------------+
-|                       civiccore (library)                     |
-|                                                               |
-|   civiccore.llm                  civiccore.migrations         |
-|     - provider registry           - runner                    |
-|     - prompt templates            - civiccore_0001_baseline   |
-|     - model registry             civiccore.db                 |
-|     - context utils               - shared declarative Base   |
-|     - structured output                                       |
-|                                                               |
-+---------------------------------------------------------------+
-         |              |               |
-         v              v               v
-+---------------------------------------------------------------+
-|              External services (operator-controlled)          |
-|                                                               |
-|   Ollama (default)   PostgreSQL    OpenAI*    Anthropic*      |
-|                                                               |
-|   * opt-in; require explicit registry entry + SDK install     |
-+---------------------------------------------------------------+
-```
-
-### Migration ordering contract
-
-CivicCore migrations are designed to run **before** any downstream
-consumer's migrations. Downstream consumers reference civiccore's tables
-in foreign keys and must list `civiccore_0001_baseline_v1` (or a later
-civiccore revision) as a `down_revision`.
-
-The migration runner uses idempotent guards — re-running a migration that
-has already been applied is a no-op, not a failure.
+### Migration Order
 
 ![Migration order](docs/diagrams/migration-order.svg)
 
-### Provider abstraction
+Consumer applications run CivicCore migrations first, then their own module
+migrations. Separate Alembic version tables prevent revision-name collisions.
 
-```
-LLMProvider (ABC)
-   |
-   +-- OllamaProvider          (built-in, default; uses httpx)
-   +-- OpenAIProvider          (built-in; opt-in; pip install openai)
-   +-- AnthropicProvider       (built-in; opt-in; pip install anthropic)
-   +-- (third-party providers via @register_provider)
-```
-
-Construction goes through `build_provider(config)` (the factory) or
-`get_provider(name, **kwargs)` (the registry shortcut). The ABC defines an
-async `generate(system_prompt, user_content, **kwargs)` contract; concrete
-providers implement transport, auth, and serialization details.
+### LLM Provider Abstraction
 
 ![Provider abstraction](docs/diagrams/provider-abstraction.svg)
 
-### Prompt template 3-step resolver
+The provider abstraction keeps local Ollama as the sovereignty-first default
+while allowing explicitly configured cloud providers where a city authorizes
+them.
 
-```
-resolve_template(session, name, consumer_app)
+### Compatibility
 
-   1. App DB override
-        consumer_app=<requesting app>
-        is_override=True, is_active=True, highest version
+Current v0.1.0 module foundations still pin `civiccore==0.2.0`.
+Production-depth consumers can move to `civiccore==0.3.0` after this release
+and the suite compatibility matrix are updated.
 
-   2. App code-level override
-        OVERRIDE_REGISTRY[(consumer_app, name)]
-        registered via register_template_override()
-
-   3. CivicCore default
-        consumer_app="civiccore"
-        is_override=False, is_active=True, highest version
-
-   else: PromptTemplateNotFoundError
-```
-
-DB overrides win over code overrides so operators retain production
-hot-fix capability without a code deploy.
-
-### Context utilities and structured output
-
-`assemble_context()` packs system prompt + retrieved chunks into a
-token-budgeted prompt, applying `sanitize_for_llm()` at chunk boundaries
-to defuse prompt-injection attempts in retrieved content. `StructuredOutput`
-wraps a provider call with a Pydantic schema; if the model returns
-malformed JSON, it retries up to `max_attempts` times before raising
-`StructuredOutputFailure`.
-
-### Sovereignty and ADR-0004
-
-- No cost tracking, no spend limits in civiccore.
-- No telemetry; no phone-home.
-- Local-first default (Ollama).
-- Cloud providers are opt-in and require an explicit registry entry.
-
-For the full design rationale see CivicCore Extraction Spec section 12 and
-ADR-0004 in the civicsuite umbrella repo.
+The suite-wide matrix lives at:
+https://github.com/CivicSuite/civicsuite/tree/main/docs/compatibility
 
 ---
 
-## Appendix: Where to file issues
+## Appendix: Where to File Issues
 
-- **Bug in civiccore itself** — file at https://github.com/CivicSuite/civiccore/issues
-- **Bug that surfaces in records-ai but is caused by civiccore** — file at civiccore.
-- **Bug in records-ai** — file at https://github.com/CivicSuite/civicrecords-ai/issues
-- **Suite-wide design / cross-module question** — file at https://github.com/CivicSuite/civicsuite/issues
-- **Security vulnerability** — see SECURITY.md (do not file publicly).
+- CivicCore bug: https://github.com/CivicSuite/civiccore/issues
+- Suite-wide design issue: https://github.com/CivicSuite/civicsuite/issues
+- Security issue: follow `SECURITY.md`; do not file publicly.
 
-The decision tree in CONTRIBUTING.md has the full rules.
+The decision tree in `CONTRIBUTING.md` has the full routing rules.
