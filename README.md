@@ -16,8 +16,8 @@ configuration, bearer-token role helpers for downstream FastAPI
 services, including mixed public/staff routes that should stay anonymous
 by default while unlocking privileged results for authorized callers,
 browser-evidence verification helpers for current-facing release pages,
-small shared search helpers for deterministic text matching plus
-hybrid ranking fusion, and local-first connector import helpers for
+small shared search helpers for deterministic text matching, generic
+permission-aware access checks, hybrid ranking fusion, and local-first connector import helpers for
 agenda-platform payload normalization with actionable error contracts and
 source provenance, plus shared notice deadline planning and publication
 compliance helpers with actionable warning codes.
@@ -42,18 +42,18 @@ by downstream modules until they ship.
 
 ## Status
 
-**v0.10.0 is in development.** This line adds shipped
+**v0.11.0 is the latest published release.** This line adds shipped
 `civiccore.onboarding` profile interview helpers on top of shipped
 `civiccore.notifications` notice deadline planning and publication
 compliance helpers on top of the shipped `civiccore.connectors`
 local-first import helpers, the shipped `civiccore.search` helper
-surface for deterministic text matching and reciprocal-rank-fusion, the
+surface for deterministic text matching, permission-aware access checks,
+and reciprocal-rank-fusion, the
 shipped `civiccore.verification` release-evidence helpers, the shipped
 `civiccore.auth` optional bearer resolver for mixed public/staff
 endpoints, and the shared audit, provenance, manifest, export-bundle,
 and city profile primitives needed for the first production-depth
-CivicSuite workflows. The most recent published GitHub release is
-`v0.9.0`.
+CivicSuite workflows.
 `v0.2.0` shipped the `civiccore.llm` module:
 provider abstraction (Ollama / OpenAI / Anthropic), prompt template engine
 with a 3-step override resolver, model registry service + admin router,
@@ -78,10 +78,10 @@ shared-schema baseline extracted from CivicRecords AI).
 
 ## Install
 
-From the current published GitHub release wheel (`v0.9.0`):
+From the current published GitHub release wheel (`v0.11.0`):
 
 ```bash
-pip install https://github.com/CivicSuite/civiccore/releases/download/v0.9.0/civiccore-0.9.0-py3-none-any.whl
+pip install https://github.com/CivicSuite/civiccore/releases/download/v0.11.0/civiccore-0.11.0-py3-none-any.whl
 ```
 
 Each GitHub release also publishes `SHA256SUMS.txt` alongside the wheel and
@@ -381,7 +381,7 @@ Extraction Spec** in
 
 Every CivicSuite module's README declares its CivicCore dependency contract.
 Current v0.1.0 module foundations pin older civiccore lines. Production-depth
-consumers can move to `==0.10.0` after that release is published and the
+consumers can move to `==0.11.0` now that the release is published and the
 compatibility matrix is updated. The suite-wide compatibility matrix — which
 module versions work with which CivicCore versions — is maintained at
 [CivicSuite/civicsuite/docs/compatibility/](https://github.com/CivicSuite/civicsuite/tree/main/docs/compatibility).

@@ -11,7 +11,7 @@ breaking changes to the public API surface (Appendix A of that spec) ship
 as MAJOR releases; new symbols or backward-compatible behavior ship as
 MINOR; bug fixes ship as PATCH.
 
-## [Unreleased]
+## [0.11.0] - 2026-04-29
 
 ### Added
 - `civiccore.onboarding.parse_profile_answer()` now ships a shared
@@ -63,6 +63,12 @@ MINOR; bug fixes ship as PATCH.
 - `civiccore.search.reciprocal_rank_fusion()` now ships a generic hybrid
   ranking helper for consumers that need to merge semantic and lexical
   search results without extracting a full search engine.
+- `civiccore.search.normalize_access_value()`,
+  `normalize_access_values()`, `roles_grant_access()`,
+  `access_level_allows()`, and `filter_records_by_access_level()` now
+  ship shared permission-aware search/access helpers so downstream
+  modules can reuse one normalized role/tier visibility contract
+  instead of reimplementing closed-session or privileged-access checks.
 - `civiccore.verification.validate_release_browser_evidence()` validates
   content-bound browser QA release manifests so downstream modules can
   prove that desktop/mobile screenshots still match the current rendered
@@ -88,8 +94,8 @@ MINOR; bug fixes ship as PATCH.
   `civiccore.verification` as a partially shipped helper namespace
   instead of a reserved future-only package.
 - Package metadata and release verification now target the upcoming
-  `0.10.0` minor line so the first shipped shared onboarding-profile
-  helpers do not retroactively change the published `0.9.0`
+  `0.11.0` minor line so the shared search-access helper additions do
+  not retroactively change the published `0.10.0`
   contract.
 
 ## [0.6.0] - 2026-04-29

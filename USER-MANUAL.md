@@ -1,6 +1,6 @@
 # CivicCore User Manual
 
-Version: v0.10.0 (development line; latest published release v0.9.0)
+Version: v0.11.0 (latest published release)
 Repository: https://github.com/CivicSuite/civiccore
 License: Apache 2.0
 
@@ -231,7 +231,7 @@ them.
 ### Compatibility
 
 Current v0.1.0 module foundations still pin older civiccore lines.
-Production-depth consumers can move to `civiccore==0.10.0` after this release
+Production-depth consumers can move to `civiccore==0.11.0` now that the release is published
 and the suite compatibility matrix is updated.
 
 The suite-wide matrix lives at:
