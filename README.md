@@ -19,14 +19,17 @@ browser-evidence verification helpers for current-facing release pages,
 small shared search helpers for deterministic text matching, generic
 permission-aware access checks, hybrid ranking fusion, and local-first connector import helpers for
 agenda-platform payload normalization with actionable error contracts and
-source provenance, plus shared notice deadline planning and publication
-compliance helpers with actionable warning codes.
+source provenance, shared ingest contracts for connector discovery/fetch
+records and cited-source validation, plus shared notice deadline planning
+and publication compliance helpers with actionable warning codes.
 
 **Still planned extraction targets (placeholder packages exist; not yet
 implemented today):** `civiccore.catalog`, `civiccore.exemptions`
 (50-state public-records exemption engine),
-`civiccore.ingest` (document ingestion),
-`civiccore.scaffold`. `civiccore.onboarding` now ships storage-neutral
+`civiccore.scaffold`. `civiccore.ingest` now ships reusable
+discovery/fetch contracts plus cited-source validation helpers, but not a
+full document ingestion pipeline, parser stack, or worker runtime.
+`civiccore.onboarding` now ships storage-neutral
 profile interview helpers, but not a web onboarding UI or persistence
 router. `civiccore.search` now ships normalization and
 fusion helpers, but not a full search engine or indexer.
@@ -45,7 +48,8 @@ by downstream modules until they ship.
 
 ## Status
 
-**v0.12.0 is the current development-line release target.** This line adds shipped
+**v0.13.0 is the current development-line release target.** This line adds shipped
+`civiccore.ingest` discovery/fetch and cited-source validation contracts on top of shipped
 `civiccore.security` connector host-validation and encrypted-config helpers on top of shipped
 `civiccore.onboarding` profile interview helpers on top of shipped
 `civiccore.notifications` notice deadline planning and publication
@@ -82,10 +86,10 @@ shared-schema baseline extracted from CivicRecords AI).
 
 ## Install
 
-From the current published GitHub release wheel (`v0.12.0` once tagged):
+From the current published GitHub release wheel (`v0.13.0`):
 
 ```bash
-pip install https://github.com/CivicSuite/civiccore/releases/download/v0.12.0/civiccore-0.12.0-py3-none-any.whl
+pip install https://github.com/CivicSuite/civiccore/releases/download/v0.13.0/civiccore-0.13.0-py3-none-any.whl
 ```
 
 Each GitHub release also publishes `SHA256SUMS.txt` alongside the wheel and

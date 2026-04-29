@@ -11,6 +11,26 @@ breaking changes to the public API surface (Appendix A of that spec) ship
 as MAJOR releases; new symbols or backward-compatible behavior ship as
 MINOR; bug fixes ship as PATCH.
 
+## [0.13.0] - 2026-04-29
+
+### Added
+- `civiccore.ingest.DiscoveredRecord`, `FetchedDocument`,
+  `HealthStatus`, and `HealthCheckResult` now ship the first shared
+  connector discovery/fetch contract so consumers can reuse one ingest-facing
+  record surface instead of carrying private copies of the same dataclasses.
+- `civiccore.ingest.SourceMaterial`, `CitedSentence`,
+  `CitationValidationError`, and `validate_cited_sentences()` now ship a
+  storage-neutral cited-source validation contract for generated drafts and
+  other document-derived workflows that must prove every sentence cites known
+  source material.
+- Package-root exports now include the shared ingest contracts so downstream
+  modules can adopt them from the stable `civiccore` public API.
+
+### Changed
+- README, package metadata, and release surfaces now describe
+  `civiccore.ingest` as a shipped helper namespace for contracts, not a
+  placeholder-only package.
+
 ## [0.12.0] - 2026-04-29
 
 ### Added
