@@ -34,7 +34,9 @@ What ships in the current development line:
 Still planned extraction targets:
 
   civiccore.catalog, civiccore.exemptions, civiccore.ingest,
-  civiccore.onboarding (web onboarding flows), and civiccore.scaffold.
+  civiccore.scaffold.
+  civiccore.onboarding now ships storage-neutral profile interview
+  helpers, but not a web onboarding UI or persistence router.
 
 Live connector sync, credential storage, vendor write-back, document ingestion,
 search indexing, notification delivery queues, and legal determinations are
@@ -43,11 +45,12 @@ still not shipped platform behaviors.
 Status
 ------
 
-v0.9.0 is in development. The latest published release is v0.8.0. The
-development line now includes auth helpers, verification helpers, shared search
-helpers, local-first connector import helpers, and notice deadline/compliance
-helpers on top of the audit, provenance, manifest, export-bundle,
-city-profile, migration, and LLM primitives. v0.2.0 shipped the
+v0.10.0 is in development. The latest published release is v0.9.0. The
+development line now includes shared onboarding profile helpers on top of auth
+helpers, verification helpers, shared search helpers, local-first connector
+import helpers, and notice deadline/compliance helpers on top of the audit,
+provenance, manifest, export-bundle, city-profile, migration, and LLM
+primitives. v0.2.0 shipped the
 civiccore.llm module. v0.1.0 shipped the migration baseline.
 
 Install
@@ -55,7 +58,7 @@ Install
 
 From the current published GitHub release wheel:
 
-    pip install https://github.com/CivicSuite/civiccore/releases/download/v0.8.0/civiccore-0.8.0-py3-none-any.whl
+    pip install https://github.com/CivicSuite/civiccore/releases/download/v0.9.0/civiccore-0.9.0-py3-none-any.whl
 
 CivicCore is distributed as versioned GitHub release artifacts (not on PyPI).
 Each release publishes SHA256SUMS.txt alongside the wheel and sdist. Verify
@@ -96,6 +99,11 @@ Public API surface (high level)
     CityProfile, DepartmentProfile, DeploymentProfile, ModuleEnablement,
     load_city_profile
 
+  civiccore.onboarding
+    OnboardingField, OnboardingProgress, DEFAULT_PROFILE_FIELDS,
+    parse_profile_answer, compute_onboarding_status,
+    completed_profile_fields, next_profile_prompt
+
   civiccore.migrations / civiccore.db
     Migration runner, civiccore_0001_baseline_v1 shared schema, and Base
 
@@ -103,7 +111,7 @@ Compatibility
 -------------
 
 Current v0.1.0 module foundations still pin older civiccore lines.
-Production-depth consumers can move to civiccore ==0.9.0 after this release and the suite
+Production-depth consumers can move to civiccore ==0.10.0 after this release and the suite
 compatibility matrix are updated.
 
 The suite-wide compatibility matrix is maintained at:

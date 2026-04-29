@@ -14,6 +14,21 @@ MINOR; bug fixes ship as PATCH.
 ## [Unreleased]
 
 ### Added
+- `civiccore.onboarding.parse_profile_answer()` now ships a shared
+  storage-neutral answer-normalization helper for interview-style
+  onboarding flows so downstream modules can reuse one yes/no parsing
+  and text-trimming contract.
+- `civiccore.onboarding.compute_onboarding_status()` now ships the
+  shared `not_started` / `in_progress` / `complete` lifecycle contract
+  for tracked city-profile onboarding state.
+- `civiccore.onboarding.completed_profile_fields()` and
+  `next_profile_prompt()` now ship a skip-aware field-walk contract for
+  modules that need deterministic onboarding interview progression
+  without taking a dependency on one product's router implementation.
+- `civiccore.onboarding.OnboardingField`,
+  `OnboardingProgress`, and `DEFAULT_PROFILE_FIELDS` now ship the
+  default CivicSuite bootstrap-profile question order for storage-neutral
+  onboarding helpers.
 - `civiccore.notifications.build_deadline_plan()` now ships a shared
   deterministic notice-deadline planning contract so downstream modules
   can reuse one publish-by/reminder surface instead of reimplementing
@@ -57,6 +72,9 @@ MINOR; bug fixes ship as PATCH.
   not fail purely because of line-ending differences.
 
 ### Changed
+- README and onboarding placeholder docs now describe
+  `civiccore.onboarding` as shipping shared onboarding-profile helpers
+  while keeping full web onboarding flows in the planned bucket.
 - README and connector placeholder docs now describe
   `civiccore.connectors` as shipping both offline manifest schemas and
   local-first import helpers for supported agenda-platform payloads.
@@ -70,8 +88,8 @@ MINOR; bug fixes ship as PATCH.
   `civiccore.verification` as a partially shipped helper namespace
   instead of a reserved future-only package.
 - Package metadata and release verification now target the upcoming
-  `0.9.0` minor line so the first shipped shared notice deadline and
-  compliance helpers do not retroactively change the published `0.8.0`
+  `0.10.0` minor line so the first shipped shared onboarding-profile
+  helpers do not retroactively change the published `0.9.0`
   contract.
 
 ## [0.6.0] - 2026-04-29

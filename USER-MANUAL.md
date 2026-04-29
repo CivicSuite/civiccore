@@ -1,6 +1,6 @@
 # CivicCore User Manual
 
-Version: v0.9.0 (development line; latest published release v0.8.0)
+Version: v0.10.0 (development line; latest published release v0.9.0)
 Repository: https://github.com/CivicSuite/civiccore
 License: Apache 2.0
 
@@ -47,12 +47,18 @@ shared foundation those applications import.
   reciprocal-rank-fusion helpers.
 - `civiccore.notifications` - notice deadline planning and publication
   compliance helpers with actionable warning codes.
+- `civiccore.onboarding` - storage-neutral onboarding profile field order,
+  answer parsing, completion-state, and next-question helpers.
 
 ### What the current development line does not ship yet
 
 The following namespaces remain planned extraction targets:
 `civiccore.catalog`, `civiccore.exemptions`, `civiccore.ingest`,
-`civiccore.onboarding`, and `civiccore.scaffold`.
+and `civiccore.scaffold`.
+
+`civiccore.onboarding` now ships shared profile interview helpers, but
+full web onboarding flows and persistence orchestration are still not
+shipped platform behavior.
 
 Live connector sync, credential storage, vendor write-back, document ingestion,
 search indexing, notification delivery queues, and legal determinations are also not
@@ -77,7 +83,7 @@ as shipped CivicCore capability.
 CivicCore is distributed as GitHub release artifacts, not PyPI packages:
 
 ```bash
-pip install https://github.com/CivicSuite/civiccore/releases/download/v0.8.0/civiccore-0.8.0-py3-none-any.whl
+pip install https://github.com/CivicSuite/civiccore/releases/download/v0.9.0/civiccore-0.9.0-py3-none-any.whl
 ```
 
 Each release publishes `SHA256SUMS.txt` next to the wheel and source
@@ -85,7 +91,7 @@ distribution. Verify checksums before promoting a release artifact:
 
 ```bash
 curl -L -o SHA256SUMS.txt \
-  https://github.com/CivicSuite/civiccore/releases/download/v0.8.0/SHA256SUMS.txt
+  https://github.com/CivicSuite/civiccore/releases/download/v0.9.0/SHA256SUMS.txt
 sha256sum -c SHA256SUMS.txt
 ```
 
@@ -190,6 +196,7 @@ civiccore/
   llm/          providers, templates, registry, context, structured output
   migrations/   migration runner and shared schema baseline
   notifications/ notice deadline + compliance helpers
+  onboarding/   shared onboarding profile field-order/progress helpers
   provenance/   source/citation/provenance metadata contracts
 ```
 
@@ -201,7 +208,7 @@ civiccore/
   exemptions/    future 50-state public-records exemption engine
   ingest/        future document ingestion
   notifications/ delivery queues and outbound orchestration remain future work
-  onboarding/    future web onboarding flows
+  onboarding/    future web onboarding UI/persistence flows
   scaffold/      future scaffolding helpers
   verification/  future sovereignty verification
 ```
@@ -224,7 +231,7 @@ them.
 ### Compatibility
 
 Current v0.1.0 module foundations still pin older civiccore lines.
-Production-depth consumers can move to `civiccore==0.9.0` after this release
+Production-depth consumers can move to `civiccore==0.10.0` after this release
 and the suite compatibility matrix is updated.
 
 The suite-wide matrix lives at:
