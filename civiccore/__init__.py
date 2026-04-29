@@ -10,7 +10,7 @@ not an end-user application.
 
 from __future__ import annotations
 
-__version__ = "0.5.0"
+__version__ = "0.6.0"
 
 from civiccore.audit import AuditActor, AuditEvent, AuditHashChain, AuditSubject
 from civiccore.city_profile import (
@@ -41,6 +41,7 @@ from civiccore.provenance import (
     SourceKind,
     SourceReference,
 )
+from civiccore.verification import normalized_text_sha256, validate_release_browser_evidence
 
 __all__ = [
     "__version__",
@@ -68,4 +69,6 @@ __all__ = [
     "DeploymentProfile",
     "ModuleEnablement",
     "load_city_profile",
+    "normalized_text_sha256",
+    "validate_release_browser_evidence",
 ]

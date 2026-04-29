@@ -14,6 +14,25 @@ MINOR; bug fixes ship as PATCH.
 ## [Unreleased]
 
 ### Added
+- `civiccore.verification.validate_release_browser_evidence()` validates
+  content-bound browser QA release manifests so downstream modules can
+  prove that desktop/mobile screenshots still match the current rendered
+  page source across Windows and Linux checkouts.
+- `civiccore.verification.normalized_text_sha256()` hashes UTF-8 text
+  with normalized newlines so cross-platform browser QA evidence does
+  not fail purely because of line-ending differences.
+
+### Changed
+- README and verification placeholder docs now describe
+  `civiccore.verification` as a partially shipped helper namespace
+  instead of a reserved future-only package.
+- Package metadata and release verification now target the upcoming
+  `0.6.0` minor line so the first shipped verification helper does not
+  retroactively change the published `0.5.0` contract.
+
+## [0.5.0] - 2026-04-29
+
+### Added
 - `civiccore.auth` now ships a minimal bearer-token role helper for
   downstream FastAPI services that need actionable `401`/`403`/`503`
   protection on non-public internal routes without introducing a full

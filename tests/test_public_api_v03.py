@@ -31,6 +31,8 @@ def test_v03_public_api_symbols_import_from_package_root() -> None:
         "DeploymentProfile",
         "ModuleEnablement",
         "load_city_profile",
+        "normalized_text_sha256",
+        "validate_release_browser_evidence",
     }
 
     missing = expected - set(dir(civiccore))
