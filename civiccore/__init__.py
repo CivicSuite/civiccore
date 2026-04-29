@@ -10,7 +10,7 @@ not an end-user application.
 
 from __future__ import annotations
 
-__version__ = "0.12.0"
+__version__ = "0.13.0"
 
 from civiccore.audit import AuditActor, AuditEvent, AuditHashChain, AuditSubject
 from civiccore.city_profile import (
@@ -38,6 +38,16 @@ from civiccore.exports import (
     build_sha256sums,
     validate_bundle,
     write_manifest,
+)
+from civiccore.ingest import (
+    CitedSentence,
+    CitationValidationError,
+    DiscoveredRecord,
+    FetchedDocument,
+    HealthCheckResult,
+    HealthStatus,
+    SourceMaterial,
+    validate_cited_sentences,
 )
 from civiccore.notifications import (
     DeadlinePlan,
@@ -114,6 +124,9 @@ __all__ = [
     "build_sha256sums",
     "validate_bundle",
     "write_manifest",
+    "CitedSentence",
+    "CitationValidationError",
+    "DiscoveredRecord",
     "DeadlinePlan",
     "NoticeComplianceResult",
     "NoticeComplianceWarning",
@@ -124,6 +137,9 @@ __all__ = [
     "CityProfile",
     "DepartmentProfile",
     "DeploymentProfile",
+    "FetchedDocument",
+    "HealthCheckResult",
+    "HealthStatus",
     "ModuleEnablement",
     "OnboardingField",
     "OnboardingProgress",
@@ -149,6 +165,8 @@ __all__ = [
     "roles_grant_access",
     "search_text_matches_query",
     "reciprocal_rank_fusion",
+    "SourceMaterial",
+    "validate_cited_sentences",
     "validate_odbc_connection_string",
     "normalized_text_sha256",
     "validate_url_host",

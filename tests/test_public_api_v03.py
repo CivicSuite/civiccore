@@ -31,6 +31,9 @@ def test_v03_public_api_symbols_import_from_package_root() -> None:
         "build_sha256sums",
         "validate_bundle",
         "write_manifest",
+        "CitedSentence",
+        "CitationValidationError",
+        "DiscoveredRecord",
         "DeadlinePlan",
         "NoticeComplianceResult",
         "NoticeComplianceWarning",
@@ -42,6 +45,9 @@ def test_v03_public_api_symbols_import_from_package_root() -> None:
         "DeploymentProfile",
         "ModuleEnablement",
         "load_city_profile",
+        "FetchedDocument",
+        "HealthCheckResult",
+        "HealthStatus",
         "OnboardingField",
         "OnboardingProgress",
         "DEFAULT_PROFILE_FIELDS",
@@ -54,10 +60,12 @@ def test_v03_public_api_symbols_import_from_package_root() -> None:
         "validate_odbc_connection_string",
         "next_profile_prompt",
         "parse_profile_answer",
+        "SourceMaterial",
         "normalize_search_query",
         "normalize_search_text",
         "search_text_matches_query",
         "reciprocal_rank_fusion",
+        "validate_cited_sentences",
         "normalized_text_sha256",
         "validate_release_browser_evidence",
     }
@@ -72,7 +80,6 @@ def test_v03_placeholder_modules_stay_out_of_root_surface() -> None:
     not_yet_shipped = {
         "Auth",
         "ExemptionRuleEngine",
-        "DocumentIngestor",
     }
 
     assert not (not_yet_shipped & set(dir(civiccore)))
