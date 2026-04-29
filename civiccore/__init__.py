@@ -10,7 +10,7 @@ not an end-user application.
 
 from __future__ import annotations
 
-__version__ = "0.10.0"
+__version__ = "0.11.0"
 
 from civiccore.audit import AuditActor, AuditEvent, AuditHashChain, AuditSubject
 from civiccore.city_profile import (
@@ -64,9 +64,14 @@ from civiccore.provenance import (
     SourceReference,
 )
 from civiccore.search import (
+    access_level_allows,
+    filter_records_by_access_level,
+    normalize_access_value,
+    normalize_access_values,
     normalize_search_query,
     normalize_search_text,
     reciprocal_rank_fusion,
+    roles_grant_access,
     search_text_matches_query,
 )
 from civiccore.verification import normalized_text_sha256, validate_release_browser_evidence
@@ -110,13 +115,18 @@ __all__ = [
     "ModuleEnablement",
     "OnboardingField",
     "OnboardingProgress",
+    "access_level_allows",
     "completed_profile_fields",
     "compute_onboarding_status",
+    "filter_records_by_access_level",
     "load_city_profile",
+    "normalize_access_value",
+    "normalize_access_values",
     "next_profile_prompt",
     "normalize_search_query",
     "normalize_search_text",
     "parse_profile_answer",
+    "roles_grant_access",
     "search_text_matches_query",
     "reciprocal_rank_fusion",
     "normalized_text_sha256",

@@ -4,7 +4,10 @@
 def test_import_civiccore() -> None:
     import civiccore
 
-    assert civiccore.__version__ == "0.10.0"
+    assert civiccore.__version__ == "0.11.0"
+    assert civiccore.roles_grant_access
+    assert civiccore.access_level_allows
+    assert civiccore.filter_records_by_access_level
     assert civiccore.AuditHashChain
     assert civiccore.SourceReference
     assert civiccore.ExportManifest

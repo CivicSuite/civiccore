@@ -45,8 +45,7 @@ still not shipped platform behaviors.
 Status
 ------
 
-v0.10.0 is in development. The latest published release is v0.9.0. The
-development line now includes shared onboarding profile helpers on top of auth
+v0.11.0 is the latest published release. The current line now includes shared onboarding profile helpers on top of auth
 helpers, verification helpers, shared search helpers, local-first connector
 import helpers, and notice deadline/compliance helpers on top of the audit,
 provenance, manifest, export-bundle, city-profile, migration, and LLM
@@ -111,7 +110,7 @@ Compatibility
 -------------
 
 Current v0.1.0 module foundations still pin older civiccore lines.
-Production-depth consumers can move to civiccore ==0.10.0 after this release and the suite
+Production-depth consumers can move to civiccore ==0.11.0 now that the release is published and the suite
 compatibility matrix are updated.
 
 The suite-wide compatibility matrix is maintained at:
