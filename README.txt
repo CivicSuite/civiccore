@@ -21,6 +21,8 @@ What ships in the current development line:
   - civiccore.provenance - source/provenance metadata contracts.
   - civiccore.connectors - offline import/export manifest schemas plus
     local-first import helpers for supported agenda-platform payloads.
+  - civiccore.security - connector host validation plus encrypted JSON
+    envelope helpers for secret-bearing config.
   - civiccore.exports - static export-bundle manifest and checksum helpers.
   - civiccore.city_profile - local city/deployment configuration models.
   - civiccore.auth - bearer-token role helpers for protected or mixed
@@ -45,11 +47,12 @@ still not shipped platform behaviors.
 Status
 ------
 
-v0.11.0 is the latest published release. The current line now includes shared onboarding profile helpers on top of auth
-helpers, verification helpers, shared search helpers, local-first connector
-import helpers, and notice deadline/compliance helpers on top of the audit,
-provenance, manifest, export-bundle, city-profile, migration, and LLM
-primitives. v0.2.0 shipped the
+v0.12.0 is the current development-line release target. The current line now
+includes shared connector security/config helpers on top of onboarding
+profile helpers, auth helpers, verification helpers, shared search helpers,
+local-first connector import helpers, and notice deadline/compliance helpers
+on top of the audit, provenance, manifest, export-bundle, city-profile,
+migration, and LLM primitives. v0.2.0 shipped the
 civiccore.llm module. v0.1.0 shipped the migration baseline.
 
 Install
@@ -57,7 +60,7 @@ Install
 
 From the current published GitHub release wheel:
 
-    pip install https://github.com/CivicSuite/civiccore/releases/download/v0.9.0/civiccore-0.9.0-py3-none-any.whl
+    pip install https://github.com/CivicSuite/civiccore/releases/download/v0.12.0/civiccore-0.12.0-py3-none-any.whl
 
 CivicCore is distributed as versioned GitHub release artifacts (not on PyPI).
 Each release publishes SHA256SUMS.txt alongside the wheel and sdist. Verify

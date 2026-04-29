@@ -35,14 +35,18 @@ helpers, but not delivery queues or outbound notification orchestration.
 `civiccore.verification` now ships the first release-evidence helper
 surface, while sovereignty verification remains future work.
 `civiccore.connectors` now also ships shared local-payload import
-normalization helpers for supported agenda platforms, but not live sync,
-credential handling, or vendor write-back. Unshipped
+normalization helpers for supported agenda platforms, while
+`civiccore.security` now ships shared connector-host validation and
+encrypted JSON envelope helpers for secret-bearing config. Live sync,
+full credential orchestration, and vendor write-back remain unshipped.
+Unshipped
 namespaces are reserved for future Phase work and must not be relied on
 by downstream modules until they ship.
 
 ## Status
 
-**v0.11.0 is the latest published release.** This line adds shipped
+**v0.12.0 is the current development-line release target.** This line adds shipped
+`civiccore.security` connector host-validation and encrypted-config helpers on top of shipped
 `civiccore.onboarding` profile interview helpers on top of shipped
 `civiccore.notifications` notice deadline planning and publication
 compliance helpers on top of the shipped `civiccore.connectors`
@@ -78,10 +82,10 @@ shared-schema baseline extracted from CivicRecords AI).
 
 ## Install
 
-From the current published GitHub release wheel (`v0.11.0`):
+From the current published GitHub release wheel (`v0.12.0` once tagged):
 
 ```bash
-pip install https://github.com/CivicSuite/civiccore/releases/download/v0.11.0/civiccore-0.11.0-py3-none-any.whl
+pip install https://github.com/CivicSuite/civiccore/releases/download/v0.12.0/civiccore-0.12.0-py3-none-any.whl
 ```
 
 Each GitHub release also publishes `SHA256SUMS.txt` alongside the wheel and
@@ -381,7 +385,7 @@ Extraction Spec** in
 
 Every CivicSuite module's README declares its CivicCore dependency contract.
 Current v0.1.0 module foundations pin older civiccore lines. Production-depth
-consumers can move to `==0.11.0` now that the release is published and the
+consumers can move to `==0.12.0` once the release is published and the
 compatibility matrix is updated. The suite-wide compatibility matrix — which
 module versions work with which CivicCore versions — is maintained at
 [CivicSuite/civicsuite/docs/compatibility/](https://github.com/CivicSuite/civicsuite/tree/main/docs/compatibility).

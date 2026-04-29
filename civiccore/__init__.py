@@ -10,7 +10,7 @@ not an end-user application.
 
 from __future__ import annotations
 
-__version__ = "0.11.0"
+__version__ = "0.12.0"
 
 from civiccore.audit import AuditActor, AuditEvent, AuditHashChain, AuditSubject
 from civiccore.city_profile import (
@@ -62,6 +62,18 @@ from civiccore.provenance import (
     ProvenanceBundle,
     SourceKind,
     SourceReference,
+)
+from civiccore.security import (
+    AtRestDecryptionError,
+    build_fernet,
+    decrypt_json,
+    encrypt_json,
+    extract_odbc_host,
+    is_blocked_host,
+    is_encrypted,
+    normalize_allowlist,
+    validate_odbc_connection_string,
+    validate_url_host,
 )
 from civiccore.search import (
     access_level_allows,
@@ -118,10 +130,18 @@ __all__ = [
     "access_level_allows",
     "completed_profile_fields",
     "compute_onboarding_status",
+    "decrypt_json",
     "filter_records_by_access_level",
+    "encrypt_json",
+    "extract_odbc_host",
+    "AtRestDecryptionError",
+    "build_fernet",
+    "is_blocked_host",
+    "is_encrypted",
     "load_city_profile",
     "normalize_access_value",
     "normalize_access_values",
+    "normalize_allowlist",
     "next_profile_prompt",
     "normalize_search_query",
     "normalize_search_text",
@@ -129,6 +149,8 @@ __all__ = [
     "roles_grant_access",
     "search_text_matches_query",
     "reciprocal_rank_fusion",
+    "validate_odbc_connection_string",
     "normalized_text_sha256",
+    "validate_url_host",
     "validate_release_browser_evidence",
 ]
