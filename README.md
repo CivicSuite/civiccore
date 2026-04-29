@@ -14,30 +14,34 @@ primitives, source/provenance metadata contracts, offline import/export
 manifest schemas, static export-bundle helpers, local city profile
 configuration, bearer-token role helpers for downstream FastAPI
 services, including mixed public/staff routes that should stay anonymous
-by default while unlocking privileged results for authorized callers, and
-browser-evidence verification helpers for current-facing release pages.
+by default while unlocking privileged results for authorized callers,
+browser-evidence verification helpers for current-facing release pages,
+and small shared search helpers for deterministic text matching plus
+hybrid ranking fusion.
 
 **Still planned extraction targets (placeholder packages exist; not yet
 implemented today):** `civiccore.catalog`, `civiccore.exemptions`
 (50-state public-records exemption engine),
 `civiccore.ingest` (document ingestion), `civiccore.notifications`,
-`civiccore.onboarding` (web onboarding flows), `civiccore.scaffold`,
-and `civiccore.search` (hybrid search). `civiccore.verification` now
-ships the first release-evidence helper surface, while sovereignty
-verification remains future work. Unshipped namespaces are reserved for
-future Phase work and must not be relied on by downstream modules until
-they ship.
+`civiccore.onboarding` (web onboarding flows), and
+`civiccore.scaffold`. `civiccore.search` now ships normalization and
+fusion helpers, but not a full search engine or indexer.
+`civiccore.verification` now ships the first release-evidence helper
+surface, while sovereignty verification remains future work. Unshipped
+namespaces are reserved for future Phase work and must not be relied on
+by downstream modules until they ship.
 
 ## Status
 
-**v0.6.0 is in development.** This line adds the first shipped
-`civiccore.verification` helper for content-bound browser QA release
-evidence, extends the shipped `civiccore.auth` surface with an optional
-bearer resolver for mixed public/staff endpoints, and keeps the shared
-audit, provenance, manifest, export-bundle, and city profile primitives
-needed for the first production-depth CivicSuite workflows. The most
-recent published GitHub release is `v0.5.0`. `v0.2.0` shipped the
-`civiccore.llm` module:
+**v0.7.0 is in development.** This line adds the first shipped
+`civiccore.search` helper surface for deterministic text matching and
+reciprocal-rank-fusion, keeps the shipped `civiccore.verification`
+release-evidence helpers, extends the shipped `civiccore.auth` surface
+with an optional bearer resolver for mixed public/staff endpoints, and
+keeps the shared audit, provenance, manifest, export-bundle, and city
+profile primitives needed for the first production-depth CivicSuite
+workflows. The most recent published GitHub release is `v0.6.0`.
+`v0.2.0` shipped the `civiccore.llm` module:
 provider abstraction (Ollama / OpenAI / Anthropic), prompt template engine
 with a 3-step override resolver, model registry service + admin router,
 context utilities with prompt-injection defense, and a Pydantic-validated
@@ -61,10 +65,10 @@ shared-schema baseline extracted from CivicRecords AI).
 
 ## Install
 
-From the current published GitHub release wheel (`v0.5.0`):
+From the current published GitHub release wheel (`v0.6.0`):
 
 ```bash
-pip install https://github.com/CivicSuite/civiccore/releases/download/v0.5.0/civiccore-0.5.0-py3-none-any.whl
+pip install https://github.com/CivicSuite/civiccore/releases/download/v0.6.0/civiccore-0.6.0-py3-none-any.whl
 ```
 
 Each GitHub release also publishes `SHA256SUMS.txt` alongside the wheel and
@@ -336,7 +340,7 @@ Extraction Spec** in
 
 Every CivicSuite module's README declares its CivicCore dependency contract.
 Current v0.1.0 module foundations pin civiccore `==0.2.0`. Production-depth
-consumers can move to `==0.6.0` after that release is published and the
+consumers can move to `==0.7.0` after that release is published and the
 compatibility matrix is updated. The suite-wide compatibility matrix — which
 module versions work with which CivicCore versions — is maintained at
 [CivicSuite/civicsuite/docs/compatibility/](https://github.com/CivicSuite/civicsuite/tree/main/docs/compatibility).

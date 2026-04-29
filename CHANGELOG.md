@@ -14,6 +14,40 @@ MINOR; bug fixes ship as PATCH.
 ## [Unreleased]
 
 ### Added
+- `civiccore.search.normalize_search_text()` and
+  `normalize_search_query()` now ship a deterministic shared
+  normalization surface for current CivicSuite consumers that need
+  case-insensitive, whitespace-stable text matching without pulling in a
+  database or embedding runtime.
+- `civiccore.search.search_text_matches_query()` now ships a tiny shared
+  substring-matching helper so mixed public/staff consumer routes can
+  reuse one query-normalization contract instead of reimplementing it
+  per module.
+- `civiccore.search.reciprocal_rank_fusion()` now ships a generic hybrid
+  ranking helper for consumers that need to merge semantic and lexical
+  search results without extracting a full search engine.
+- `civiccore.verification.validate_release_browser_evidence()` validates
+  content-bound browser QA release manifests so downstream modules can
+  prove that desktop/mobile screenshots still match the current rendered
+  page source across Windows and Linux checkouts.
+- `civiccore.verification.normalized_text_sha256()` hashes UTF-8 text
+  with normalized newlines so cross-platform browser QA evidence does
+  not fail purely because of line-ending differences.
+
+### Changed
+- README and placeholder docs now describe `civiccore.search` as a
+  partially shipped helper namespace instead of a future-only placeholder
+  package.
+- README and verification placeholder docs now describe
+  `civiccore.verification` as a partially shipped helper namespace
+  instead of a reserved future-only package.
+- Package metadata and release verification now target the upcoming
+  `0.7.0` minor line so the first shipped shared search helpers do not
+  retroactively change the published `0.6.0` contract.
+
+## [0.6.0] - 2026-04-29
+
+### Added
 - `civiccore.verification.validate_release_browser_evidence()` validates
   content-bound browser QA release manifests so downstream modules can
   prove that desktop/mobile screenshots still match the current rendered
