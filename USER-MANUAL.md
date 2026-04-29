@@ -1,6 +1,6 @@
 # CivicCore User Manual
 
-Version: v0.3.0
+Version: v0.8.0 (development line; latest published release v0.7.0)
 Repository: https://github.com/CivicSuite/civiccore
 License: Apache 2.0
 
@@ -25,7 +25,7 @@ It is **not** an app a clerk or resident logs into. End users interact with
 module applications such as CivicRecords AI or CivicClerk. CivicCore is the
 shared foundation those applications import.
 
-### What v0.3.0 Ships
+### What the current development line ships
 
 - `civiccore.migrations` - migration runner, idempotent guards, and the shared
   schema baseline.
@@ -36,20 +36,26 @@ shared foundation those applications import.
   event streams.
 - `civiccore.provenance` - source, citation, document, and provenance metadata
   contracts.
-- `civiccore.connectors` - offline import/export manifest schemas.
+- `civiccore.connectors` - offline import/export manifest schemas plus
+  local-first import helpers for supported agenda-platform payloads.
 - `civiccore.exports` - static export-bundle manifest and checksum helpers.
 - `civiccore.city_profile` - local city/deployment configuration models.
+- `civiccore.auth` - bearer-token role helpers for protected or mixed
+  public/staff FastAPI routes.
+- `civiccore.verification` - content-bound browser release-evidence helpers.
+- `civiccore.search` - deterministic text normalization, matching, and
+  reciprocal-rank-fusion helpers.
 
-### What v0.3.0 Does Not Ship Yet
+### What the current development line does not ship yet
 
-The following namespaces remain planned extraction targets: `civiccore.auth`,
+The following namespaces remain planned extraction targets:
 `civiccore.catalog`, `civiccore.exemptions`, `civiccore.ingest`,
-`civiccore.notifications`, `civiccore.onboarding`, `civiccore.scaffold`,
-`civiccore.search`, and `civiccore.verification`.
+`civiccore.notifications`, `civiccore.onboarding`, and
+`civiccore.scaffold`.
 
 Live connector sync, credential storage, vendor write-back, document ingestion,
-search indexing, notification delivery, auth/RBAC, and legal determinations are
-also not shipped in v0.3.0. Downstream modules must not promote those behaviors
+search indexing, notification delivery, and legal determinations are also not
+shipped platform behaviors. Downstream modules must not promote those behaviors
 as shipped CivicCore capability.
 
 ### Why Municipal Teams Should Care
@@ -70,7 +76,7 @@ as shipped CivicCore capability.
 CivicCore is distributed as GitHub release artifacts, not PyPI packages:
 
 ```bash
-pip install https://github.com/CivicSuite/civiccore/releases/download/v0.3.0/civiccore-0.3.0-py3-none-any.whl
+pip install https://github.com/CivicSuite/civiccore/releases/download/v0.7.0/civiccore-0.7.0-py3-none-any.whl
 ```
 
 Each release publishes `SHA256SUMS.txt` next to the wheel and source
@@ -78,7 +84,7 @@ distribution. Verify checksums before promoting a release artifact:
 
 ```bash
 curl -L -o SHA256SUMS.txt \
-  https://github.com/CivicSuite/civiccore/releases/download/v0.3.0/SHA256SUMS.txt
+  https://github.com/CivicSuite/civiccore/releases/download/v0.7.0/SHA256SUMS.txt
 sha256sum -c SHA256SUMS.txt
 ```
 
@@ -171,13 +177,13 @@ The release gate verifies the CivicCore migration chain, including
 
 ![CivicCore extraction map](docs/diagrams/civiccore-extraction-map.svg)
 
-Shipped implementation in v0.3.0:
+Shipped implementation in the current development line:
 
 ```text
 civiccore/
   audit/        hash-chained audit primitives
   city_profile/ local city/deployment configuration models
-  connectors/   offline import/export manifest schemas
+  connectors/   offline manifests plus local-first import helpers
   db/           shared SQLAlchemy declarative Base
   exports/      static export-bundle helpers
   llm/          providers, templates, registry, context, structured output
@@ -185,18 +191,16 @@ civiccore/
   provenance/   source/citation/provenance metadata contracts
 ```
 
-Planned namespaces in v0.3.0:
+Still planned namespaces:
 
 ```text
 civiccore/
-  auth/          future auth/RBAC extraction
   catalog/       future catalog primitives
   exemptions/    future 50-state public-records exemption engine
   ingest/        future document ingestion
   notifications/ future notification primitives
   onboarding/    future web onboarding flows
   scaffold/      future scaffolding helpers
-  search/        future hybrid search
   verification/  future sovereignty verification
 ```
 
@@ -217,9 +221,9 @@ them.
 
 ### Compatibility
 
-Current v0.1.0 module foundations still pin `civiccore==0.2.0`.
-Production-depth consumers can move to `civiccore==0.3.0` after this release
-and the suite compatibility matrix are updated.
+Current v0.1.0 module foundations still pin older civiccore lines.
+Production-depth consumers can move to `civiccore==0.8.0` after this release
+and the suite compatibility matrix is updated.
 
 The suite-wide matrix lives at:
 https://github.com/CivicSuite/civicsuite/tree/main/docs/compatibility

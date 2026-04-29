@@ -1,7 +1,7 @@
 CivicCore User Manual
 =====================
 
-Version: v0.3.0
+Version: v0.8.0 (development line; latest published release v0.7.0)
 Repository: https://github.com/CivicSuite/civiccore
 License: Apache 2.0
 
@@ -19,7 +19,7 @@ a clerk or resident logs into. End users interact with module applications such
 as CivicRecords AI or CivicClerk. CivicCore is the shared foundation those
 applications import.
 
-What v0.3.0 ships:
+What the current development line ships:
 
   - civiccore.migrations - migration runner, idempotent guards, and shared
     schema baseline.
@@ -28,17 +28,23 @@ What v0.3.0 ships:
     context utilities, and structured-output helpers.
   - civiccore.audit - hash-chained audit primitives.
   - civiccore.provenance - source/provenance metadata contracts.
-  - civiccore.connectors - offline import/export manifest schemas.
+  - civiccore.connectors - offline import/export manifest schemas plus
+    local-first import helpers for supported agenda-platform payloads.
   - civiccore.exports - static export-bundle manifest and checksum helpers.
   - civiccore.city_profile - local city/deployment configuration models.
+  - civiccore.auth - bearer-token role helpers for protected or mixed
+    public/staff FastAPI routes.
+  - civiccore.verification - content-bound browser release-evidence helpers.
+  - civiccore.search - deterministic text normalization, matching, and
+    reciprocal-rank-fusion helpers.
 
 Not shipped yet:
 
-  civiccore.auth, civiccore.catalog, civiccore.exemptions, civiccore.ingest,
+  civiccore.catalog, civiccore.exemptions, civiccore.ingest,
   civiccore.notifications, civiccore.onboarding, civiccore.scaffold,
-  civiccore.search, civiccore.verification, live connector sync, credential
-  storage, vendor write-back, document ingestion, search indexing, notification
-  delivery, auth/RBAC, and legal determinations.
+  live connector sync, credential storage, vendor write-back, document
+  ingestion, search indexing, notification delivery, and legal
+  determinations.
 
 Why it matters:
 
@@ -51,12 +57,12 @@ Technical Guide
 
 Install from the GitHub release wheel:
 
-    pip install https://github.com/CivicSuite/civiccore/releases/download/v0.3.0/civiccore-0.3.0-py3-none-any.whl
+    pip install https://github.com/CivicSuite/civiccore/releases/download/v0.7.0/civiccore-0.7.0-py3-none-any.whl
 
 Verify the release artifact:
 
     curl -L -o SHA256SUMS.txt \
-      https://github.com/CivicSuite/civiccore/releases/download/v0.3.0/SHA256SUMS.txt
+      https://github.com/CivicSuite/civiccore/releases/download/v0.7.0/SHA256SUMS.txt
     sha256sum -c SHA256SUMS.txt
 
 For local development:
@@ -91,14 +97,15 @@ Audit/provenance/export example:
 Architecture Reference
 ----------------------
 
-Shipped implementation in v0.3.0:
+Shipped implementation in the current development line:
 
   audit, city_profile, connectors, db, exports, llm, migrations, provenance
+  connectors include offline manifests plus local-first import helpers
 
-Planned namespaces in v0.3.0:
+Still planned namespaces:
 
-  auth, catalog, exemptions, ingest, notifications, onboarding, scaffold,
-  search, verification
+  catalog, exemptions, ingest, notifications, onboarding, scaffold,
+  verification
 
 Consumer applications run CivicCore migrations first, then their own module
 migrations. Separate Alembic version tables prevent revision-name collisions.
@@ -106,9 +113,9 @@ migrations. Separate Alembic version tables prevent revision-name collisions.
 Compatibility
 -------------
 
-Current v0.1.0 module foundations still pin civiccore ==0.2.0.
-Production-depth consumers can move to civiccore ==0.3.0 after this release and
-the suite compatibility matrix are updated.
+Current v0.1.0 module foundations still pin older civiccore lines.
+Production-depth consumers can move to civiccore ==0.8.0 after this release and
+the suite compatibility matrix is updated.
 
 Compatibility matrix:
 https://github.com/CivicSuite/civicsuite/tree/main/docs/compatibility

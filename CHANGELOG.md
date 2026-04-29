@@ -14,6 +14,17 @@ MINOR; bug fixes ship as PATCH.
 ## [Unreleased]
 
 ### Added
+- `civiccore.connectors.import_meeting_payload()` now ships a shared
+  local-first normalization helper for supported agenda-platform export
+  payloads so downstream modules can reuse one deterministic import
+  contract instead of reimplementing payload mapping and provenance
+  logic per module.
+- `civiccore.connectors.ImportedMeeting` and `ImportedAgendaItem` now
+  ship a shared normalized payload surface with source provenance
+  metadata for local connector imports.
+- `civiccore.connectors.ConnectorImportError` now ships actionable
+  `message`/`fix` validation errors for malformed or unsupported local
+  connector payloads.
 - `civiccore.search.normalize_search_text()` and
   `normalize_search_query()` now ship a deterministic shared
   normalization surface for current CivicSuite consumers that need
@@ -35,6 +46,9 @@ MINOR; bug fixes ship as PATCH.
   not fail purely because of line-ending differences.
 
 ### Changed
+- README and connector placeholder docs now describe
+  `civiccore.connectors` as shipping both offline manifest schemas and
+  local-first import helpers for supported agenda-platform payloads.
 - README and placeholder docs now describe `civiccore.search` as a
   partially shipped helper namespace instead of a future-only placeholder
   package.
@@ -42,8 +56,8 @@ MINOR; bug fixes ship as PATCH.
   `civiccore.verification` as a partially shipped helper namespace
   instead of a reserved future-only package.
 - Package metadata and release verification now target the upcoming
-  `0.7.0` minor line so the first shipped shared search helpers do not
-  retroactively change the published `0.6.0` contract.
+  `0.8.0` minor line so the first shipped shared connector import helpers
+  do not retroactively change the published `0.7.0` contract.
 
 ## [0.6.0] - 2026-04-29
 

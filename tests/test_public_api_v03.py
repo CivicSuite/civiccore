@@ -1,4 +1,4 @@
-"""Smoke tests for the CivicCore v0.3.0 public primitive surface."""
+"""Smoke tests for the shipped CivicCore package-root surface."""
 
 from __future__ import annotations
 
@@ -16,10 +16,15 @@ def test_v03_public_api_symbols_import_from_package_root() -> None:
         "CitationTarget",
         "DocumentMetadata",
         "ProvenanceBundle",
+        "ConnectorImportError",
         "ImportManifest",
         "ExportManifest",
+        "ImportedAgendaItem",
+        "ImportedMeeting",
         "ManifestFile",
         "ManifestValidationError",
+        "SUPPORTED_CONNECTORS",
+        "import_meeting_payload",
         "validate_manifest",
         "BundleFile",
         "ExportBundle",
@@ -40,7 +45,7 @@ def test_v03_public_api_symbols_import_from_package_root() -> None:
     }
 
     missing = expected - set(dir(civiccore))
-    assert not missing, f"Missing v0.3.0 public symbols: {missing}"
+    assert not missing, f"Missing shipped public symbols: {missing}"
 
 
 def test_v03_placeholder_modules_stay_out_of_root_surface() -> None:
