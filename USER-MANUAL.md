@@ -1,6 +1,6 @@
 # CivicCore User Manual
 
-Version: v0.8.0 (development line; latest published release v0.7.0)
+Version: v0.9.0 (development line; latest published release v0.8.0)
 Repository: https://github.com/CivicSuite/civiccore
 License: Apache 2.0
 
@@ -45,16 +45,17 @@ shared foundation those applications import.
 - `civiccore.verification` - content-bound browser release-evidence helpers.
 - `civiccore.search` - deterministic text normalization, matching, and
   reciprocal-rank-fusion helpers.
+- `civiccore.notifications` - notice deadline planning and publication
+  compliance helpers with actionable warning codes.
 
 ### What the current development line does not ship yet
 
 The following namespaces remain planned extraction targets:
 `civiccore.catalog`, `civiccore.exemptions`, `civiccore.ingest`,
-`civiccore.notifications`, `civiccore.onboarding`, and
-`civiccore.scaffold`.
+`civiccore.onboarding`, and `civiccore.scaffold`.
 
 Live connector sync, credential storage, vendor write-back, document ingestion,
-search indexing, notification delivery, and legal determinations are also not
+search indexing, notification delivery queues, and legal determinations are also not
 shipped platform behaviors. Downstream modules must not promote those behaviors
 as shipped CivicCore capability.
 
@@ -76,7 +77,7 @@ as shipped CivicCore capability.
 CivicCore is distributed as GitHub release artifacts, not PyPI packages:
 
 ```bash
-pip install https://github.com/CivicSuite/civiccore/releases/download/v0.7.0/civiccore-0.7.0-py3-none-any.whl
+pip install https://github.com/CivicSuite/civiccore/releases/download/v0.8.0/civiccore-0.8.0-py3-none-any.whl
 ```
 
 Each release publishes `SHA256SUMS.txt` next to the wheel and source
@@ -84,7 +85,7 @@ distribution. Verify checksums before promoting a release artifact:
 
 ```bash
 curl -L -o SHA256SUMS.txt \
-  https://github.com/CivicSuite/civiccore/releases/download/v0.7.0/SHA256SUMS.txt
+  https://github.com/CivicSuite/civiccore/releases/download/v0.8.0/SHA256SUMS.txt
 sha256sum -c SHA256SUMS.txt
 ```
 
@@ -188,6 +189,7 @@ civiccore/
   exports/      static export-bundle helpers
   llm/          providers, templates, registry, context, structured output
   migrations/   migration runner and shared schema baseline
+  notifications/ notice deadline + compliance helpers
   provenance/   source/citation/provenance metadata contracts
 ```
 
@@ -198,7 +200,7 @@ civiccore/
   catalog/       future catalog primitives
   exemptions/    future 50-state public-records exemption engine
   ingest/        future document ingestion
-  notifications/ future notification primitives
+  notifications/ delivery queues and outbound orchestration remain future work
   onboarding/    future web onboarding flows
   scaffold/      future scaffolding helpers
   verification/  future sovereignty verification
@@ -222,7 +224,7 @@ them.
 ### Compatibility
 
 Current v0.1.0 module foundations still pin older civiccore lines.
-Production-depth consumers can move to `civiccore==0.8.0` after this release
+Production-depth consumers can move to `civiccore==0.9.0` after this release
 and the suite compatibility matrix is updated.
 
 The suite-wide matrix lives at:

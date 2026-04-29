@@ -31,6 +31,12 @@ def test_v03_public_api_symbols_import_from_package_root() -> None:
         "build_sha256sums",
         "validate_bundle",
         "write_manifest",
+        "DeadlinePlan",
+        "NoticeComplianceResult",
+        "NoticeComplianceWarning",
+        "SPECIAL_NOTICE_TYPES",
+        "build_deadline_plan",
+        "evaluate_notice_compliance",
         "CityProfile",
         "DepartmentProfile",
         "DeploymentProfile",
@@ -53,7 +59,6 @@ def test_v03_placeholder_modules_stay_out_of_root_surface() -> None:
 
     not_yet_shipped = {
         "Auth",
-        "NotificationDelivery",
         "ExemptionRuleEngine",
         "DocumentIngestor",
     }

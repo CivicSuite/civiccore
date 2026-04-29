@@ -14,6 +14,17 @@ MINOR; bug fixes ship as PATCH.
 ## [Unreleased]
 
 ### Added
+- `civiccore.notifications.build_deadline_plan()` now ships a shared
+  deterministic notice-deadline planning contract so downstream modules
+  can reuse one publish-by/reminder surface instead of reimplementing
+  lead-time math per module.
+- `civiccore.notifications.evaluate_notice_compliance()` now ships a
+  shared publication-readiness helper with actionable warning codes for
+  missing statutory basis, missed deadlines, and missing human approval.
+- `civiccore.notifications.NoticeComplianceResult` and
+  `NoticeComplianceWarning` now ship a reusable notice warning/result
+  contract for mixed public/staff workflows that need operator-facing
+  fix paths.
 - `civiccore.connectors.import_meeting_payload()` now ships a shared
   local-first normalization helper for supported agenda-platform export
   payloads so downstream modules can reuse one deterministic import
@@ -49,6 +60,9 @@ MINOR; bug fixes ship as PATCH.
 - README and connector placeholder docs now describe
   `civiccore.connectors` as shipping both offline manifest schemas and
   local-first import helpers for supported agenda-platform payloads.
+- README and placeholder docs now describe `civiccore.notifications` as
+  a partially shipped helper namespace instead of a future-only
+  delivery placeholder.
 - README and placeholder docs now describe `civiccore.search` as a
   partially shipped helper namespace instead of a future-only placeholder
   package.
@@ -56,8 +70,9 @@ MINOR; bug fixes ship as PATCH.
   `civiccore.verification` as a partially shipped helper namespace
   instead of a reserved future-only package.
 - Package metadata and release verification now target the upcoming
-  `0.8.0` minor line so the first shipped shared connector import helpers
-  do not retroactively change the published `0.7.0` contract.
+  `0.9.0` minor line so the first shipped shared notice deadline and
+  compliance helpers do not retroactively change the published `0.8.0`
+  contract.
 
 ## [0.6.0] - 2026-04-29
 

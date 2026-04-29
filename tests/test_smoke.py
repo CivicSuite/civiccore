@@ -4,7 +4,7 @@
 def test_import_civiccore() -> None:
     import civiccore
 
-    assert civiccore.__version__ == "0.8.0"
+    assert civiccore.__version__ == "0.9.0"
     assert civiccore.AuditHashChain
     assert civiccore.SourceReference
     assert civiccore.ExportManifest
@@ -12,3 +12,5 @@ def test_import_civiccore() -> None:
     assert civiccore.CityProfile
     assert civiccore.reciprocal_rank_fusion
     assert civiccore.import_meeting_payload
+    assert civiccore.build_deadline_plan
+    assert civiccore.evaluate_notice_compliance
