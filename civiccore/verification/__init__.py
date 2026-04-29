@@ -1,1 +1,15 @@
-"""CivicCore: sovereignty verification — proves the running install makes zero outbound calls and emits zero telemetry. Phase 4 extraction target."""
+"""Verification helpers for CivicSuite release and runtime evidence."""
+
+from civiccore.verification.browser_evidence import (
+    DEFAULT_MIN_SCREENSHOT_BYTES,
+    BrowserReleaseEvidenceResult,
+    normalized_text_sha256,
+    validate_release_browser_evidence,
+)
+
+__all__ = [
+    "DEFAULT_MIN_SCREENSHOT_BYTES",
+    "BrowserReleaseEvidenceResult",
+    "normalized_text_sha256",
+    "validate_release_browser_evidence",
+]

@@ -12,27 +12,32 @@ shared platform plumbing. **What ships today:** the migration runner plus
 declarative `Base`, the `civiccore.llm` module, hash-chained audit
 primitives, source/provenance metadata contracts, offline import/export
 manifest schemas, static export-bundle helpers, local city profile
-configuration, and bearer-token role helpers for downstream FastAPI
+configuration, bearer-token role helpers for downstream FastAPI
 services, including mixed public/staff routes that should stay anonymous
-by default while unlocking privileged results for authorized callers.
+by default while unlocking privileged results for authorized callers, and
+browser-evidence verification helpers for current-facing release pages.
 
 **Still planned extraction targets (placeholder packages exist; not yet
 implemented today):** `civiccore.catalog`, `civiccore.exemptions`
 (50-state public-records exemption engine),
 `civiccore.ingest` (document ingestion), `civiccore.notifications`,
 `civiccore.onboarding` (web onboarding flows), `civiccore.scaffold`,
-`civiccore.search` (hybrid search), and `civiccore.verification`
-(sovereignty verification). These namespaces are reserved for future Phase
-work and must not be relied on by downstream modules until they ship.
+and `civiccore.search` (hybrid search). `civiccore.verification` now
+ships the first release-evidence helper surface, while sovereignty
+verification remains future work. Unshipped namespaces are reserved for
+future Phase work and must not be relied on by downstream modules until
+they ship.
 
 ## Status
 
-**v0.5.0 is in development.** This line extends the shipped
-`civiccore.auth` surface with an optional bearer resolver for mixed
-public/staff endpoints, alongside the shared audit, provenance,
-manifest, export-bundle, and city profile primitives needed for the
-first production-depth CivicSuite workflows. The most recent published
-GitHub release is `v0.4.0`. `v0.2.0` shipped the `civiccore.llm` module:
+**v0.6.0 is in development.** This line adds the first shipped
+`civiccore.verification` helper for content-bound browser QA release
+evidence, extends the shipped `civiccore.auth` surface with an optional
+bearer resolver for mixed public/staff endpoints, and keeps the shared
+audit, provenance, manifest, export-bundle, and city profile primitives
+needed for the first production-depth CivicSuite workflows. The most
+recent published GitHub release is `v0.5.0`. `v0.2.0` shipped the
+`civiccore.llm` module:
 provider abstraction (Ollama / OpenAI / Anthropic), prompt template engine
 with a 3-step override resolver, model registry service + admin router,
 context utilities with prompt-injection defense, and a Pydantic-validated
@@ -56,10 +61,10 @@ shared-schema baseline extracted from CivicRecords AI).
 
 ## Install
 
-From the current published GitHub release wheel (`v0.4.0`):
+From the current published GitHub release wheel (`v0.5.0`):
 
 ```bash
-pip install https://github.com/CivicSuite/civiccore/releases/download/v0.4.0/civiccore-0.4.0-py3-none-any.whl
+pip install https://github.com/CivicSuite/civiccore/releases/download/v0.5.0/civiccore-0.5.0-py3-none-any.whl
 ```
 
 Each GitHub release also publishes `SHA256SUMS.txt` alongside the wheel and
@@ -276,6 +281,26 @@ allowed role return `403`. The optional resolver returns `None` for
 anonymous callers, which lets public endpoints stay public until a caller
 actually presents a bearer token.
 
+## Verification helper
+
+`civiccore.verification` now ships a small browser-evidence helper for
+current-facing release pages. It binds a release screenshot manifest to
+the normalized content hash of a rendered source file, which keeps
+browser QA evidence honest across Windows and Linux checkouts.
+
+```python
+from pathlib import Path
+
+from civiccore.verification import validate_release_browser_evidence
+
+result = validate_release_browser_evidence(
+    repo_root=Path("."),
+    manifest_path=Path("docs/browser-qa/release-evidence.json"),
+    expected_version="0.1.2",
+)
+print(result.reviewed_at)
+```
+
 ## Public API surface
 
 `civiccore.llm` exposes a single import surface for downstream apps:
@@ -311,7 +336,7 @@ Extraction Spec** in
 
 Every CivicSuite module's README declares its CivicCore dependency contract.
 Current v0.1.0 module foundations pin civiccore `==0.2.0`. Production-depth
-consumers can move to `==0.5.0` after that release is published and the
+consumers can move to `==0.6.0` after that release is published and the
 compatibility matrix is updated. The suite-wide compatibility matrix — which
 module versions work with which CivicCore versions — is maintained at
 [CivicSuite/civicsuite/docs/compatibility/](https://github.com/CivicSuite/civicsuite/tree/main/docs/compatibility).
