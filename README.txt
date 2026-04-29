@@ -10,7 +10,7 @@ What this is
 CivicCore is the Python library every CivicSuite module depends on for shared
 platform plumbing. It is not an end-user municipal app.
 
-What ships in v0.3.0:
+What ships in the current development line:
 
   - civiccore.migrations - migration runner with idempotent guards plus the
     civiccore_0001_baseline_v1 shared-schema baseline and civiccore_0002_llm.
@@ -19,33 +19,42 @@ What ships in v0.3.0:
     utilities, and structured output.
   - civiccore.audit - hash-chained audit primitives.
   - civiccore.provenance - source/provenance metadata contracts.
-  - civiccore.connectors - offline import/export manifest schemas.
+  - civiccore.connectors - offline import/export manifest schemas plus
+    local-first import helpers for supported agenda-platform payloads.
   - civiccore.exports - static export-bundle manifest and checksum helpers.
   - civiccore.city_profile - local city/deployment configuration models.
+  - civiccore.auth - bearer-token role helpers for protected or mixed
+    public/staff FastAPI routes.
+  - civiccore.verification - content-bound browser release-evidence helpers.
+  - civiccore.search - deterministic text normalization, matching, and
+    reciprocal-rank-fusion helpers.
 
-Still planned extraction targets in v0.3.0:
+Still planned extraction targets:
 
-  civiccore.auth, civiccore.catalog, civiccore.exemptions, civiccore.ingest,
-  civiccore.notifications, civiccore.onboarding (web onboarding flows),
-  civiccore.scaffold, civiccore.search, and civiccore.verification.
+  civiccore.catalog, civiccore.exemptions, civiccore.ingest,
+  civiccore.notifications, civiccore.onboarding (web onboarding flows), and
+  civiccore.scaffold.
 
 Live connector sync, credential storage, vendor write-back, document ingestion,
-search indexing, notification delivery, auth/RBAC, and legal determinations are
-not shipped in v0.3.0.
+search indexing, notification delivery, and legal determinations are still not
+shipped platform behaviors.
 
 Status
 ------
 
-v0.3.0 adds offline-first audit, provenance, manifest, export-bundle, and city
-profile primitives for production-depth CivicSuite workflows. v0.2.0 shipped
-the civiccore.llm module. v0.1.0 shipped the migration baseline.
+v0.8.0 is in development. The latest published release is v0.7.0. The
+development line now includes auth helpers, verification helpers, shared search
+helpers, and local-first connector import helpers on top of the audit,
+provenance, manifest, export-bundle, city-profile, migration, and LLM
+primitives. v0.2.0 shipped the civiccore.llm module. v0.1.0 shipped the
+migration baseline.
 
 Install
 -------
 
-From the GitHub release wheel:
+From the current published GitHub release wheel:
 
-    pip install https://github.com/CivicSuite/civiccore/releases/download/v0.3.0/civiccore-0.3.0-py3-none-any.whl
+    pip install https://github.com/CivicSuite/civiccore/releases/download/v0.7.0/civiccore-0.7.0-py3-none-any.whl
 
 CivicCore is distributed as versioned GitHub release artifacts (not on PyPI).
 Each release publishes SHA256SUMS.txt alongside the wheel and sdist. Verify
@@ -76,6 +85,8 @@ Public API surface (high level)
     ProvenanceBundle
 
   civiccore.connectors / civiccore.exports
+    ConnectorImportError, ImportedAgendaItem, ImportedMeeting,
+    SUPPORTED_CONNECTORS, import_meeting_payload,
     ImportManifest, ExportManifest, ManifestFile, validate_manifest,
     ExportBundle, BundleFile, write_manifest, build_sha256sums,
     validate_bundle
@@ -90,8 +101,8 @@ Public API surface (high level)
 Compatibility
 -------------
 
-Current v0.1.0 module foundations still pin civiccore ==0.2.0. Production-depth
-consumers can move to civiccore ==0.3.0 after this release and the suite
+Current v0.1.0 module foundations still pin older civiccore lines.
+Production-depth consumers can move to civiccore ==0.8.0 after this release and the suite
 compatibility matrix are updated.
 
 The suite-wide compatibility matrix is maintained at:

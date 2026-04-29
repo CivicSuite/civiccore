@@ -10,7 +10,7 @@ not an end-user application.
 
 from __future__ import annotations
 
-__version__ = "0.7.0"
+__version__ = "0.8.0"
 
 from civiccore.audit import AuditActor, AuditEvent, AuditHashChain, AuditSubject
 from civiccore.city_profile import (
@@ -21,10 +21,15 @@ from civiccore.city_profile import (
     load_city_profile,
 )
 from civiccore.connectors import (
+    ConnectorImportError,
     ExportManifest,
+    ImportedAgendaItem,
+    ImportedMeeting,
     ImportManifest,
     ManifestFile,
     ManifestValidationError,
+    SUPPORTED_CONNECTORS,
+    import_meeting_payload,
     validate_manifest,
 )
 from civiccore.exports import (
@@ -60,10 +65,15 @@ __all__ = [
     "CitationTarget",
     "DocumentMetadata",
     "ProvenanceBundle",
+    "ConnectorImportError",
     "ImportManifest",
     "ExportManifest",
+    "ImportedAgendaItem",
+    "ImportedMeeting",
     "ManifestFile",
     "ManifestValidationError",
+    "SUPPORTED_CONNECTORS",
+    "import_meeting_payload",
     "validate_manifest",
     "BundleFile",
     "ExportBundle",

@@ -1,5 +1,12 @@
-"""CivicCore: connector framework (Connector ABC, registry, encrypted credentials). Module-agnostic adapters only; module-specific connectors stay module-side. Phase 3 extraction target."""
+"""Shared offline connector primitives for current CivicSuite consumers."""
 
+from civiccore.connectors.imports import (
+    ConnectorImportError,
+    ImportedAgendaItem,
+    ImportedMeeting,
+    SUPPORTED_CONNECTORS,
+    import_meeting_payload,
+)
 from civiccore.connectors.manifest import (
     ExportManifest,
     ImportManifest,
@@ -9,9 +16,14 @@ from civiccore.connectors.manifest import (
 )
 
 __all__ = [
+    "ConnectorImportError",
     "ExportManifest",
+    "ImportedAgendaItem",
+    "ImportedMeeting",
     "ImportManifest",
     "ManifestFile",
     "ManifestValidationError",
+    "SUPPORTED_CONNECTORS",
+    "import_meeting_payload",
     "validate_manifest",
 ]
