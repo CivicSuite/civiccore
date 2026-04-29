@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="CivicCore v0.3.0 - shared platform library for the open-source CivicSuite municipal operations suite. Not an end-user app. Apache 2.0.">
-  <title>CivicCore v0.3.0 - CivicSuite shared platform library</title>
+  <meta name="description" content="CivicCore v0.4.0 in development - shared platform library for the open-source CivicSuite municipal operations suite. Not an end-user app. Apache 2.0.">
+  <title>CivicCore v0.4.0 in development - CivicSuite shared platform library</title>
   <style>
     :root {
       --text: #1f2328;
@@ -141,10 +141,14 @@
         <li><code>civiccore.city_profile</code> - local city/deployment configuration models.</li>
       </ul>
 
-      <h3>Planned extraction targets</h3>
-      <p>These namespaces or behaviors are not shipped in v0.3.0:</p>
+      <h3>Added in the v0.4.0 development line</h3>
       <ul>
-        <li><code>civiccore.auth</code> - authentication and RBAC.</li>
+        <li><code>civiccore.auth</code> - minimal bearer-token role checks for non-public FastAPI routes, with actionable <code>401</code>, <code>403</code>, and <code>503</code> responses.</li>
+      </ul>
+
+      <h3>Still planned extraction targets</h3>
+      <p>These namespaces or behaviors are not shipped yet:</p>
+      <ul>
         <li><code>civiccore.catalog</code> - catalog primitives.</li>
         <li><code>civiccore.exemptions</code> - 50-state public-records exemption engine.</li>
         <li><code>civiccore.ingest</code> - document ingestion.</li>
@@ -158,13 +162,13 @@
 
       <figure style="margin: 2em 0;">
         <img src="diagrams/civiccore-extraction-map.svg" alt="CivicCore extraction map showing shipped and planned namespaces." style="max-width: 100%; height: auto; display: block; margin: 0 auto;">
-        <figcaption style="text-align: center; color: #666; font-size: 0.9em; margin-top: 0.5em;">Shipped vs planned - civiccore v0.3.0 namespaces.</figcaption>
+        <figcaption style="text-align: center; color: #666; font-size: 0.9em; margin-top: 0.5em;">Shipped vs planned - civiccore development line namespaces.</figcaption>
       </figure>
     </section>
 
     <section aria-labelledby="install">
       <h2 id="install">Install</h2>
-      <p>From the GitHub release wheel (canonical distribution - civiccore is GitHub-wheel-only, not on PyPI):</p>
+      <p>From the current published GitHub release wheel (`v0.3.0`) - civiccore is GitHub-wheel-only, not on PyPI:</p>
       <pre><code>pip install https://github.com/CivicSuite/civiccore/releases/download/v0.3.0/civiccore-0.3.0-py3-none-any.whl</code></pre>
       <p>For development from a clone:</p>
       <pre><code>git clone https://github.com/CivicSuite/civiccore.git
@@ -181,10 +185,10 @@ pip install -e .[dev]</code></pre>
       <h2 id="status">Status</h2>
       <div class="status">
         <p>
-          <strong>v0.3.0 - production-depth primitives shipped.</strong>
-          Adds hash-chained audit primitives, source/provenance contracts,
-          offline import/export manifest schemas, export-bundle helpers, and
-          local city profile configuration. v0.2.0 shipped the
+          <strong>v0.4.0 is in development; v0.3.0 is the latest published release.</strong>
+          The current development line adds the <code>civiccore.auth</code>
+          helper to the already-shipped audit, provenance, manifest,
+          export-bundle, and city profile primitives. v0.2.0 shipped the
           <code>civiccore.llm</code> module; v0.1.0 shipped the migration baseline.
         </p>
       </div>
@@ -201,6 +205,7 @@ pip install -e .[dev]</code></pre>
         <li><strong>Provenance</strong> - <code>SourceReference</code>, <code>SourceKind</code>, <code>CitationTarget</code>, <code>DocumentMetadata</code>, <code>ProvenanceBundle</code>.</li>
         <li><strong>Manifests and exports</strong> - <code>ImportManifest</code>, <code>ExportManifest</code>, <code>validate_manifest</code>, <code>ExportBundle</code>, <code>write_manifest</code>, <code>validate_bundle</code>.</li>
         <li><strong>City profiles</strong> - <code>CityProfile</code>, <code>DepartmentProfile</code>, <code>DeploymentProfile</code>, <code>ModuleEnablement</code>, <code>load_city_profile</code>.</li>
+        <li><strong>Auth helper</strong> - <code>civiccore.auth</code> bearer-token role checks for non-public FastAPI routes.</li>
       </ul>
       <figure style="margin: 2em 0;">
         <img src="diagrams/provider-abstraction.svg" alt="LLMProvider ABC with decorator-registered Ollama, OpenAI, Anthropic, and third-party providers." style="max-width: 100%; height: auto; display: block; margin: 0 auto;">
@@ -212,9 +217,9 @@ pip install -e .[dev]</code></pre>
       <h2 id="compat">Compatibility</h2>
       <p>
         <strong>Current v0.1.0 module foundations still pin civiccore v0.2.0.</strong>
-        Production-depth consumers can move to civiccore v0.3.0 after this release
-        and the compatibility matrix are updated. Every CivicSuite module's README
-        declares a CivicCore version range.
+        Production-depth consumers can move to civiccore v0.4.0 after that release
+        is published and the compatibility matrix is updated. Every CivicSuite
+        module's README declares a CivicCore version range.
       </p>
     </section>
 
