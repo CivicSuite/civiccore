@@ -12,8 +12,9 @@ shared platform plumbing. **What ships today:** the migration runner plus
 declarative `Base`, the `civiccore.llm` module, hash-chained audit
 primitives, source/provenance metadata contracts, offline import/export
 manifest schemas, static export-bundle helpers, local city profile
-configuration, and minimal bearer-token role checks for downstream
-FastAPI services.
+configuration, and bearer-token role helpers for downstream FastAPI
+services, including mixed public/staff routes that should stay anonymous
+by default while unlocking privileged results for authorized callers.
 
 **Still planned extraction targets (placeholder packages exist; not yet
 implemented today):** `civiccore.catalog`, `civiccore.exemptions`
@@ -26,11 +27,12 @@ work and must not be relied on by downstream modules until they ship.
 
 ## Status
 
-**v0.4.0 is in development.** This line adds the `civiccore.auth`
-helper alongside the shared audit, provenance, manifest, export-bundle,
-and city profile primitives needed for the first production-depth
-CivicSuite workflows. The most recent published GitHub release remains
-`v0.3.0`. `v0.2.0` shipped the `civiccore.llm` module:
+**v0.5.0 is in development.** This line extends the shipped
+`civiccore.auth` surface with an optional bearer resolver for mixed
+public/staff endpoints, alongside the shared audit, provenance,
+manifest, export-bundle, and city profile primitives needed for the
+first production-depth CivicSuite workflows. The most recent published
+GitHub release is `v0.4.0`. `v0.2.0` shipped the `civiccore.llm` module:
 provider abstraction (Ollama / OpenAI / Anthropic), prompt template engine
 with a 3-step override resolver, model registry service + admin router,
 context utilities with prompt-injection defense, and a Pydantic-validated
@@ -54,10 +56,10 @@ shared-schema baseline extracted from CivicRecords AI).
 
 ## Install
 
-From the current published GitHub release wheel (`v0.3.0`):
+From the current published GitHub release wheel (`v0.4.0`):
 
 ```bash
-pip install https://github.com/CivicSuite/civiccore/releases/download/v0.3.0/civiccore-0.3.0-py3-none-any.whl
+pip install https://github.com/CivicSuite/civiccore/releases/download/v0.4.0/civiccore-0.4.0-py3-none-any.whl
 ```
 
 Each GitHub release also publishes `SHA256SUMS.txt` alongside the wheel and
@@ -223,15 +225,16 @@ write-back.
 
 ## Auth helper
 
-`civiccore.auth` now exposes a small bearer-token role helper for
+`civiccore.auth` now exposes small bearer-token role helpers for
 downstream FastAPI services that need to protect non-public internal
-endpoints without taking on a full identity-provider dependency.
+endpoints or support mixed public/staff routes without taking on a full
+identity-provider dependency.
 
 ```python
 from fastapi import Depends
 from fastapi.security import HTTPBearer
 
-from civiccore.auth import authorize_bearer_roles
+from civiccore.auth import authorize_bearer_roles, resolve_optional_bearer_roles
 
 bearer = HTTPBearer(auto_error=False)
 
@@ -244,6 +247,17 @@ def read_workpaper(credentials = Depends(bearer)) -> dict[str, str]:
         allowed_roles={"workpaper_reader", "budget_admin"},
     )
     return {"status": "ok"}
+
+
+def search_archive(credentials = Depends(bearer)) -> dict[str, bool]:
+    principal = resolve_optional_bearer_roles(
+        credentials,
+        service_name="CivicClerk",
+        feature_name="archive search staff access",
+        token_roles_env_var="CIVICCLERK_AUTH_TOKEN_ROLES",
+        allowed_roles={"archive_reader", "clerk_admin", "city_attorney"},
+    )
+    return {"include_closed": principal is not None}
 ```
 
 Set `CIVICBUDGET_AUTH_TOKEN_ROLES` to a JSON object that maps bearer
@@ -258,7 +272,9 @@ tokens to role strings or role lists:
 
 If the config is missing or malformed, CivicCore raises an actionable
 `503`; missing or invalid bearer headers return `401`; tokens without an
-allowed role return `403`.
+allowed role return `403`. The optional resolver returns `None` for
+anonymous callers, which lets public endpoints stay public until a caller
+actually presents a bearer token.
 
 ## Public API surface
 
@@ -295,7 +311,7 @@ Extraction Spec** in
 
 Every CivicSuite module's README declares its CivicCore dependency contract.
 Current v0.1.0 module foundations pin civiccore `==0.2.0`. Production-depth
-consumers can move to `==0.4.0` after that release is published and the
+consumers can move to `==0.5.0` after that release is published and the
 compatibility matrix is updated. The suite-wide compatibility matrix — which
 module versions work with which CivicCore versions — is maintained at
 [CivicSuite/civicsuite/docs/compatibility/](https://github.com/CivicSuite/civicsuite/tree/main/docs/compatibility).
