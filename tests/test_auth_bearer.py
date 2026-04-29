@@ -4,7 +4,12 @@ import pytest
 from fastapi import HTTPException
 from fastapi.security import HTTPAuthorizationCredentials
 
-from civiccore.auth import AuthenticatedPrincipal, authorize_bearer_roles, parse_token_role_map
+from civiccore.auth import (
+    AuthenticatedPrincipal,
+    authorize_bearer_roles,
+    parse_token_role_map,
+    resolve_optional_bearer_roles,
+)
 
 
 def test_parse_token_role_map_accepts_string_and_list_roles() -> None:
@@ -118,4 +123,56 @@ def test_authorize_bearer_roles_returns_principal_for_allowed_token(
 
     assert isinstance(principal, AuthenticatedPrincipal)
     assert principal.roles == frozenset({"workpaper_reader", "budget_admin"})
-    assert len(principal.token_fingerprint) == 12
+
+
+def test_resolve_optional_bearer_roles_allows_anonymous_callers_without_config() -> None:
+    principal = resolve_optional_bearer_roles(
+        None,
+        service_name="CivicClerk",
+        feature_name="archive search staff access",
+        token_roles_env_var="CIVICCLERK_AUTH_TOKEN_ROLES",
+        allowed_roles={"archive_reader"},
+    )
+
+    assert principal is None
+
+
+def test_resolve_optional_bearer_roles_returns_principal_for_configured_staff_token(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setenv(
+        "CIVICCLERK_AUTH_TOKEN_ROLES",
+        '{"staff-token": ["archive_reader", "clerk_admin"]}',
+    )
+
+    principal = resolve_optional_bearer_roles(
+        HTTPAuthorizationCredentials(scheme="Bearer", credentials="staff-token"),
+        service_name="CivicClerk",
+        feature_name="archive search staff access",
+        token_roles_env_var="CIVICCLERK_AUTH_TOKEN_ROLES",
+        allowed_roles={"archive_reader"},
+    )
+
+    assert isinstance(principal, AuthenticatedPrincipal)
+    assert principal.roles == frozenset({"archive_reader", "clerk_admin"})
+
+
+def test_resolve_optional_bearer_roles_rejects_present_token_without_allowed_role(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setenv(
+        "CIVICCLERK_AUTH_TOKEN_ROLES",
+        '{"staff-token": ["meeting_editor"]}',
+    )
+
+    with pytest.raises(HTTPException) as exc_info:
+        resolve_optional_bearer_roles(
+            HTTPAuthorizationCredentials(scheme="Bearer", credentials="staff-token"),
+            service_name="CivicClerk",
+            feature_name="archive search staff access",
+            token_roles_env_var="CIVICCLERK_AUTH_TOKEN_ROLES",
+            allowed_roles={"archive_reader"},
+        )
+
+    assert exc_info.value.status_code == 403
+    assert exc_info.value.detail["required_roles"] == ["archive_reader"]

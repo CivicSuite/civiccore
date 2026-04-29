@@ -18,13 +18,17 @@ MINOR; bug fixes ship as PATCH.
   downstream FastAPI services that need actionable `401`/`403`/`503`
   protection on non-public internal routes without introducing a full
   identity-provider stack.
+- `civiccore.auth.resolve_optional_bearer_roles()` now supports mixed
+  public/staff endpoints that should keep anonymous access available
+  while upgrading privileged results to the shared bearer-token role
+  contract when callers present Authorization headers.
 
 ### Changed
 - README and auth placeholder docs now describe `civiccore.auth` as a
   shipped helper namespace instead of a reserved future-only package.
 - Package metadata and release verification now target the upcoming
-  `0.4.0` minor line so the auth helper does not retroactively change the
-  published `0.3.0` contract.
+  `0.5.0` minor line so the optional mixed-route auth helper does not
+  retroactively change the published `0.4.0` contract.
 
 ## [0.3.0] - 2026-04-28
 

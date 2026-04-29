@@ -140,3 +140,30 @@ def authorize_bearer_roles(
         token_fingerprint=hashlib.sha256(credentials.credentials.encode("utf-8")).hexdigest()[:12],
         roles=token_roles,
     )
+
+
+def resolve_optional_bearer_roles(
+    credentials: HTTPAuthorizationCredentials | None,
+    *,
+    service_name: str,
+    feature_name: str,
+    token_roles_env_var: str,
+    allowed_roles: Iterable[str],
+) -> AuthenticatedPrincipal | None:
+    """Return an authenticated principal when a bearer token is present.
+
+    Mixed public/staff endpoints can use this helper to keep anonymous access
+    available while upgrading privileged results to the shared bearer-token
+    contract when callers present Authorization headers.
+    """
+
+    if credentials is None:
+        return None
+
+    return authorize_bearer_roles(
+        credentials,
+        service_name=service_name,
+        feature_name=feature_name,
+        token_roles_env_var=token_roles_env_var,
+        allowed_roles=allowed_roles,
+    )
