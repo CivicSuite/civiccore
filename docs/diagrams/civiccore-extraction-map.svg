@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 780" role="img" aria-labelledby="title desc">
-  <title id="title">CivicCore v0.3.0 shipped and planned namespaces</title>
-  <desc id="desc">Architecture map showing CivicCore v0.3.0 shipped primitives on the left and planned extraction targets on the right.</desc>
+  <title id="title">CivicCore v0.9.0 shipped and partial/future namespaces</title>
+  <desc id="desc">Architecture map showing CivicCore v0.9.0 shipped primitives on the left and partial or future extraction targets on the right.</desc>
   <defs>
     <style>
       .bg { fill: #f8faf7; }
@@ -18,12 +18,12 @@
   </defs>
 
   <rect class="bg" width="1120" height="780"/>
-  <text x="70" y="72" class="title">CivicCore v0.3.0</text>
+  <text x="70" y="72" class="title">CivicCore v0.9.0</text>
   <text x="70" y="104" class="subtitle">Shared platform primitives for CivicSuite modules. Library only; not an end-user app.</text>
 
   <rect class="panel" x="60" y="145" width="480" height="545"/>
   <text x="92" y="190" class="panel-title">Shipped implementation</text>
-  <text x="92" y="216" class="panel-note">Safe for downstream modules to import in v0.3.0.</text>
+  <text x="92" y="216" class="panel-note">Safe for downstream modules to import in the current development line.</text>
 
   <g transform="translate(92 245)">
     <rect class="ship" width="190" height="66"/>
@@ -53,7 +53,7 @@
   <g transform="translate(306 425)">
     <rect class="ship" width="190" height="66"/>
     <text x="18" y="28" class="label">connectors</text>
-    <text x="18" y="50" class="small">offline manifests only</text>
+    <text x="18" y="50" class="small">offline manifests + import helpers</text>
   </g>
   <g transform="translate(92 515)">
     <rect class="ship" width="190" height="66"/>
@@ -67,13 +67,13 @@
   </g>
 
   <rect class="panel" x="580" y="145" width="480" height="545"/>
-  <text x="612" y="190" class="panel-title">Planned extraction targets</text>
-  <text x="612" y="216" class="panel-note">Reserved or future capabilities; do not promote as shipped.</text>
+  <text x="612" y="190" class="panel-title">Partial or future extraction targets</text>
+  <text x="612" y="216" class="panel-note">Some namespaces ship helper slices; deeper platform behavior remains future work.</text>
 
   <g transform="translate(612 245)">
     <rect class="plan" width="190" height="62"/>
     <text x="18" y="27" class="label">auth</text>
-    <text x="18" y="48" class="small">auth/RBAC</text>
+    <text x="18" y="48" class="small">shipped bearer helpers</text>
   </g>
   <g transform="translate(826 245)">
     <rect class="plan" width="190" height="62"/>
@@ -93,7 +93,7 @@
   <g transform="translate(612 411)">
     <rect class="plan" width="190" height="62"/>
     <text x="18" y="27" class="label">notifications</text>
-    <text x="18" y="48" class="small">delivery primitives</text>
+    <text x="18" y="48" class="small">shipped notice helpers</text>
   </g>
   <g transform="translate(826 411)">
     <rect class="plan" width="190" height="62"/>
@@ -108,12 +108,12 @@
   <g transform="translate(826 494)">
     <rect class="plan" width="190" height="62"/>
     <text x="18" y="27" class="label">search</text>
-    <text x="18" y="48" class="small">hybrid search</text>
+    <text x="18" y="48" class="small">shipped helper surface</text>
   </g>
   <g transform="translate(612 577)">
     <rect class="plan" width="190" height="62"/>
     <text x="18" y="27" class="label">verification</text>
-    <text x="18" y="48" class="small">sovereignty checks</text>
+    <text x="18" y="48" class="small">shipped QA helpers</text>
   </g>
   <g transform="translate(826 577)">
     <rect class="plan" width="190" height="62"/>
@@ -121,5 +121,5 @@
     <text x="18" y="48" class="small">sync + write-back</text>
   </g>
 
-  <text x="70" y="735" class="footer">Boundary: v0.3.0 adds offline-first primitives only. It does not ship auth/RBAC, live sync, ingestion, search indexing, notification delivery, or legal determinations.</text>
+  <text x="70" y="735" class="footer">Boundary: v0.9.0 ships helper surfaces for auth, notice compliance, search, verification, and local imports. It does not ship live sync, ingestion, search indexing, delivery queues, or legal determinations.</text>
 </svg>

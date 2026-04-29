@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="CivicCore v0.8.0 in development - shared platform library for the open-source CivicSuite municipal operations suite. Not an end-user app. Apache 2.0.">
-  <title>CivicCore v0.8.0 in development - CivicSuite shared platform library</title>
+  <meta name="description" content="CivicCore v0.9.0 in development - shared platform library for the open-source CivicSuite municipal operations suite. Not an end-user app. Apache 2.0.">
+  <title>CivicCore v0.9.0 in development - CivicSuite shared platform library</title>
   <style>
     :root {
       --text: #1f2328;
@@ -129,7 +129,7 @@
         <li>Designed for downstream modules without tight coupling: migrations, LLMs, audit chains, provenance, manifests, export bundles, and city profiles.</li>
       </ul>
 
-      <h3>Shipped in v0.3.0</h3>
+      <h3>Shipped core surface</h3>
       <ul>
         <li><code>civiccore.migrations</code> - migration runner + idempotent guards + <code>civiccore_0001_baseline_v1</code> + <code>civiccore_0002_llm</code>.</li>
         <li><code>civiccore.db</code> - shared SQLAlchemy declarative <code>Base</code>.</li>
@@ -147,6 +147,7 @@
         <li><code>civiccore.verification</code> - content-bound browser QA release-evidence validation helpers.</li>
         <li><code>civiccore.search</code> - deterministic query normalization, shared text matching, and reciprocal-rank-fusion helpers.</li>
         <li><code>civiccore.connectors</code> - local-payload meeting import normalization with shared source provenance and actionable fix-path errors.</li>
+        <li><code>civiccore.notifications</code> - deterministic notice deadline planning plus publication-compliance warning helpers.</li>
       </ul>
 
       <h3>Still planned extraction targets</h3>
@@ -155,7 +156,7 @@
         <li><code>civiccore.catalog</code> - catalog primitives.</li>
         <li><code>civiccore.exemptions</code> - 50-state public-records exemption engine.</li>
         <li><code>civiccore.ingest</code> - document ingestion.</li>
-        <li><code>civiccore.notifications</code> - notification delivery.</li>
+        <li><code>civiccore.notifications</code> - delivery queues and outbound notification orchestration.</li>
         <li><code>civiccore.onboarding</code> - web onboarding flows.</li>
         <li><code>civiccore.scaffold</code> - scaffolding helpers.</li>
         <li><code>civiccore.search</code> - full search engine, index storage, and database-backed retrieval orchestration.</li>
@@ -171,8 +172,8 @@
 
     <section aria-labelledby="install">
       <h2 id="install">Install</h2>
-      <p>From the current published GitHub release wheel (`v0.7.0`) - civiccore is GitHub-wheel-only, not on PyPI:</p>
-      <pre><code>pip install https://github.com/CivicSuite/civiccore/releases/download/v0.7.0/civiccore-0.7.0-py3-none-any.whl</code></pre>
+      <p>From the current published GitHub release wheel (`v0.8.0`) - civiccore is GitHub-wheel-only, not on PyPI:</p>
+      <pre><code>pip install https://github.com/CivicSuite/civiccore/releases/download/v0.8.0/civiccore-0.8.0-py3-none-any.whl</code></pre>
       <p>For development from a clone:</p>
       <pre><code>git clone https://github.com/CivicSuite/civiccore.git
 cd civiccore
@@ -188,10 +189,11 @@ pip install -e .[dev]</code></pre>
       <h2 id="status">Status</h2>
       <div class="status">
         <p>
-          <strong>v0.8.0 is in development; v0.7.0 is the latest published release.</strong>
-          The current development line adds shared <code>civiccore.connectors</code>
-          local-first import helpers on top of the already-shipped <code>civiccore.auth</code>,
-          <code>civiccore.verification</code>, <code>civiccore.search</code>, audit,
+          <strong>v0.9.0 is in development; v0.8.0 is the latest published release.</strong>
+          The current development line adds shared <code>civiccore.notifications</code>
+          notice deadline and publication-compliance helpers on top of the already-shipped
+          <code>civiccore.auth</code>, <code>civiccore.verification</code>,
+          <code>civiccore.search</code>, <code>civiccore.connectors</code>, audit,
           provenance, manifest, export-bundle, and city profile primitives.
           v0.2.0 shipped the <code>civiccore.llm</code> module; v0.1.0 shipped the migration baseline.
         </p>
@@ -213,6 +215,7 @@ pip install -e .[dev]</code></pre>
         <li><strong>Verification helper</strong> - <code>civiccore.verification</code> content-bound browser QA release evidence validation.</li>
         <li><strong>Search helpers</strong> - <code>civiccore.search</code> normalization, deterministic text matching, and reciprocal-rank-fusion.</li>
         <li><strong>Connector import helpers</strong> - <code>civiccore.connectors</code> local-first meeting import normalization, actionable fix-path errors, and source provenance builders.</li>
+        <li><strong>Notice helpers</strong> - <code>civiccore.notifications</code> deadline planning plus publication-compliance warning contracts.</li>
       </ul>
       <figure style="margin: 2em 0;">
         <img src="diagrams/provider-abstraction.svg" alt="LLMProvider ABC with decorator-registered Ollama, OpenAI, Anthropic, and third-party providers." style="max-width: 100%; height: auto; display: block; margin: 0 auto;">
@@ -224,7 +227,7 @@ pip install -e .[dev]</code></pre>
       <h2 id="compat">Compatibility</h2>
       <p>
         <strong>Current module foundations span older civiccore lines while newer product-depth consumers already target later releases.</strong>
-        Production-depth consumers can move to civiccore v0.8.0 after that release
+        Production-depth consumers can move to civiccore v0.9.0 after that release
         is published and the compatibility matrix is updated. Every CivicSuite
         module's README declares a CivicCore version range.
       </p>

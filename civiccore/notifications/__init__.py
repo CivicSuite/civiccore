@@ -1,1 +1,19 @@
-"""CivicCore: notification service — templates, delivery log, event-driven dispatch. Phase 3 extraction target."""
+"""Shared notice and notification helpers for CivicSuite modules."""
+
+from civiccore.notifications.notice import (
+    DeadlinePlan,
+    NoticeComplianceResult,
+    NoticeComplianceWarning,
+    SPECIAL_NOTICE_TYPES,
+    build_deadline_plan,
+    evaluate_notice_compliance,
+)
+
+__all__ = [
+    "DeadlinePlan",
+    "NoticeComplianceResult",
+    "NoticeComplianceWarning",
+    "SPECIAL_NOTICE_TYPES",
+    "build_deadline_plan",
+    "evaluate_notice_compliance",
+]
