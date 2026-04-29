@@ -4,9 +4,10 @@
 def test_import_civiccore() -> None:
     import civiccore
 
-    assert civiccore.__version__ == "0.6.0"
+    assert civiccore.__version__ == "0.7.0"
     assert civiccore.AuditHashChain
     assert civiccore.SourceReference
     assert civiccore.ExportManifest
     assert civiccore.ExportBundle
     assert civiccore.CityProfile
+    assert civiccore.reciprocal_rank_fusion

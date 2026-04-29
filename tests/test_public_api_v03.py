@@ -31,6 +31,10 @@ def test_v03_public_api_symbols_import_from_package_root() -> None:
         "DeploymentProfile",
         "ModuleEnablement",
         "load_city_profile",
+        "normalize_search_query",
+        "normalize_search_text",
+        "search_text_matches_query",
+        "reciprocal_rank_fusion",
         "normalized_text_sha256",
         "validate_release_browser_evidence",
     }
@@ -44,7 +48,6 @@ def test_v03_placeholder_modules_stay_out_of_root_surface() -> None:
 
     not_yet_shipped = {
         "Auth",
-        "SearchIndex",
         "NotificationDelivery",
         "ExemptionRuleEngine",
         "DocumentIngestor",

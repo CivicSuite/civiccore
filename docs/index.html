@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="CivicCore v0.4.0 in development - shared platform library for the open-source CivicSuite municipal operations suite. Not an end-user app. Apache 2.0.">
-  <title>CivicCore v0.4.0 in development - CivicSuite shared platform library</title>
+  <meta name="description" content="CivicCore v0.7.0 in development - shared platform library for the open-source CivicSuite municipal operations suite. Not an end-user app. Apache 2.0.">
+  <title>CivicCore v0.7.0 in development - CivicSuite shared platform library</title>
   <style>
     :root {
       --text: #1f2328;
@@ -141,9 +141,11 @@
         <li><code>civiccore.city_profile</code> - local city/deployment configuration models.</li>
       </ul>
 
-      <h3>Added in the v0.4.0 development line</h3>
+      <h3>Added in the v0.4.0+ development line</h3>
       <ul>
         <li><code>civiccore.auth</code> - minimal bearer-token role checks for non-public FastAPI routes, with actionable <code>401</code>, <code>403</code>, and <code>503</code> responses.</li>
+        <li><code>civiccore.verification</code> - content-bound browser QA release-evidence validation helpers.</li>
+        <li><code>civiccore.search</code> - deterministic query normalization, shared text matching, and reciprocal-rank-fusion helpers.</li>
       </ul>
 
       <h3>Still planned extraction targets</h3>
@@ -155,7 +157,7 @@
         <li><code>civiccore.notifications</code> - notification delivery.</li>
         <li><code>civiccore.onboarding</code> - web onboarding flows.</li>
         <li><code>civiccore.scaffold</code> - scaffolding helpers.</li>
-        <li><code>civiccore.search</code> - hybrid search.</li>
+        <li><code>civiccore.search</code> - full search engine, index storage, and database-backed retrieval orchestration.</li>
         <li><code>civiccore.verification</code> - sovereignty verification.</li>
         <li>Live connector sync, credential storage, vendor write-back, and legal determinations.</li>
       </ul>
@@ -168,8 +170,8 @@
 
     <section aria-labelledby="install">
       <h2 id="install">Install</h2>
-      <p>From the current published GitHub release wheel (`v0.3.0`) - civiccore is GitHub-wheel-only, not on PyPI:</p>
-      <pre><code>pip install https://github.com/CivicSuite/civiccore/releases/download/v0.3.0/civiccore-0.3.0-py3-none-any.whl</code></pre>
+      <p>From the current published GitHub release wheel (`v0.6.0`) - civiccore is GitHub-wheel-only, not on PyPI:</p>
+      <pre><code>pip install https://github.com/CivicSuite/civiccore/releases/download/v0.6.0/civiccore-0.6.0-py3-none-any.whl</code></pre>
       <p>For development from a clone:</p>
       <pre><code>git clone https://github.com/CivicSuite/civiccore.git
 cd civiccore
@@ -185,9 +187,10 @@ pip install -e .[dev]</code></pre>
       <h2 id="status">Status</h2>
       <div class="status">
         <p>
-          <strong>v0.4.0 is in development; v0.3.0 is the latest published release.</strong>
-          The current development line adds the <code>civiccore.auth</code>
-          helper to the already-shipped audit, provenance, manifest,
+          <strong>v0.7.0 is in development; v0.6.0 is the latest published release.</strong>
+          The current development line adds the first shared <code>civiccore.search</code>
+          helper surface on top of the already-shipped <code>civiccore.auth</code>,
+          <code>civiccore.verification</code>, audit, provenance, manifest,
           export-bundle, and city profile primitives. v0.2.0 shipped the
           <code>civiccore.llm</code> module; v0.1.0 shipped the migration baseline.
         </p>
@@ -206,6 +209,8 @@ pip install -e .[dev]</code></pre>
         <li><strong>Manifests and exports</strong> - <code>ImportManifest</code>, <code>ExportManifest</code>, <code>validate_manifest</code>, <code>ExportBundle</code>, <code>write_manifest</code>, <code>validate_bundle</code>.</li>
         <li><strong>City profiles</strong> - <code>CityProfile</code>, <code>DepartmentProfile</code>, <code>DeploymentProfile</code>, <code>ModuleEnablement</code>, <code>load_city_profile</code>.</li>
         <li><strong>Auth helper</strong> - <code>civiccore.auth</code> bearer-token role checks for non-public FastAPI routes.</li>
+        <li><strong>Verification helper</strong> - <code>civiccore.verification</code> content-bound browser QA release evidence validation.</li>
+        <li><strong>Search helpers</strong> - <code>civiccore.search</code> normalization, deterministic text matching, and reciprocal-rank-fusion.</li>
       </ul>
       <figure style="margin: 2em 0;">
         <img src="diagrams/provider-abstraction.svg" alt="LLMProvider ABC with decorator-registered Ollama, OpenAI, Anthropic, and third-party providers." style="max-width: 100%; height: auto; display: block; margin: 0 auto;">
@@ -217,7 +222,7 @@ pip install -e .[dev]</code></pre>
       <h2 id="compat">Compatibility</h2>
       <p>
         <strong>Current v0.1.0 module foundations still pin civiccore v0.2.0.</strong>
-        Production-depth consumers can move to civiccore v0.4.0 after that release
+        Production-depth consumers can move to civiccore v0.7.0 after that release
         is published and the compatibility matrix is updated. Every CivicSuite
         module's README declares a CivicCore version range.
       </p>

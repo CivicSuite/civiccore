@@ -139,12 +139,13 @@ def main() -> int:
                     "from importlib.metadata import version; "
                     "import civiccore; "
                     "from civiccore.migrations.runner import upgrade_to_head; "
-                    "assert version('civiccore') == '0.6.0'; "
-                    "assert civiccore.__version__ == '0.6.0'; "
+                    "assert version('civiccore') == '0.7.0'; "
+                    "assert civiccore.__version__ == '0.7.0'; "
                     "assert callable(upgrade_to_head); "
                     "assert callable(civiccore.validate_manifest); "
                     "assert civiccore.AuditHashChain; "
                     "assert civiccore.CityProfile; "
+                    "assert callable(civiccore.reciprocal_rank_fusion); "
                     "print('fresh-venv import smoke OK')"
                 ),
             ],

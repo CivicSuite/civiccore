@@ -10,7 +10,7 @@ not an end-user application.
 
 from __future__ import annotations
 
-__version__ = "0.6.0"
+__version__ = "0.7.0"
 
 from civiccore.audit import AuditActor, AuditEvent, AuditHashChain, AuditSubject
 from civiccore.city_profile import (
@@ -41,6 +41,12 @@ from civiccore.provenance import (
     SourceKind,
     SourceReference,
 )
+from civiccore.search import (
+    normalize_search_query,
+    normalize_search_text,
+    reciprocal_rank_fusion,
+    search_text_matches_query,
+)
 from civiccore.verification import normalized_text_sha256, validate_release_browser_evidence
 
 __all__ = [
@@ -69,6 +75,10 @@ __all__ = [
     "DeploymentProfile",
     "ModuleEnablement",
     "load_city_profile",
+    "normalize_search_query",
+    "normalize_search_text",
+    "search_text_matches_query",
+    "reciprocal_rank_fusion",
     "normalized_text_sha256",
     "validate_release_browser_evidence",
 ]
