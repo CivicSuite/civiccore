@@ -26,8 +26,9 @@ compliance helpers with actionable warning codes.
 implemented today):** `civiccore.catalog`, `civiccore.exemptions`
 (50-state public-records exemption engine),
 `civiccore.ingest` (document ingestion),
-`civiccore.onboarding` (web onboarding flows), and
-`civiccore.scaffold`. `civiccore.search` now ships normalization and
+`civiccore.scaffold`. `civiccore.onboarding` now ships storage-neutral
+profile interview helpers, but not a web onboarding UI or persistence
+router. `civiccore.search` now ships normalization and
 fusion helpers, but not a full search engine or indexer.
 `civiccore.notifications` now ships notice deadline and compliance
 helpers, but not delivery queues or outbound notification orchestration.
@@ -41,7 +42,8 @@ by downstream modules until they ship.
 
 ## Status
 
-**v0.9.0 is in development.** This line adds shipped
+**v0.10.0 is in development.** This line adds shipped
+`civiccore.onboarding` profile interview helpers on top of shipped
 `civiccore.notifications` notice deadline planning and publication
 compliance helpers on top of the shipped `civiccore.connectors`
 local-first import helpers, the shipped `civiccore.search` helper
@@ -51,7 +53,7 @@ shipped `civiccore.verification` release-evidence helpers, the shipped
 endpoints, and the shared audit, provenance, manifest, export-bundle,
 and city profile primitives needed for the first production-depth
 CivicSuite workflows. The most recent published GitHub release is
-`v0.8.0`.
+`v0.9.0`.
 `v0.2.0` shipped the `civiccore.llm` module:
 provider abstraction (Ollama / OpenAI / Anthropic), prompt template engine
 with a 3-step override resolver, model registry service + admin router,
@@ -76,10 +78,10 @@ shared-schema baseline extracted from CivicRecords AI).
 
 ## Install
 
-From the current published GitHub release wheel (`v0.8.0`):
+From the current published GitHub release wheel (`v0.9.0`):
 
 ```bash
-pip install https://github.com/CivicSuite/civiccore/releases/download/v0.8.0/civiccore-0.8.0-py3-none-any.whl
+pip install https://github.com/CivicSuite/civiccore/releases/download/v0.9.0/civiccore-0.9.0-py3-none-any.whl
 ```
 
 Each GitHub release also publishes `SHA256SUMS.txt` alongside the wheel and
@@ -296,6 +298,34 @@ allowed role return `403`. The optional resolver returns `None` for
 anonymous callers, which lets public endpoints stay public until a caller
 actually presents a bearer token.
 
+## Onboarding helper
+
+`civiccore.onboarding` now ships shared storage-neutral helpers for
+interview-style city-profile onboarding flows:
+
+```python
+from civiccore.onboarding import (
+    DEFAULT_PROFILE_FIELDS,
+    compute_onboarding_status,
+    next_profile_prompt,
+    parse_profile_answer,
+)
+
+parsed = parse_profile_answer("has_dedicated_it", "yes")
+status = compute_onboarding_status({"city_name": "Sampleville"})
+progress = next_profile_prompt(
+    {"city_name": "Sampleville"},
+    skipped_fields=("state",),
+)
+assert parsed is True
+assert status == "in_progress"
+assert progress.next_field == "county"
+```
+
+This ships the field order, skip-aware next-question selection, text
+trimming, and yes/no normalization contract. Full web onboarding flows,
+router integration, and persistence orchestration remain future work.
+
 ## Verification helper
 
 `civiccore.verification` now ships a small browser-evidence helper for
@@ -351,7 +381,7 @@ Extraction Spec** in
 
 Every CivicSuite module's README declares its CivicCore dependency contract.
 Current v0.1.0 module foundations pin older civiccore lines. Production-depth
-consumers can move to `==0.9.0` after that release is published and the
+consumers can move to `==0.10.0` after that release is published and the
 compatibility matrix is updated. The suite-wide compatibility matrix — which
 module versions work with which CivicCore versions — is maintained at
 [CivicSuite/civicsuite/docs/compatibility/](https://github.com/CivicSuite/civicsuite/tree/main/docs/compatibility).

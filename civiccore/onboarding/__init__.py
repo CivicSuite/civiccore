@@ -1,1 +1,21 @@
-"""CivicCore: first-run onboarding wizard and city profile (one row per installation). Phase 4 extraction target."""
+"""Shared onboarding interview/profile helpers for CivicSuite modules."""
+
+from civiccore.onboarding.profile import (
+    DEFAULT_PROFILE_FIELDS,
+    OnboardingField,
+    OnboardingProgress,
+    completed_profile_fields,
+    compute_onboarding_status,
+    next_profile_prompt,
+    parse_profile_answer,
+)
+
+__all__ = [
+    "DEFAULT_PROFILE_FIELDS",
+    "OnboardingField",
+    "OnboardingProgress",
+    "completed_profile_fields",
+    "compute_onboarding_status",
+    "next_profile_prompt",
+    "parse_profile_answer",
+]

@@ -10,7 +10,7 @@ not an end-user application.
 
 from __future__ import annotations
 
-__version__ = "0.9.0"
+__version__ = "0.10.0"
 
 from civiccore.audit import AuditActor, AuditEvent, AuditHashChain, AuditSubject
 from civiccore.city_profile import (
@@ -46,6 +46,15 @@ from civiccore.notifications import (
     SPECIAL_NOTICE_TYPES,
     build_deadline_plan,
     evaluate_notice_compliance,
+)
+from civiccore.onboarding import (
+    DEFAULT_PROFILE_FIELDS,
+    OnboardingField,
+    OnboardingProgress,
+    completed_profile_fields,
+    compute_onboarding_status,
+    next_profile_prompt,
+    parse_profile_answer,
 )
 from civiccore.provenance import (
     CitationTarget,
@@ -94,13 +103,20 @@ __all__ = [
     "SPECIAL_NOTICE_TYPES",
     "build_deadline_plan",
     "evaluate_notice_compliance",
+    "DEFAULT_PROFILE_FIELDS",
     "CityProfile",
     "DepartmentProfile",
     "DeploymentProfile",
     "ModuleEnablement",
+    "OnboardingField",
+    "OnboardingProgress",
+    "completed_profile_fields",
+    "compute_onboarding_status",
     "load_city_profile",
+    "next_profile_prompt",
     "normalize_search_query",
     "normalize_search_text",
+    "parse_profile_answer",
     "search_text_matches_query",
     "reciprocal_rank_fusion",
     "normalized_text_sha256",
