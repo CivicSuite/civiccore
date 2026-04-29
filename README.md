@@ -7,16 +7,17 @@ municipal operations suite.
 ## What this is
 
 CivicCore is the Python package every CivicSuite module depends on for
-shared platform plumbing. **What ships in v0.3.0:** the migration runner
-plus `civiccore_0001_baseline_v1` shared-schema baseline, a shared
-SQLAlchemy declarative `Base`, the `civiccore.llm` module, hash-chained
-audit primitives, source/provenance metadata contracts, offline
-import/export manifest schemas, static export-bundle helpers, and local
-city profile configuration.
+shared platform plumbing. **What ships today:** the migration runner plus
+`civiccore_0001_baseline_v1` shared-schema baseline, a shared SQLAlchemy
+declarative `Base`, the `civiccore.llm` module, hash-chained audit
+primitives, source/provenance metadata contracts, offline import/export
+manifest schemas, static export-bundle helpers, local city profile
+configuration, and minimal bearer-token role checks for downstream
+FastAPI services.
 
 **Still planned extraction targets (placeholder packages exist; not yet
-implemented in v0.3.0):** `civiccore.auth`, `civiccore.catalog`,
-`civiccore.exemptions` (50-state public-records exemption engine),
+implemented today):** `civiccore.catalog`, `civiccore.exemptions`
+(50-state public-records exemption engine),
 `civiccore.ingest` (document ingestion), `civiccore.notifications`,
 `civiccore.onboarding` (web onboarding flows), `civiccore.scaffold`,
 `civiccore.search` (hybrid search), and `civiccore.verification`
@@ -25,9 +26,11 @@ work and must not be relied on by downstream modules until they ship.
 
 ## Status
 
-**v0.3.0 shipped.** This release adds shared audit, provenance, manifest,
-export-bundle, and city profile primitives for the first production-depth
-CivicSuite workflows. `v0.2.0` shipped the `civiccore.llm` module:
+**v0.4.0 is in development.** This line adds the `civiccore.auth`
+helper alongside the shared audit, provenance, manifest, export-bundle,
+and city profile primitives needed for the first production-depth
+CivicSuite workflows. The most recent published GitHub release remains
+`v0.3.0`. `v0.2.0` shipped the `civiccore.llm` module:
 provider abstraction (Ollama / OpenAI / Anthropic), prompt template engine
 with a 3-step override resolver, model registry service + admin router,
 context utilities with prompt-injection defense, and a Pydantic-validated
@@ -51,7 +54,7 @@ shared-schema baseline extracted from CivicRecords AI).
 
 ## Install
 
-From the GitHub release wheel:
+From the current published GitHub release wheel (`v0.3.0`):
 
 ```bash
 pip install https://github.com/CivicSuite/civiccore/releases/download/v0.3.0/civiccore-0.3.0-py3-none-any.whl
@@ -191,8 +194,8 @@ Per ADR-0004: token counting is context-window math; no cost tracking, no spend 
 
 ## Audit, provenance, manifests, exports, and city profiles
 
-CivicCore v0.3.0 adds storage-neutral primitives for production-depth
-municipal workflows:
+The current CivicCore development line adds storage-neutral primitives
+for production-depth municipal workflows:
 
 ```python
 from civiccore import (
@@ -213,9 +216,49 @@ chain.record_event(
 assert chain.verify()
 ```
 
-These APIs are deliberately offline-first. They do not provide auth/RBAC,
-live connector sync, credential storage, document ingestion, search indexing,
-legal determinations, or vendor write-back.
+These APIs are deliberately offline-first. They do not provide JWT
+issuance, SSO, user directories, live connector sync, credential storage,
+document ingestion, search indexing, legal determinations, or vendor
+write-back.
+
+## Auth helper
+
+`civiccore.auth` now exposes a small bearer-token role helper for
+downstream FastAPI services that need to protect non-public internal
+endpoints without taking on a full identity-provider dependency.
+
+```python
+from fastapi import Depends
+from fastapi.security import HTTPBearer
+
+from civiccore.auth import authorize_bearer_roles
+
+bearer = HTTPBearer(auto_error=False)
+
+def read_workpaper(credentials = Depends(bearer)) -> dict[str, str]:
+    authorize_bearer_roles(
+        credentials,
+        service_name="CivicBudget",
+        feature_name="persisted workpaper retrieval",
+        token_roles_env_var="CIVICBUDGET_AUTH_TOKEN_ROLES",
+        allowed_roles={"workpaper_reader", "budget_admin"},
+    )
+    return {"status": "ok"}
+```
+
+Set `CIVICBUDGET_AUTH_TOKEN_ROLES` to a JSON object that maps bearer
+tokens to role strings or role lists:
+
+```json
+{
+  "demo-reader-token": ["workpaper_reader"],
+  "budget-admin-token": "workpaper_reader,budget_admin"
+}
+```
+
+If the config is missing or malformed, CivicCore raises an actionable
+`503`; missing or invalid bearer headers return `401`; tokens without an
+allowed role return `403`.
 
 ## Public API surface
 
@@ -252,9 +295,9 @@ Extraction Spec** in
 
 Every CivicSuite module's README declares its CivicCore dependency contract.
 Current v0.1.0 module foundations pin civiccore `==0.2.0`. Production-depth
-consumers can move to `==0.3.0` after the release and compatibility matrix are
-updated. The suite-wide compatibility matrix — which module versions
-work with which CivicCore versions — is maintained at
+consumers can move to `==0.4.0` after that release is published and the
+compatibility matrix is updated. The suite-wide compatibility matrix — which
+module versions work with which CivicCore versions — is maintained at
 [CivicSuite/civicsuite/docs/compatibility/](https://github.com/CivicSuite/civicsuite/tree/main/docs/compatibility).
 
 ## License
