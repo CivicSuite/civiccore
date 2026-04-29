@@ -11,6 +11,26 @@ breaking changes to the public API surface (Appendix A of that spec) ship
 as MAJOR releases; new symbols or backward-compatible behavior ship as
 MINOR; bug fixes ship as PATCH.
 
+## [0.12.0] - 2026-04-29
+
+### Added
+- `civiccore.security.validate_url_host()` now ships a shared connector-host
+  validation helper that blocks loopback, RFC1918, link-local, and localhost
+  targets by default while supporting narrow exact-host allowlists for
+  intentional on-prem endpoints.
+- `civiccore.security.extract_odbc_host()` and
+  `validate_odbc_connection_string()` now ship a fail-closed shared contract
+  for ODBC host parsing and blocked-range enforcement.
+- `civiccore.security.encrypt_json()`, `decrypt_json()`, and
+  `is_encrypted()` now ship a shared encrypted JSON envelope contract for
+  secret-bearing connector/config payloads that need at-rest protection.
+- Package-root exports now include the shared security primitives so
+  downstream modules can consume them from the stable `civiccore` public API.
+
+### Changed
+- README, package metadata, and release surfaces now describe
+  `civiccore.security` as a shipped helper namespace.
+
 ## [0.11.0] - 2026-04-29
 
 ### Added

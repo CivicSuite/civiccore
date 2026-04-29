@@ -1,6 +1,6 @@
 # CivicCore User Manual
 
-Version: v0.11.0 (latest published release)
+Version: v0.12.0 (current development-line release target)
 Repository: https://github.com/CivicSuite/civiccore
 License: Apache 2.0
 
