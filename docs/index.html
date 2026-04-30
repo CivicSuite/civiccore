@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="CivicCore v0.15.0 - shared platform library for the open-source CivicSuite municipal operations suite. Not an end-user app. Apache 2.0.">
-  <title>CivicCore v0.15.0 - CivicSuite shared platform library</title>
+<meta name="description" content="CivicCore v0.16.0 - shared platform library for the open-source CivicSuite municipal operations suite. Not an end-user app. Apache 2.0.">
+<title>CivicCore v0.16.0 - CivicSuite shared platform library</title>
   <style>
     :root {
       --text: #1f2328;
@@ -138,7 +138,7 @@
         <li><code>civiccore.provenance</code> - source, citation, document, and provenance metadata contracts.</li>
         <li><code>civiccore.connectors</code> - offline import/export manifest schemas plus local-first import helpers for supported agenda-platform payloads.</li>
         <li><code>civiccore.exports</code> - static export-bundle manifest and checksum helpers.</li>
-        <li><code>civiccore.auth</code> - bearer-token and trusted-header reverse-proxy auth helpers for protected staff routes.</li>
+        <li><code>civiccore.auth</code> - bearer-token auth helpers plus trusted-header reverse-proxy config and source-boundary helpers for protected staff routes.</li>
         <li><code>civiccore.city_profile</code> - local city/deployment configuration models.</li>
       </ul>
 
@@ -174,8 +174,8 @@
 
     <section aria-labelledby="install">
       <h2 id="install">Install</h2>
-      <p>From the current published GitHub release wheel (`v0.15.0`) - civiccore is GitHub-wheel-only, not on PyPI:</p>
-      <pre><code>pip install https://github.com/CivicSuite/civiccore/releases/download/v0.15.0/civiccore-0.15.0-py3-none-any.whl</code></pre>
+      <p>From the current published GitHub release wheel (`v0.16.0`) - civiccore is GitHub-wheel-only, not on PyPI:</p>
+      <pre><code>pip install https://github.com/CivicSuite/civiccore/releases/download/v0.16.0/civiccore-0.16.0-py3-none-any.whl</code></pre>
       <p>For development from a clone:</p>
       <pre><code>git clone https://github.com/CivicSuite/civiccore.git
 cd civiccore
@@ -191,13 +191,13 @@ pip install -e .[dev]</code></pre>
       <h2 id="status">Status</h2>
       <div class="status">
         <p>
-          <strong>v0.15.0 is the current development-line release target.</strong>
+          <strong>v0.16.0 is the current published development-line release.</strong>
           The current development line adds shared <code>civiccore.ingest</code>
           discovery/fetch and cited-source validation contracts on top of shared <code>civiccore.security</code>
           connector host-validation and encrypted-config helpers on top of shared <code>civiccore.onboarding</code>
           profile interview helpers on top of shared <code>civiccore.notifications</code>
           notice deadline and publication-compliance helpers on top of the already-shipped
-          <code>civiccore.auth</code>, <code>civiccore.verification</code>,
+          <code>civiccore.auth</code> trusted-header config and proxy-boundary helpers, <code>civiccore.verification</code>,
           <code>civiccore.search</code> access and ranking helpers, <code>civiccore.connectors</code>, audit,
           provenance, manifest, export-bundle, and city profile primitives.
           v0.2.0 shipped the <code>civiccore.llm</code> module; v0.1.0 shipped the migration baseline.
@@ -216,7 +216,7 @@ pip install -e .[dev]</code></pre>
         <li><strong>Provenance</strong> - <code>SourceReference</code>, <code>SourceKind</code>, <code>CitationTarget</code>, <code>DocumentMetadata</code>, <code>ProvenanceBundle</code>.</li>
         <li><strong>Manifests and exports</strong> - <code>ImportManifest</code>, <code>ExportManifest</code>, <code>validate_manifest</code>, <code>ExportBundle</code>, <code>write_manifest</code>, <code>validate_bundle</code>.</li>
         <li><strong>City profiles</strong> - <code>CityProfile</code>, <code>DepartmentProfile</code>, <code>DeploymentProfile</code>, <code>ModuleEnablement</code>, <code>load_city_profile</code>.</li>
-        <li><strong>Auth helper</strong> - <code>civiccore.auth</code> bearer-token role checks for non-public FastAPI routes.</li>
+        <li><strong>Auth helper</strong> - <code>civiccore.auth</code> bearer-token role checks plus trusted-header config loading and proxy-source enforcement for non-public FastAPI routes.</li>
         <li><strong>Verification helper</strong> - <code>civiccore.verification</code> content-bound browser QA release evidence validation.</li>
         <li><strong>Search helpers</strong> - <code>civiccore.search</code> normalization, deterministic text matching, permission-aware access checks, and reciprocal-rank-fusion.</li>
         <li><strong>Connector import helpers</strong> - <code>civiccore.connectors</code> local-first meeting import normalization, actionable fix-path errors, and source provenance builders.</li>
@@ -233,8 +233,7 @@ pip install -e .[dev]</code></pre>
       <h2 id="compat">Compatibility</h2>
       <p>
         <strong>Current module foundations span older civiccore lines while newer product-depth consumers already target later releases.</strong>
-          Production-depth consumers can move to civiccore v0.15.0 once the release
-          is published and the compatibility matrix is updated. Every CivicSuite
+          Production-depth consumers can target civiccore v0.16.0 once the compatibility matrix is updated. Every CivicSuite
           module's README declares a CivicCore version range.
         </p>
     </section>

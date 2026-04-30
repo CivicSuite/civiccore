@@ -48,7 +48,8 @@ by downstream modules until they ship.
 
 ## Status
 
-**v0.15.0 is the current development-line release target.** This line adds shipped
+**v0.16.0 is the current published development-line release.** This line adds shared
+trusted-header auth config loading and proxy-source enforcement helpers on top of shipped
 trusted-header auth helpers on top of shipped
 `civiccore.ingest` discovery/fetch and cited-source validation contracts on top of shipped
 `civiccore.security` connector host-validation and encrypted-config helpers on top of shipped
@@ -87,10 +88,10 @@ shared-schema baseline extracted from CivicRecords AI).
 
 ## Install
 
-From the current published GitHub release wheel (`v0.15.0`):
+From the current published GitHub release wheel (`v0.16.0`):
 
 ```bash
-pip install https://github.com/CivicSuite/civiccore/releases/download/v0.15.0/civiccore-0.15.0-py3-none-any.whl
+pip install https://github.com/CivicSuite/civiccore/releases/download/v0.16.0/civiccore-0.16.0-py3-none-any.whl
 ```
 
 Each GitHub release also publishes `SHA256SUMS.txt` alongside the wheel and
@@ -259,7 +260,9 @@ write-back.
 `civiccore.auth` now exposes small auth helpers for downstream FastAPI
 services that need to protect non-public internal endpoints or support
 mixed public/staff routes without taking on a full first-party
-identity-provider dependency.
+identity-provider dependency. That surface now includes shared
+trusted-header config loading and proxy-source enforcement helpers in
+addition to bearer-token and trusted-header role checks.
 
 ```python
 from fastapi import Depends

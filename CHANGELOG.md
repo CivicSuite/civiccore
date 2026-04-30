@@ -11,6 +11,24 @@ breaking changes to the public API surface (Appendix A of that spec) ship
 as MAJOR releases; new symbols or backward-compatible behavior ship as
 MINOR; bug fixes ship as PATCH.
 
+## [0.16.0] - 2026-04-29
+
+### Added
+- `civiccore.auth.TrustedHeaderAuthConfig` now ships a shared trusted-header
+  configuration contract so downstream modules can load provider labels,
+  principal/roles header names, and proxy CIDR allowlists without bespoke env
+  parsing.
+- `civiccore.auth.load_trusted_header_auth_config()` now ships shared
+  environment-backed trusted-header config loading for reverse-proxy SSO
+  bridges.
+- `civiccore.auth.enforce_trusted_proxy_source()` now ships shared actionable
+  source-boundary enforcement for trusted-header deployments so downstream
+  modules can require approved proxy CIDRs without carrying service-local copy.
+
+### Changed
+- Trusted-header auth tests now cover shared config loading plus missing,
+  invalid, rejected, and accepted proxy-source paths.
+
 ## [0.14.1] - 2026-04-29
 
 ### Fixed
