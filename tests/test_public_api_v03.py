@@ -56,6 +56,8 @@ def test_v03_public_api_symbols_import_from_package_root() -> None:
         "encrypt_json",
         "decrypt_json",
         "is_encrypted",
+        "is_trusted_proxy_ip",
+        "normalize_trusted_proxy_cidrs",
         "validate_url_host",
         "validate_odbc_connection_string",
         "next_profile_prompt",

@@ -4,7 +4,7 @@
 def test_import_civiccore() -> None:
     import civiccore
 
-    assert civiccore.__version__ == "0.14.1"
+    assert civiccore.__version__ == "0.15.0"
     assert civiccore.roles_grant_access
     assert civiccore.access_level_allows
     assert civiccore.filter_records_by_access_level
@@ -23,3 +23,5 @@ def test_import_civiccore() -> None:
     assert civiccore.evaluate_notice_compliance
     assert civiccore.encrypt_json
     assert civiccore.validate_url_host
+    assert civiccore.normalize_trusted_proxy_cidrs
+    assert civiccore.is_trusted_proxy_ip

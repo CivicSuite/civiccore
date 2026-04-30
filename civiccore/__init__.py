@@ -10,7 +10,7 @@ reverse-proxy bridges. CivicCore is a library, not an end-user application.
 
 from __future__ import annotations
 
-__version__ = "0.14.1"
+__version__ = "0.15.0"
 
 from civiccore.audit import AuditActor, AuditEvent, AuditHashChain, AuditSubject
 from civiccore.city_profile import (
@@ -81,7 +81,9 @@ from civiccore.security import (
     extract_odbc_host,
     is_blocked_host,
     is_encrypted,
+    is_trusted_proxy_ip,
     normalize_allowlist,
+    normalize_trusted_proxy_cidrs,
     validate_odbc_connection_string,
     validate_url_host,
 )
@@ -154,10 +156,12 @@ __all__ = [
     "build_fernet",
     "is_blocked_host",
     "is_encrypted",
+    "is_trusted_proxy_ip",
     "load_city_profile",
     "normalize_access_value",
     "normalize_access_values",
     "normalize_allowlist",
+    "normalize_trusted_proxy_cidrs",
     "next_profile_prompt",
     "normalize_search_query",
     "normalize_search_text",

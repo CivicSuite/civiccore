@@ -15,7 +15,9 @@ from civiccore.security.host_validation import (
     ODBC_HOST_KEYS,
     extract_odbc_host,
     is_blocked_host,
+    is_trusted_proxy_ip,
     normalize_allowlist,
+    normalize_trusted_proxy_cidrs,
     validate_odbc_connection_string,
     validate_url_host,
 )
@@ -33,7 +35,9 @@ __all__ = [
     "extract_odbc_host",
     "is_blocked_host",
     "is_encrypted",
+    "is_trusted_proxy_ip",
     "normalize_allowlist",
+    "normalize_trusted_proxy_cidrs",
     "validate_odbc_connection_string",
     "validate_url_host",
 ]
