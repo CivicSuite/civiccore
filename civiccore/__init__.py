@@ -10,7 +10,7 @@ reverse-proxy bridges. CivicCore is a library, not an end-user application.
 
 from __future__ import annotations
 
-__version__ = "0.15.0"
+__version__ = "0.16.0"
 
 from civiccore.audit import AuditActor, AuditEvent, AuditHashChain, AuditSubject
 from civiccore.city_profile import (

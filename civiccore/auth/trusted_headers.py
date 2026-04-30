@@ -3,11 +3,24 @@
 from __future__ import annotations
 
 import hashlib
+import os
+from dataclasses import dataclass
 from collections.abc import Iterable, Mapping
 
 from fastapi import HTTPException
 
 from civiccore.auth.bearer import AuthenticatedPrincipal
+from civiccore.security import is_trusted_proxy_ip, normalize_trusted_proxy_cidrs
+
+
+@dataclass(frozen=True)
+class TrustedHeaderAuthConfig:
+    """Service-specific trusted-header auth settings loaded from env/defaults."""
+
+    provider_name: str
+    principal_header_name: str
+    roles_header_name: str
+    trusted_proxy_cidrs: tuple[str, ...]
 
 
 def parse_header_role_list(raw_value: str, *, header_name: str) -> frozenset[str]:
@@ -26,6 +39,90 @@ def _lookup_header(headers: Mapping[str, str], header_name: str) -> str | None:
             candidate = value.strip()
             return candidate or None
     return None
+
+
+def load_trusted_header_auth_config(
+    *,
+    provider_env_var: str,
+    provider_default: str,
+    principal_header_env_var: str,
+    principal_header_default: str,
+    roles_header_env_var: str,
+    roles_header_default: str,
+    trusted_proxy_env_var: str,
+) -> TrustedHeaderAuthConfig:
+    """Load trusted-header auth settings from environment-backed service config."""
+
+    provider_name = os.environ.get(provider_env_var, provider_default).strip() or provider_default
+    principal_header_name = (
+        os.environ.get(principal_header_env_var, principal_header_default).strip()
+        or principal_header_default
+    )
+    roles_header_name = (
+        os.environ.get(roles_header_env_var, roles_header_default).strip() or roles_header_default
+    )
+    trusted_proxy_cidrs = tuple(
+        candidate.strip()
+        for candidate in os.environ.get(trusted_proxy_env_var, "").split(",")
+        if candidate.strip()
+    )
+    return TrustedHeaderAuthConfig(
+        provider_name=provider_name,
+        principal_header_name=principal_header_name,
+        roles_header_name=roles_header_name,
+        trusted_proxy_cidrs=trusted_proxy_cidrs,
+    )
+
+
+def enforce_trusted_proxy_source(
+    client_host: str | None,
+    *,
+    service_name: str,
+    feature_name: str,
+    config: TrustedHeaderAuthConfig,
+    trusted_proxy_env_var: str,
+) -> None:
+    """Require trusted headers to arrive from a configured reverse-proxy allowlist."""
+
+    if not config.trusted_proxy_cidrs:
+        raise HTTPException(
+            status_code=503,
+            detail={
+                "message": "Trusted-header proxy allowlist is missing.",
+                "fix": (
+                    f"Set {trusted_proxy_env_var} to the reverse-proxy CIDR list "
+                    f"allowed to inject {service_name} {feature_name} identity headers, for example "
+                    "'10.0.0.0/24,192.168.1.8/32'."
+                ),
+            },
+        )
+
+    try:
+        normalize_trusted_proxy_cidrs(config.trusted_proxy_cidrs)
+    except ValueError as exc:
+        raise HTTPException(
+            status_code=503,
+            detail={
+                "message": "Trusted-header proxy allowlist is invalid.",
+                "fix": f"{trusted_proxy_env_var}: {exc}",
+            },
+        ) from exc
+
+    if not is_trusted_proxy_ip(client_host, config.trusted_proxy_cidrs):
+        raise HTTPException(
+            status_code=403,
+            detail={
+                "message": "Trusted staff headers were not received from an approved proxy.",
+                "fix": (
+                    f"Route {service_name} {feature_name} requests through a reverse proxy inside "
+                    f"{trusted_proxy_env_var} and strip client-supplied copies of "
+                    f"{config.principal_header_name} and {config.roles_header_name} before they reach "
+                    f"{service_name}."
+                ),
+                "client_host": client_host,
+                "trusted_proxy_cidrs": list(config.trusted_proxy_cidrs),
+            },
+        )
 
 
 def authorize_trusted_header_roles(

@@ -1,6 +1,6 @@
 # CivicCore User Manual
 
-Version: v0.12.0 (current development-line release target)
+Version: v0.16.0 (current published development-line release)
 Repository: https://github.com/CivicSuite/civiccore
 License: Apache 2.0
 
@@ -40,8 +40,8 @@ shared foundation those applications import.
   local-first import helpers for supported agenda-platform payloads.
 - `civiccore.exports` - static export-bundle manifest and checksum helpers.
 - `civiccore.city_profile` - local city/deployment configuration models.
-- `civiccore.auth` - bearer-token role helpers for protected or mixed
-  public/staff FastAPI routes.
+- `civiccore.auth` - bearer-token role helpers plus trusted-header config and
+  source-boundary helpers for protected or mixed public/staff FastAPI routes.
 - `civiccore.verification` - content-bound browser release-evidence helpers.
 - `civiccore.search` - deterministic text normalization, matching, and
   reciprocal-rank-fusion helpers.

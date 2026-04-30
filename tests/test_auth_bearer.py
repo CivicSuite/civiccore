@@ -7,11 +7,14 @@ from fastapi.security import HTTPAuthorizationCredentials
 from civiccore.auth import (
     AuthenticatedPrincipal,
     authorize_bearer_roles,
+    enforce_trusted_proxy_source,
+    load_trusted_header_auth_config,
     authorize_trusted_header_roles,
     parse_header_role_list,
     parse_token_role_map,
     resolve_optional_bearer_roles,
     resolve_optional_trusted_header_roles,
+    TrustedHeaderAuthConfig,
 )
 
 
@@ -304,3 +307,139 @@ def test_resolve_optional_trusted_header_roles_returns_principal_when_present() 
 
     assert isinstance(principal, AuthenticatedPrincipal)
     assert principal.subject == "clerk@example.gov"
+
+
+def test_load_trusted_header_auth_config_trims_values_and_parses_proxies(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setenv("TEST_SSO_PROVIDER", " Entra ID proxy ")
+    monkeypatch.setenv("TEST_SSO_PRINCIPAL_HEADER", " X-Staff-Email ")
+    monkeypatch.setenv("TEST_SSO_ROLES_HEADER", " X-Staff-Roles ")
+    monkeypatch.setenv("TEST_SSO_TRUSTED_PROXIES", "10.0.0.0/24, 192.168.1.8/32 ")
+
+    config = load_trusted_header_auth_config(
+        provider_env_var="TEST_SSO_PROVIDER",
+        provider_default="trusted reverse proxy",
+        principal_header_env_var="TEST_SSO_PRINCIPAL_HEADER",
+        principal_header_default="X-Civic-Principal",
+        roles_header_env_var="TEST_SSO_ROLES_HEADER",
+        roles_header_default="X-Civic-Roles",
+        trusted_proxy_env_var="TEST_SSO_TRUSTED_PROXIES",
+    )
+
+    assert config == TrustedHeaderAuthConfig(
+        provider_name="Entra ID proxy",
+        principal_header_name="X-Staff-Email",
+        roles_header_name="X-Staff-Roles",
+        trusted_proxy_cidrs=("10.0.0.0/24", "192.168.1.8/32"),
+    )
+
+
+def test_load_trusted_header_auth_config_falls_back_to_defaults(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.delenv("TEST_SSO_PROVIDER", raising=False)
+    monkeypatch.delenv("TEST_SSO_PRINCIPAL_HEADER", raising=False)
+    monkeypatch.delenv("TEST_SSO_ROLES_HEADER", raising=False)
+    monkeypatch.delenv("TEST_SSO_TRUSTED_PROXIES", raising=False)
+
+    config = load_trusted_header_auth_config(
+        provider_env_var="TEST_SSO_PROVIDER",
+        provider_default="trusted reverse proxy",
+        principal_header_env_var="TEST_SSO_PRINCIPAL_HEADER",
+        principal_header_default="X-Civic-Principal",
+        roles_header_env_var="TEST_SSO_ROLES_HEADER",
+        roles_header_default="X-Civic-Roles",
+        trusted_proxy_env_var="TEST_SSO_TRUSTED_PROXIES",
+    )
+
+    assert config.provider_name == "trusted reverse proxy"
+    assert config.principal_header_name == "X-Civic-Principal"
+    assert config.roles_header_name == "X-Civic-Roles"
+    assert config.trusted_proxy_cidrs == ()
+
+
+def test_enforce_trusted_proxy_source_requires_allowlist() -> None:
+    config = TrustedHeaderAuthConfig(
+        provider_name="Entra ID proxy",
+        principal_header_name="X-Staff-Email",
+        roles_header_name="X-Staff-Roles",
+        trusted_proxy_cidrs=(),
+    )
+
+    with pytest.raises(HTTPException) as exc_info:
+        enforce_trusted_proxy_source(
+            "127.0.0.1",
+            service_name="CivicClerk",
+            feature_name="staff workflow access",
+            config=config,
+            trusted_proxy_env_var="CIVICCLERK_STAFF_SSO_TRUSTED_PROXIES",
+        )
+
+    assert exc_info.value.status_code == 503
+    assert exc_info.value.detail["message"] == "Trusted-header proxy allowlist is missing."
+    assert "CIVICCLERK_STAFF_SSO_TRUSTED_PROXIES" in exc_info.value.detail["fix"]
+
+
+def test_enforce_trusted_proxy_source_rejects_invalid_allowlist() -> None:
+    config = TrustedHeaderAuthConfig(
+        provider_name="Entra ID proxy",
+        principal_header_name="X-Staff-Email",
+        roles_header_name="X-Staff-Roles",
+        trusted_proxy_cidrs=("not-a-cidr",),
+    )
+
+    with pytest.raises(HTTPException) as exc_info:
+        enforce_trusted_proxy_source(
+            "127.0.0.1",
+            service_name="CivicClerk",
+            feature_name="staff workflow access",
+            config=config,
+            trusted_proxy_env_var="CIVICCLERK_STAFF_SSO_TRUSTED_PROXIES",
+        )
+
+    assert exc_info.value.status_code == 503
+    assert exc_info.value.detail["message"] == "Trusted-header proxy allowlist is invalid."
+    assert "not-a-cidr" in exc_info.value.detail["fix"]
+
+
+def test_enforce_trusted_proxy_source_rejects_untrusted_host() -> None:
+    config = TrustedHeaderAuthConfig(
+        provider_name="Entra ID proxy",
+        principal_header_name="X-Staff-Email",
+        roles_header_name="X-Staff-Roles",
+        trusted_proxy_cidrs=("10.20.30.0/24",),
+    )
+
+    with pytest.raises(HTTPException) as exc_info:
+        enforce_trusted_proxy_source(
+            "203.0.113.22",
+            service_name="CivicClerk",
+            feature_name="staff workflow access",
+            config=config,
+            trusted_proxy_env_var="CIVICCLERK_STAFF_SSO_TRUSTED_PROXIES",
+        )
+
+    assert exc_info.value.status_code == 403
+    assert (
+        exc_info.value.detail["message"] == "Trusted staff headers were not received from an approved proxy."
+    )
+    assert exc_info.value.detail["client_host"] == "203.0.113.22"
+    assert exc_info.value.detail["trusted_proxy_cidrs"] == ["10.20.30.0/24"]
+
+
+def test_enforce_trusted_proxy_source_accepts_allowed_host() -> None:
+    config = TrustedHeaderAuthConfig(
+        provider_name="Entra ID proxy",
+        principal_header_name="X-Staff-Email",
+        roles_header_name="X-Staff-Roles",
+        trusted_proxy_cidrs=("10.20.30.0/24",),
+    )
+
+    enforce_trusted_proxy_source(
+        "10.20.30.40",
+        service_name="CivicClerk",
+        feature_name="staff workflow access",
+        config=config,
+        trusted_proxy_env_var="CIVICCLERK_STAFF_SSO_TRUSTED_PROXIES",
+    )
