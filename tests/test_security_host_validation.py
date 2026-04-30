@@ -6,7 +6,9 @@ from civiccore.security import (
     BLOCK_REASON,
     extract_odbc_host,
     is_blocked_host,
+    is_trusted_proxy_ip,
     normalize_allowlist,
+    normalize_trusted_proxy_cidrs,
     validate_odbc_connection_string,
     validate_url_host,
 )
@@ -57,3 +59,24 @@ def test_validate_odbc_connection_string_blocks_private_hosts_with_fix_path() ->
 
 def test_block_reason_mentions_allowlist_fix_path() -> None:
     assert "allowlist" in BLOCK_REASON
+
+
+def test_normalize_trusted_proxy_cidrs_parses_networks_and_single_hosts() -> None:
+    networks = normalize_trusted_proxy_cidrs(["10.0.0.0/24, 192.168.1.9/32", "2001:db8::/64"])
+
+    assert [str(network) for network in networks] == [
+        "10.0.0.0/24",
+        "192.168.1.9/32",
+        "2001:db8::/64",
+    ]
+
+
+def test_normalize_trusted_proxy_cidrs_rejects_invalid_entries_with_fix_path() -> None:
+    with pytest.raises(ValueError, match="Trusted proxy CIDR 'not-a-cidr' is invalid"):
+        normalize_trusted_proxy_cidrs(["not-a-cidr"])
+
+
+def test_is_trusted_proxy_ip_requires_ip_inside_configured_cidr() -> None:
+    assert is_trusted_proxy_ip("10.20.30.40", ["10.20.30.0/24"]) is True
+    assert is_trusted_proxy_ip("10.20.31.40", ["10.20.30.0/24"]) is False
+    assert is_trusted_proxy_ip("clerk-proxy.internal", ["10.20.30.0/24"]) is False

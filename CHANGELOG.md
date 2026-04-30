@@ -24,6 +24,21 @@ MINOR; bug fixes ship as PATCH.
   missing principal headers, missing role headers, and underprivileged
   identities.
 
+## [0.15.0] - 2026-04-29
+
+### Added
+- `civiccore.security.normalize_trusted_proxy_cidrs()` now ships a shared
+  CIDR parser for reverse-proxy trust boundaries so downstream modules can
+  validate trusted-header deployments without carrying bespoke network parsing.
+- `civiccore.security.is_trusted_proxy_ip()` now ships a shared source-IP
+  matcher for reverse-proxy CIDR allowlists, making trusted-header auth
+  contracts enforceable instead of purely documentary.
+
+### Changed
+- README, package metadata, and release surfaces now describe `civiccore.security`
+  as the shared home for both connector host validation and trusted-proxy
+  boundary checks.
+
 ## [0.14.0] - 2026-04-29
 
 ### Added

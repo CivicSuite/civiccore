@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import ipaddress
-from typing import Iterable
+from collections.abc import Iterable
 from urllib.parse import urlparse
 
 BLOCKED_HOSTNAMES = frozenset({"localhost"})
@@ -31,6 +31,45 @@ def normalize_allowlist(allowlist: Iterable[str]) -> set[str]:
     """Normalize an allowlist into case-insensitive exact host matches."""
 
     return {host.strip().lower() for host in allowlist if host and host.strip()}
+
+
+def normalize_trusted_proxy_cidrs(
+    trusted_proxy_cidrs: Iterable[str],
+) -> tuple[ipaddress.IPv4Network | ipaddress.IPv6Network, ...]:
+    """Parse configured trusted-proxy CIDRs into normalized network objects."""
+
+    networks: list[ipaddress.IPv4Network | ipaddress.IPv6Network] = []
+    for raw_value in trusted_proxy_cidrs:
+        if not raw_value:
+            continue
+        for candidate in raw_value.split(","):
+            token = candidate.strip()
+            if not token:
+                continue
+            try:
+                networks.append(ipaddress.ip_network(token, strict=False))
+            except ValueError as exc:
+                raise ValueError(
+                    f"Trusted proxy CIDR {token!r} is invalid. Use CIDR values like "
+                    "'10.0.0.0/24' or single-host ranges like '10.0.0.8/32'."
+                ) from exc
+    return tuple(networks)
+
+
+def is_trusted_proxy_ip(client_host: str | None, trusted_proxy_cidrs: Iterable[str]) -> bool:
+    """Return True when the caller IP falls within a configured trusted-proxy CIDR."""
+
+    if client_host is None or not client_host.strip():
+        return False
+    try:
+        client_ip = ipaddress.ip_address(client_host.strip())
+    except ValueError:
+        return False
+
+    for network in normalize_trusted_proxy_cidrs(trusted_proxy_cidrs):
+        if client_ip.version == network.version and client_ip in network:
+            return True
+    return False
 
 
 def is_blocked_host(host: str, allowlist: Iterable[str] = ()) -> bool:
@@ -105,7 +144,9 @@ __all__ = [
     "ODBC_HOST_KEYS",
     "extract_odbc_host",
     "is_blocked_host",
+    "is_trusted_proxy_ip",
     "normalize_allowlist",
+    "normalize_trusted_proxy_cidrs",
     "validate_odbc_connection_string",
     "validate_url_host",
 ]

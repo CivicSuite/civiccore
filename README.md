@@ -48,7 +48,7 @@ by downstream modules until they ship.
 
 ## Status
 
-**v0.14.1 is the current development-line release target.** This line adds shipped
+**v0.15.0 is the current development-line release target.** This line adds shipped
 trusted-header auth helpers on top of shipped
 `civiccore.ingest` discovery/fetch and cited-source validation contracts on top of shipped
 `civiccore.security` connector host-validation and encrypted-config helpers on top of shipped
@@ -87,10 +87,10 @@ shared-schema baseline extracted from CivicRecords AI).
 
 ## Install
 
-From the current published GitHub release wheel (`v0.14.1`):
+From the current published GitHub release wheel (`v0.15.0`):
 
 ```bash
-pip install https://github.com/CivicSuite/civiccore/releases/download/v0.14.1/civiccore-0.14.1-py3-none-any.whl
+pip install https://github.com/CivicSuite/civiccore/releases/download/v0.15.0/civiccore-0.15.0-py3-none-any.whl
 ```
 
 Each GitHub release also publishes `SHA256SUMS.txt` alongside the wheel and
