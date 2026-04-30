@@ -12,9 +12,9 @@ shared platform plumbing. **What ships today:** the migration runner plus
 declarative `Base`, the `civiccore.llm` module, hash-chained audit
 primitives, source/provenance metadata contracts, offline import/export
 manifest schemas, static export-bundle helpers, local city profile
-configuration, bearer-token role helpers for downstream FastAPI
-services, including mixed public/staff routes that should stay anonymous
-by default while unlocking privileged results for authorized callers,
+configuration, small auth helpers for downstream FastAPI services,
+including mixed public/staff routes that should stay anonymous by
+default while unlocking privileged results for authorized callers,
 browser-evidence verification helpers for current-facing release pages,
 small shared search helpers for deterministic text matching, generic
 permission-aware access checks, hybrid ranking fusion, and local-first connector import helpers for
@@ -48,7 +48,8 @@ by downstream modules until they ship.
 
 ## Status
 
-**v0.13.0 is the current development-line release target.** This line adds shipped
+**v0.14.0 is the current development-line release target.** This line adds shipped
+trusted-header auth helpers on top of shipped
 `civiccore.ingest` discovery/fetch and cited-source validation contracts on top of shipped
 `civiccore.security` connector host-validation and encrypted-config helpers on top of shipped
 `civiccore.onboarding` profile interview helpers on top of shipped
@@ -86,10 +87,10 @@ shared-schema baseline extracted from CivicRecords AI).
 
 ## Install
 
-From the current published GitHub release wheel (`v0.13.0`):
+From the current published GitHub release wheel (`v0.14.0`):
 
 ```bash
-pip install https://github.com/CivicSuite/civiccore/releases/download/v0.13.0/civiccore-0.13.0-py3-none-any.whl
+pip install https://github.com/CivicSuite/civiccore/releases/download/v0.14.0/civiccore-0.14.0-py3-none-any.whl
 ```
 
 Each GitHub release also publishes `SHA256SUMS.txt` alongside the wheel and
@@ -255,16 +256,20 @@ write-back.
 
 ## Auth helper
 
-`civiccore.auth` now exposes small bearer-token role helpers for
-downstream FastAPI services that need to protect non-public internal
-endpoints or support mixed public/staff routes without taking on a full
+`civiccore.auth` now exposes small auth helpers for downstream FastAPI
+services that need to protect non-public internal endpoints or support
+mixed public/staff routes without taking on a full first-party
 identity-provider dependency.
 
 ```python
 from fastapi import Depends
 from fastapi.security import HTTPBearer
 
-from civiccore.auth import authorize_bearer_roles, resolve_optional_bearer_roles
+from civiccore.auth import (
+    authorize_bearer_roles,
+    authorize_trusted_header_roles,
+    resolve_optional_bearer_roles,
+)
 
 bearer = HTTPBearer(auto_error=False)
 
@@ -288,6 +293,19 @@ def search_archive(credentials = Depends(bearer)) -> dict[str, bool]:
         allowed_roles={"archive_reader", "clerk_admin", "city_attorney"},
     )
     return {"include_closed": principal is not None}
+
+
+def require_proxy_assertion(request) -> dict[str, str]:
+    principal = authorize_trusted_header_roles(
+        request.headers,
+        service_name="CivicClerk",
+        feature_name="staff workflow access",
+        principal_header_name="X-Forwarded-Email",
+        roles_header_name="X-Forwarded-Roles",
+        allowed_roles={"clerk_admin", "meeting_editor"},
+        provider_name="Entra ID proxy",
+    )
+    return {"subject": principal.subject or "unknown"}
 ```
 
 Set `CIVICBUDGET_AUTH_TOKEN_ROLES` to a JSON object that maps bearer
@@ -300,11 +318,13 @@ tokens to role strings or role lists:
 }
 ```
 
-If the config is missing or malformed, CivicCore raises an actionable
-`503`; missing or invalid bearer headers return `401`; tokens without an
-allowed role return `403`. The optional resolver returns `None` for
+If the bearer-token config is missing or malformed, CivicCore raises an
+actionable `503`; missing or invalid bearer headers return `401`; tokens
+without an allowed role return `403`. Trusted-header helpers return
+actionable `401` and `403` responses when the proxy assertion is missing,
+malformed, or underprivileged. The optional resolvers return `None` for
 anonymous callers, which lets public endpoints stay public until a caller
-actually presents a bearer token.
+actually presents a bearer token or arrives through a trusted proxy.
 
 ## Onboarding helper
 

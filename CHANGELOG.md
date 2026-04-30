@@ -11,6 +11,28 @@ breaking changes to the public API surface (Appendix A of that spec) ship
 as MAJOR releases; new symbols or backward-compatible behavior ship as
 MINOR; bug fixes ship as PATCH.
 
+## [0.14.0] - 2026-04-29
+
+### Added
+- `civiccore.auth.authorize_trusted_header_roles()` now ships a shared
+  reverse-proxy SSO bridge contract for downstream FastAPI services that
+  receive asserted principal and role headers from a trusted municipal IdP
+  front door instead of handling first-party login directly.
+- `civiccore.auth.resolve_optional_trusted_header_roles()` now lets mixed
+  public/staff routes stay anonymous until a trusted proxy actually injects
+  identity headers.
+- `civiccore.auth.parse_header_role_list()` now ships a shared comma-delimited
+  role-header parser with actionable error handling for misconfigured proxy
+  role assertions.
+
+### Changed
+- `AuthenticatedPrincipal` now records the auth method plus optional subject
+  and provider metadata so downstream modules can describe bearer-token and
+  trusted-header sessions through one stable contract.
+- README, package metadata, and release surfaces now describe
+  `civiccore.auth` as a shipped small-auth helper namespace for bearer-token
+  and trusted-header reverse-proxy bridges.
+
 ## [0.13.0] - 2026-04-29
 
 ### Added
