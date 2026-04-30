@@ -52,7 +52,7 @@ def authorize_trusted_header_roles(
                 "message": "Trusted identity header missing.",
                 "fix": (
                     f"Authenticate through the configured {provider_name} flow so it injects "
-                    f"{principal_header_name} before CivicClerk handles staff requests."
+                    f"{principal_header_name} before {service_name} handles {feature_name}."
                 ),
             },
         )
@@ -65,7 +65,7 @@ def authorize_trusted_header_roles(
                 "message": "Trusted role header missing.",
                 "fix": (
                     f"Configure the trusted proxy to inject {roles_header_name} with one of these "
-                    f"roles: {', '.join(sorted(normalized_allowed))}."
+                    f"roles for {service_name} {feature_name}: {', '.join(sorted(normalized_allowed))}."
                 ),
             },
         )
@@ -77,7 +77,7 @@ def authorize_trusted_header_roles(
             status_code=401,
             detail={
                 "message": "Trusted role header is invalid.",
-                "fix": str(exc),
+                "fix": f"{service_name} {feature_name}: {exc}",
             },
         ) from exc
 
@@ -88,7 +88,8 @@ def authorize_trusted_header_roles(
                 "message": "Trusted identity lacks an allowed role.",
                 "fix": (
                     "Grant the signed-in staff account one of these roles or adjust the "
-                    f"{provider_name} role mapping: {', '.join(sorted(normalized_allowed))}."
+                    f"{provider_name} role mapping for {service_name} {feature_name}: "
+                    f"{', '.join(sorted(normalized_allowed))}."
                 ),
                 "required_roles": sorted(normalized_allowed),
                 "principal_roles": sorted(header_roles),
