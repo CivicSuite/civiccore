@@ -16,8 +16,11 @@ from fastapi.security import HTTPAuthorizationCredentials
 class AuthenticatedPrincipal:
     """Represents the caller that satisfied a bearer-token role check."""
 
-    token_fingerprint: str
+    token_fingerprint: str | None
     roles: frozenset[str]
+    auth_method: str = "bearer"
+    subject: str | None = None
+    provider: str | None = None
 
 
 def parse_token_role_map(raw_value: str, *, env_var: str) -> dict[str, frozenset[str]]:
@@ -139,6 +142,7 @@ def authorize_bearer_roles(
     return AuthenticatedPrincipal(
         token_fingerprint=hashlib.sha256(credentials.credentials.encode("utf-8")).hexdigest()[:12],
         roles=token_roles,
+        auth_method="bearer",
     )
 
 
