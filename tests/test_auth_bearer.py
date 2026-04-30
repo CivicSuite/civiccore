@@ -205,6 +205,8 @@ def test_authorize_trusted_header_roles_requires_principal_header() -> None:
     assert exc_info.value.status_code == 401
     assert exc_info.value.detail["message"] == "Trusted identity header missing."
     assert "X-Civic-Principal" in exc_info.value.detail["fix"]
+    assert "CivicClerk" in exc_info.value.detail["fix"]
+    assert "staff workflow access" in exc_info.value.detail["fix"]
 
 
 def test_authorize_trusted_header_roles_requires_role_header() -> None:
@@ -222,6 +224,8 @@ def test_authorize_trusted_header_roles_requires_role_header() -> None:
     assert exc_info.value.status_code == 401
     assert exc_info.value.detail["message"] == "Trusted role header missing."
     assert "X-Civic-Roles" in exc_info.value.detail["fix"]
+    assert "CivicClerk" in exc_info.value.detail["fix"]
+    assert "staff workflow access" in exc_info.value.detail["fix"]
 
 
 def test_authorize_trusted_header_roles_rejects_underprivileged_identity() -> None:
@@ -244,6 +248,8 @@ def test_authorize_trusted_header_roles_rejects_underprivileged_identity() -> No
     assert exc_info.value.detail["principal"] == "clerk@example.gov"
     assert exc_info.value.detail["principal_roles"] == ["records_viewer"]
     assert exc_info.value.detail["required_roles"] == ["clerk_admin", "meeting_editor"]
+    assert "CivicClerk" in exc_info.value.detail["fix"]
+    assert "staff workflow access" in exc_info.value.detail["fix"]
 
 
 def test_authorize_trusted_header_roles_returns_principal() -> None:

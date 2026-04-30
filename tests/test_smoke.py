@@ -4,7 +4,7 @@
 def test_import_civiccore() -> None:
     import civiccore
 
-    assert civiccore.__version__ == "0.14.0"
+    assert civiccore.__version__ == "0.14.1"
     assert civiccore.roles_grant_access
     assert civiccore.access_level_allows
     assert civiccore.filter_records_by_access_level

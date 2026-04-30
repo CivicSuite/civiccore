@@ -11,6 +11,19 @@ breaking changes to the public API surface (Appendix A of that spec) ship
 as MAJOR releases; new symbols or backward-compatible behavior ship as
 MINOR; bug fixes ship as PATCH.
 
+## [0.14.1] - 2026-04-29
+
+### Fixed
+- `civiccore.auth.authorize_trusted_header_roles()` now uses the caller-provided
+  `service_name` and `feature_name` when building actionable fix text so
+  downstream modules do not leak `CivicClerk`-specific guidance in shared
+  auth failures.
+
+### Changed
+- Trusted-header auth tests now assert service-aware error-copy paths for
+  missing principal headers, missing role headers, and underprivileged
+  identities.
+
 ## [0.14.0] - 2026-04-29
 
 ### Added
