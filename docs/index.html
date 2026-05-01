@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="CivicCore v0.16.0 - shared platform library for the open-source CivicSuite municipal operations suite. Not an end-user app. Apache 2.0.">
-<title>CivicCore v0.16.0 - CivicSuite shared platform library</title>
+<meta name="description" content="CivicCore v0.17.0 - shared platform library for the open-source CivicSuite municipal operations suite. Not an end-user app. Apache 2.0.">
+<title>CivicCore v0.17.0 - CivicSuite shared platform library</title>
   <style>
     :root {
       --text: #1f2328;
@@ -134,7 +134,7 @@
         <li><code>civiccore.migrations</code> - migration runner + idempotent guards + <code>civiccore_0001_baseline_v1</code> + <code>civiccore_0002_llm</code>.</li>
         <li><code>civiccore.db</code> - shared SQLAlchemy declarative <code>Base</code>.</li>
         <li><code>civiccore.llm</code> - providers, templates, model registry, context utilities, and structured output.</li>
-        <li><code>civiccore.audit</code> - hash-chained audit primitives.</li>
+        <li><code>civiccore.audit</code> - hash-chained audit primitives plus legacy-compatible persisted audit-log verification helpers.</li>
         <li><code>civiccore.provenance</code> - source, citation, document, and provenance metadata contracts.</li>
         <li><code>civiccore.connectors</code> - offline import/export manifest schemas plus local-first import helpers for supported agenda-platform payloads.</li>
         <li><code>civiccore.exports</code> - static export-bundle manifest and checksum helpers.</li>
@@ -174,8 +174,8 @@
 
     <section aria-labelledby="install">
       <h2 id="install">Install</h2>
-      <p>From the current published GitHub release wheel (`v0.16.0`) - civiccore is GitHub-wheel-only, not on PyPI:</p>
-      <pre><code>pip install https://github.com/CivicSuite/civiccore/releases/download/v0.16.0/civiccore-0.16.0-py3-none-any.whl</code></pre>
+      <p>From the current GitHub release wheel (<code>v0.17.0</code>, once published) - civiccore is GitHub-wheel-only, not on PyPI:</p>
+      <pre><code>pip install https://github.com/CivicSuite/civiccore/releases/download/v0.17.0/civiccore-0.17.0-py3-none-any.whl</code></pre>
       <p>For development from a clone:</p>
       <pre><code>git clone https://github.com/CivicSuite/civiccore.git
 cd civiccore
@@ -191,8 +191,9 @@ pip install -e .[dev]</code></pre>
       <h2 id="status">Status</h2>
       <div class="status">
         <p>
-          <strong>v0.16.0 is the current published development-line release.</strong>
-          The current development line adds shared <code>civiccore.ingest</code>
+          <strong>v0.17.0 is the current development-line release.</strong>
+          The current development line adds persisted audit-log hash and verification helpers for
+          database-backed module audit rows on top of shared <code>civiccore.ingest</code>
           discovery/fetch and cited-source validation contracts on top of shared <code>civiccore.security</code>
           connector host-validation and encrypted-config helpers on top of shared <code>civiccore.onboarding</code>
           profile interview helpers on top of shared <code>civiccore.notifications</code>
@@ -212,7 +213,7 @@ pip install -e .[dev]</code></pre>
         <li><strong>Migrations</strong> - <code>civiccore.migrations</code> runner + idempotent guards.</li>
         <li><strong>db.Base</strong> - shared SQLAlchemy declarative base.</li>
         <li><strong>LLM</strong> - providers, prompt templates, model registry, context utilities, structured output.</li>
-        <li><strong>Audit chains</strong> - <code>AuditActor</code>, <code>AuditSubject</code>, <code>AuditEvent</code>, <code>AuditHashChain</code>.</li>
+        <li><strong>Audit chains</strong> - <code>AuditActor</code>, <code>AuditSubject</code>, <code>AuditEvent</code>, <code>AuditHashChain</code>, <code>PersistedAuditLogEntry</code>, <code>compute_persisted_audit_hash</code>, and <code>verify_persisted_audit_chain</code>.</li>
         <li><strong>Provenance</strong> - <code>SourceReference</code>, <code>SourceKind</code>, <code>CitationTarget</code>, <code>DocumentMetadata</code>, <code>ProvenanceBundle</code>.</li>
         <li><strong>Manifests and exports</strong> - <code>ImportManifest</code>, <code>ExportManifest</code>, <code>validate_manifest</code>, <code>ExportBundle</code>, <code>write_manifest</code>, <code>validate_bundle</code>.</li>
         <li><strong>City profiles</strong> - <code>CityProfile</code>, <code>DepartmentProfile</code>, <code>DeploymentProfile</code>, <code>ModuleEnablement</code>, <code>load_city_profile</code>.</li>
@@ -233,7 +234,7 @@ pip install -e .[dev]</code></pre>
       <h2 id="compat">Compatibility</h2>
       <p>
         <strong>Current module foundations span older civiccore lines while newer product-depth consumers already target later releases.</strong>
-          Production-depth consumers can target civiccore v0.16.0 once the compatibility matrix is updated. Every CivicSuite
+          Production-depth consumers can target civiccore v0.17.0 once the compatibility matrix is updated. Every CivicSuite
           module's README declares a CivicCore version range.
         </p>
     </section>
