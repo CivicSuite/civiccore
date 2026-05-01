@@ -11,6 +11,21 @@ breaking changes to the public API surface (Appendix A of that spec) ship
 as MAJOR releases; new symbols or backward-compatible behavior ship as
 MINOR; bug fixes ship as PATCH.
 
+## [0.17.0] - 2026-05-01
+
+### Added
+- `civiccore.audit.PersistedAuditLogEntry` now ships a storage-neutral view of
+  legacy database-backed audit rows so modules can verify retained audit logs
+  without owning duplicate hash-chain math.
+- `civiccore.audit.compute_persisted_audit_hash()` now preserves the
+  CivicRecords AI legacy `previous_hash|timestamp|actor_id|action|details`
+  SHA-256 formula for existing deployed audit rows.
+- `civiccore.audit.verify_persisted_audit_chain()` now verifies persisted
+  audit rows with archived-log support, including actionable mismatch messages
+  that identify the failing row and position.
+- Package-root exports now expose the persisted audit-log helpers so
+  CivicRecords AI and CivicClerk can consume one shared implementation.
+
 ## [0.16.0] - 2026-04-29
 
 ### Added

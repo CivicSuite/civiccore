@@ -16,6 +16,9 @@ from uuid import uuid4
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 
+ZERO_HASH = "0" * 64
+
+
 def _utc_now() -> datetime:
     return datetime.now(UTC)
 
@@ -186,11 +189,119 @@ class AuditHashChain(BaseModel):
         return verify_chain(self.events)
 
 
+class PersistedAuditLogEntry(BaseModel):
+    """Storage-neutral view of a legacy persisted audit-log row.
+
+    This model preserves the historical CivicRecords AI hash formula for
+    database-backed ``audit_log`` rows. It intentionally lives beside, rather
+    than replacing, ``AuditEvent`` because existing deployed rows must continue
+    to verify after modules move their reusable audit math into CivicCore.
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    previous_hash: str = Field(default=ZERO_HASH, min_length=64, max_length=64)
+    entry_hash: str = Field(min_length=64, max_length=64)
+    timestamp: datetime | str
+    actor_id: str | None = None
+    action: str
+    details: dict[str, Any] | None = None
+    entry_id: int | str | None = None
+
+
+def canonical_audit_actor_id(actor_id: object | None) -> str:
+    """Return the persisted audit actor id used in legacy hash payloads."""
+
+    return str(actor_id) if actor_id else "system"
+
+
+def canonical_audit_details(details: dict[str, Any] | None) -> str:
+    """Return deterministic details JSON for persisted audit-log hashing."""
+
+    return json.dumps(details, sort_keys=True, default=str) if details else ""
+
+
+def canonical_audit_timestamp(timestamp: datetime | str) -> str:
+    """Return the timestamp string covered by persisted audit-log hashes."""
+
+    return timestamp.isoformat() if isinstance(timestamp, datetime) else timestamp
+
+
+def compute_persisted_audit_hash(
+    *,
+    previous_hash: str,
+    timestamp: datetime | str,
+    actor_id: object | None,
+    action: str,
+    details: dict[str, Any] | None = None,
+) -> str:
+    """Compute the legacy persisted audit-log SHA-256 entry hash.
+
+    The pipe-delimited payload mirrors CivicRecords AI's original database
+    audit chain exactly: ``previous_hash|timestamp|actor_id|action|details``.
+    """
+
+    payload = "|".join(
+        [
+            previous_hash,
+            canonical_audit_timestamp(timestamp),
+            canonical_audit_actor_id(actor_id),
+            action,
+            canonical_audit_details(details),
+        ]
+    )
+    return hashlib.sha256(payload.encode("utf-8")).hexdigest()
+
+
+def verify_persisted_audit_chain(
+    entries: Iterable[PersistedAuditLogEntry],
+    *,
+    accept_first_previous_hash: bool = True,
+) -> tuple[bool, int, str]:
+    """Verify legacy persisted audit-log rows without assuming storage.
+
+    ``accept_first_previous_hash`` supports retained/archived audit logs where
+    the first surviving row may point at a row that has already been archived.
+    """
+
+    total_checked = 0
+    expected_previous_hash: str | None = None
+    for entry in entries:
+        if expected_previous_hash is None:
+            expected_previous_hash = entry.previous_hash if accept_first_previous_hash else ZERO_HASH
+        elif entry.previous_hash != expected_previous_hash:
+            label = f"Entry {entry.entry_id}" if entry.entry_id is not None else "Entry"
+            return False, total_checked, f"{label}: prev_hash mismatch at position {total_checked}"
+
+        recomputed = compute_persisted_audit_hash(
+            previous_hash=entry.previous_hash,
+            timestamp=entry.timestamp,
+            actor_id=entry.actor_id,
+            action=entry.action,
+            details=entry.details,
+        )
+        if entry.entry_hash != recomputed:
+            label = f"Entry {entry.entry_id}" if entry.entry_id is not None else "Entry"
+            return False, total_checked, f"{label}: hash mismatch at position {total_checked}"
+
+        expected_previous_hash = entry.entry_hash
+        total_checked += 1
+
+    return True, total_checked, ""
+
+
 __all__ = [
     "AuditActor",
     "AuditEvent",
     "AuditHashChain",
     "AuditSubject",
+    "PersistedAuditLogEntry",
+    "ZERO_HASH",
+    "canonical_audit_actor_id",
+    "canonical_audit_details",
+    "canonical_audit_timestamp",
+    "compute_persisted_audit_hash",
     "record_event",
     "verify_chain",
+    "verify_persisted_audit_chain",
 ]

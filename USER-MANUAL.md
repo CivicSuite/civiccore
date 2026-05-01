@@ -1,6 +1,6 @@
 # CivicCore User Manual
 
-Version: v0.16.0 (current published development-line release)
+Version: v0.17.0 (current development-line release)
 Repository: https://github.com/CivicSuite/civiccore
 License: Apache 2.0
 
@@ -33,7 +33,8 @@ shared foundation those applications import.
 - `civiccore.llm` - provider registry, prompt templates, model registry,
   context utilities, and structured-output helpers.
 - `civiccore.audit` - hash-chained audit primitives for tamper-evident local
-  event streams.
+  event streams plus legacy-compatible persisted audit-log verification
+  helpers.
 - `civiccore.provenance` - source, citation, document, and provenance metadata
   contracts.
 - `civiccore.connectors` - offline import/export manifest schemas plus
@@ -83,7 +84,7 @@ as shipped CivicCore capability.
 CivicCore is distributed as GitHub release artifacts, not PyPI packages:
 
 ```bash
-pip install https://github.com/CivicSuite/civiccore/releases/download/v0.9.0/civiccore-0.9.0-py3-none-any.whl
+pip install https://github.com/CivicSuite/civiccore/releases/download/v0.17.0/civiccore-0.17.0-py3-none-any.whl
 ```
 
 Each release publishes `SHA256SUMS.txt` next to the wheel and source
@@ -91,7 +92,7 @@ distribution. Verify checksums before promoting a release artifact:
 
 ```bash
 curl -L -o SHA256SUMS.txt \
-  https://github.com/CivicSuite/civiccore/releases/download/v0.9.0/SHA256SUMS.txt
+  https://github.com/CivicSuite/civiccore/releases/download/v0.17.0/SHA256SUMS.txt
 sha256sum -c SHA256SUMS.txt
 ```
 
@@ -149,9 +150,12 @@ from civiccore import (
     CityProfile,
     ExportBundle,
     ImportManifest,
+    PersistedAuditLogEntry,
     SourceReference,
+    compute_persisted_audit_hash,
     validate_bundle,
     validate_manifest,
+    verify_persisted_audit_chain,
 )
 
 chain = AuditHashChain()
@@ -162,6 +166,24 @@ chain.record_event(
     source_module="civicclerk",
 )
 assert chain.verify()
+
+entry_hash = compute_persisted_audit_hash(
+    previous_hash="0" * 64,
+    timestamp="2026-05-01T12:00:00+00:00",
+    actor_id="records-admin",
+    action="request_created",
+    details={"request_id": "RR-1001"},
+)
+assert verify_persisted_audit_chain([
+    PersistedAuditLogEntry(
+        previous_hash="0" * 64,
+        entry_hash=entry_hash,
+        timestamp="2026-05-01T12:00:00+00:00",
+        actor_id="records-admin",
+        action="request_created",
+        details={"request_id": "RR-1001"},
+    )
+])[0]
 ```
 
 These primitives are storage-neutral. They give downstream modules a consistent
@@ -188,7 +210,7 @@ Shipped implementation in the current development line:
 
 ```text
 civiccore/
-  audit/        hash-chained audit primitives
+  audit/        hash-chained audit primitives and persisted audit-log helpers
   city_profile/ local city/deployment configuration models
   connectors/   offline manifests plus local-first import helpers
   db/           shared SQLAlchemy declarative Base
@@ -231,7 +253,7 @@ them.
 ### Compatibility
 
 Current v0.1.0 module foundations still pin older civiccore lines.
-Production-depth consumers can move to `civiccore==0.11.0` now that the release is published
+Production-depth consumers can move to `civiccore==0.17.0` once the release is published
 and the suite compatibility matrix is updated.
 
 The suite-wide matrix lives at:

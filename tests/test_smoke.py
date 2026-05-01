@@ -4,11 +4,14 @@
 def test_import_civiccore() -> None:
     import civiccore
 
-    assert civiccore.__version__ == "0.16.0"
+    assert civiccore.__version__ == "0.17.0"
     assert civiccore.roles_grant_access
     assert civiccore.access_level_allows
     assert civiccore.filter_records_by_access_level
     assert civiccore.AuditHashChain
+    assert civiccore.PersistedAuditLogEntry
+    assert callable(civiccore.compute_persisted_audit_hash)
+    assert callable(civiccore.verify_persisted_audit_chain)
     assert civiccore.SourceReference
     assert civiccore.ExportManifest
     assert civiccore.ExportBundle

@@ -48,8 +48,10 @@ by downstream modules until they ship.
 
 ## Status
 
-**v0.16.0 is the current published development-line release.** This line adds shared
-trusted-header auth config loading and proxy-source enforcement helpers on top of shipped
+**v0.17.0 is the current development-line release.** This line adds shared
+persisted audit-log hash and verification helpers for database-backed module
+audit rows on top of shared trusted-header auth config loading and proxy-source
+enforcement helpers on top of shipped
 trusted-header auth helpers on top of shipped
 `civiccore.ingest` discovery/fetch and cited-source validation contracts on top of shipped
 `civiccore.security` connector host-validation and encrypted-config helpers on top of shipped
@@ -88,10 +90,10 @@ shared-schema baseline extracted from CivicRecords AI).
 
 ## Install
 
-From the current published GitHub release wheel (`v0.16.0`):
+From the current GitHub release wheel (`v0.17.0`, once published):
 
 ```bash
-pip install https://github.com/CivicSuite/civiccore/releases/download/v0.16.0/civiccore-0.16.0-py3-none-any.whl
+pip install https://github.com/CivicSuite/civiccore/releases/download/v0.17.0/civiccore-0.17.0-py3-none-any.whl
 ```
 
 Each GitHub release also publishes `SHA256SUMS.txt` alongside the wheel and
@@ -234,6 +236,8 @@ for production-depth municipal workflows:
 ```python
 from civiccore import (
     AuditActor, AuditSubject, AuditHashChain,
+    PersistedAuditLogEntry, compute_persisted_audit_hash,
+    verify_persisted_audit_chain,
     SourceReference, SourceKind, CitationTarget, ProvenanceBundle,
     ImportManifest, ExportManifest, ManifestFile, validate_manifest,
     ExportBundle, BundleFile, write_manifest, build_sha256sums, validate_bundle,
@@ -248,6 +252,24 @@ chain.record_event(
     source_module="civicclerk",
 )
 assert chain.verify()
+
+entry_hash = compute_persisted_audit_hash(
+    previous_hash="0" * 64,
+    timestamp="2026-05-01T12:00:00+00:00",
+    actor_id="records-admin",
+    action="request_created",
+    details={"request_id": "RR-1001"},
+)
+assert verify_persisted_audit_chain([
+    PersistedAuditLogEntry(
+        previous_hash="0" * 64,
+        entry_hash=entry_hash,
+        timestamp="2026-05-01T12:00:00+00:00",
+        actor_id="records-admin",
+        action="request_created",
+        details={"request_id": "RR-1001"},
+    )
+])[0]
 ```
 
 These APIs are deliberately offline-first. They do not provide JWT
@@ -412,7 +434,7 @@ Extraction Spec** in
 
 Every CivicSuite module's README declares its CivicCore dependency contract.
 Current v0.1.0 module foundations pin older civiccore lines. Production-depth
-consumers can move to `==0.12.0` once the release is published and the
+consumers can move to `==0.17.0` once the release is published and the
 compatibility matrix is updated. The suite-wide compatibility matrix — which
 module versions work with which CivicCore versions — is maintained at
 [CivicSuite/civicsuite/docs/compatibility/](https://github.com/CivicSuite/civicsuite/tree/main/docs/compatibility).

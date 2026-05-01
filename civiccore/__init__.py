@@ -10,9 +10,21 @@ reverse-proxy bridges. CivicCore is a library, not an end-user application.
 
 from __future__ import annotations
 
-__version__ = "0.16.0"
+__version__ = "0.17.0"
 
-from civiccore.audit import AuditActor, AuditEvent, AuditHashChain, AuditSubject
+from civiccore.audit import (
+    AuditActor,
+    AuditEvent,
+    AuditHashChain,
+    AuditSubject,
+    PersistedAuditLogEntry,
+    ZERO_HASH,
+    canonical_audit_actor_id,
+    canonical_audit_details,
+    canonical_audit_timestamp,
+    compute_persisted_audit_hash,
+    verify_persisted_audit_chain,
+)
 from civiccore.city_profile import (
     CityProfile,
     DepartmentProfile,
@@ -106,6 +118,13 @@ __all__ = [
     "AuditEvent",
     "AuditHashChain",
     "AuditSubject",
+    "PersistedAuditLogEntry",
+    "ZERO_HASH",
+    "canonical_audit_actor_id",
+    "canonical_audit_details",
+    "canonical_audit_timestamp",
+    "compute_persisted_audit_hash",
+    "verify_persisted_audit_chain",
     "SourceKind",
     "SourceReference",
     "CitationTarget",
