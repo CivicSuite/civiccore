@@ -11,6 +11,17 @@ breaking changes to the public API surface (Appendix A of that spec) ship
 as MAJOR releases; new symbols or backward-compatible behavior ship as
 MINOR; bug fixes ship as PATCH.
 
+## [0.19.0] - 2026-05-02
+
+### Added
+- `civiccore.connectors.plan_vendor_delta_request()` now ships the shared
+  connector-specific delta cursor planning contract for Legistar, Granicus,
+  PrimeGov, and NovusAGENDA live-sync consumers.
+- `civiccore.testing.mock_city` now ships reusable no-network Brookfield
+  mock-city contracts for supported agenda vendors, municipal OIDC staff auth,
+  and backup-retention/off-host readiness so future modules can prove those
+  seams without contacting vendors, identity providers, or storage services.
+
 ## [0.18.1] - 2026-05-02
 
 ### Fixed

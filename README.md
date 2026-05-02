@@ -20,7 +20,9 @@ small shared search helpers for deterministic text matching, generic
 permission-aware access checks, hybrid ranking fusion, and local-first connector import helpers for
 agenda-platform payload normalization with actionable error contracts and
 source provenance, storage-neutral live connector sync retry/circuit-breaker
-primitives with actionable operator health copy, shared ingest contracts for connector discovery/fetch
+primitives with actionable operator health copy, connector delta request
+planning, reusable mock-city proof contracts for vendor, municipal IdP, and
+backup-retention readiness, shared ingest contracts for connector discovery/fetch
 records and cited-source validation, plus shared notice deadline planning
 and publication compliance helpers with actionable warning codes.
 
@@ -49,9 +51,11 @@ by downstream modules until they ship.
 
 ## Status
 
-**v0.18.1 is the current development-line release.** This line adds shared
-live connector sync retry/circuit-breaker primitives, including run-result
-normalization, operator health copy, retry delay policy, and async HTTP retry,
+**v0.19.0 is the current development-line release.** This line adds shared
+vendor delta request planning plus reusable no-network mock-city proof
+contracts for agenda vendors, municipal OIDC, and backup retention/off-host
+storage, on top of shared live connector sync retry/circuit-breaker primitives,
+including run-result normalization, operator health copy, retry delay policy, and async HTTP retry,
 on top of shared persisted audit-log hash and verification helpers for
 database-backed module audit rows on top of shared trusted-header auth config
 loading and proxy-source enforcement helpers on top of shipped
@@ -93,10 +97,10 @@ shared-schema baseline extracted from CivicRecords AI).
 
 ## Install
 
-From the current GitHub release wheel (`v0.18.1`, once published):
+From the current GitHub release wheel (`v0.19.0`, once published):
 
 ```bash
-pip install https://github.com/CivicSuite/civiccore/releases/download/v0.18.1/civiccore-0.18.1-py3-none-any.whl
+pip install https://github.com/CivicSuite/civiccore/releases/download/v0.19.0/civiccore-0.19.0-py3-none-any.whl
 ```
 
 Each GitHub release also publishes `SHA256SUMS.txt` alongside the wheel and
@@ -466,7 +470,7 @@ Extraction Spec** in
 
 Every CivicSuite module's README declares its CivicCore dependency contract.
 Current v0.1.0 module foundations pin older civiccore lines. Production-depth
-consumers can move to `==0.18.1` once the release is published and the
+consumers can move to `==0.19.0` once the release is published and the
 compatibility matrix is updated. The suite-wide compatibility matrix — which
 module versions work with which CivicCore versions — is maintained at
 [CivicSuite/civicsuite/docs/compatibility/](https://github.com/CivicSuite/civicsuite/tree/main/docs/compatibility).
