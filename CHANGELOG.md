@@ -11,6 +11,14 @@ breaking changes to the public API surface (Appendix A of that spec) ship
 as MAJOR releases; new symbols or backward-compatible behavior ship as
 MINOR; bug fixes ship as PATCH.
 
+## [0.20.0] - 2026-05-02
+
+### Added
+- `civiccore.security` now ships shared startup config validation helpers for
+  placeholder detection, CSV env parsing, generic secret length/default checks,
+  Fernet key validation, and common-password rejection so modules do not carry
+  one-off bootstrap hardening rules.
+
 ## [0.19.0] - 2026-05-02
 
 ### Added

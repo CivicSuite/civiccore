@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="CivicCore v0.19.0 - shared platform library for the open-source CivicSuite municipal operations suite. Not an end-user app. Apache 2.0.">
-<title>CivicCore v0.19.0 - CivicSuite shared platform library</title>
+<meta name="description" content="CivicCore v0.20.0 - shared platform library for the open-source CivicSuite municipal operations suite. Not an end-user app. Apache 2.0.">
+<title>CivicCore v0.20.0 - CivicSuite shared platform library</title>
   <style>
     :root {
       --text: #1f2328;
@@ -175,8 +175,8 @@
 
     <section aria-labelledby="install">
       <h2 id="install">Install</h2>
-      <p>From the current GitHub release wheel (<code>v0.19.0</code>, once published) - civiccore is GitHub-wheel-only, not on PyPI:</p>
-      <pre><code>pip install https://github.com/CivicSuite/civiccore/releases/download/v0.19.0/civiccore-0.19.0-py3-none-any.whl</code></pre>
+      <p>From the current GitHub release wheel (<code>v0.20.0</code>, once published) - civiccore is GitHub-wheel-only, not on PyPI:</p>
+      <pre><code>pip install https://github.com/CivicSuite/civiccore/releases/download/v0.20.0/civiccore-0.20.0-py3-none-any.whl</code></pre>
       <p>For development from a clone:</p>
       <pre><code>git clone https://github.com/CivicSuite/civiccore.git
 cd civiccore
@@ -192,8 +192,9 @@ pip install -e .[dev]</code></pre>
       <h2 id="status">Status</h2>
       <div class="status">
         <p>
-          <strong>v0.19.0 is the current development-line release.</strong>
-          The current development line adds vendor delta request planning, reusable mock-city proof contracts, live connector sync retry/circuit-breaker primitives
+          <strong>v0.20.0 is the current development-line release.</strong>
+          The current development line adds startup config validation helpers,
+          vendor delta request planning, reusable mock-city proof contracts, live connector sync retry/circuit-breaker primitives
           and persisted audit-log hash and verification helpers for
           database-backed module audit rows on top of shared <code>civiccore.ingest</code>
           discovery/fetch and cited-source validation contracts on top of shared <code>civiccore.security</code>
@@ -238,7 +239,7 @@ pip install -e .[dev]</code></pre>
       <h2 id="compat">Compatibility</h2>
       <p>
         <strong>Current module foundations span older civiccore lines while newer product-depth consumers already target later releases.</strong>
-          Production-depth consumers can target civiccore v0.19.0 once the compatibility matrix is updated. Every CivicSuite
+          Production-depth consumers can target civiccore v0.20.0 once the compatibility matrix is updated. Every CivicSuite
           module's README declares a CivicCore version range.
         </p>
     </section>

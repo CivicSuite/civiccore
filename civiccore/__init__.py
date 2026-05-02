@@ -6,13 +6,14 @@ metadata contracts, offline import/export manifests, export bundle helpers,
 local city profile configuration, and small auth helpers for protected or
 mixed public/staff FastAPI routes, including bearer-token and trusted-header
 reverse-proxy bridges, live connector sync retry and circuit-breaker
-primitives, connector delta planning, and reusable mock-city proof contracts.
+primitives, connector delta planning, reusable mock-city proof contracts, and
+startup config validation helpers for placeholder-free module settings.
 CivicCore is a library, not an end-user application.
 """
 
 from __future__ import annotations
 
-__version__ = "0.19.0"
+__version__ = "0.20.0"
 
 from civiccore.audit import (
     AuditActor,
@@ -104,6 +105,7 @@ from civiccore.provenance import (
 )
 from civiccore.security import (
     AtRestDecryptionError,
+    ConfigValidationError,
     build_fernet,
     decrypt_json,
     encrypt_json,
@@ -111,9 +113,14 @@ from civiccore.security import (
     is_blocked_host,
     is_encrypted,
     is_trusted_proxy_ip,
+    looks_like_placeholder,
     normalize_allowlist,
     normalize_trusted_proxy_cidrs,
+    parse_csv_setting,
+    validate_fernet_key_setting,
     validate_odbc_connection_string,
+    validate_password_setting,
+    validate_secret_setting,
     validate_url_host,
 )
 from civiccore.search import (
@@ -204,15 +211,18 @@ __all__ = [
     "encrypt_json",
     "extract_odbc_host",
     "AtRestDecryptionError",
+    "ConfigValidationError",
     "build_fernet",
     "is_blocked_host",
     "is_encrypted",
     "is_trusted_proxy_ip",
+    "looks_like_placeholder",
     "load_city_profile",
     "normalize_access_value",
     "normalize_access_values",
     "normalize_allowlist",
     "normalize_trusted_proxy_cidrs",
+    "parse_csv_setting",
     "next_profile_prompt",
     "normalize_search_query",
     "normalize_search_text",
@@ -222,7 +232,10 @@ __all__ = [
     "reciprocal_rank_fusion",
     "SourceMaterial",
     "validate_cited_sentences",
+    "validate_fernet_key_setting",
     "validate_odbc_connection_string",
+    "validate_password_setting",
+    "validate_secret_setting",
     "normalized_text_sha256",
     "validate_url_host",
     "validate_release_browser_evidence",
