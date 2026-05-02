@@ -42,8 +42,8 @@ helpers, but not delivery queues or outbound notification orchestration.
 surface, while sovereignty verification remains future work.
 `civiccore.connectors` now also ships shared local-payload import
 normalization helpers and live-sync retry/circuit-breaker primitives for supported agenda platforms, while
-`civiccore.security` now ships shared connector-host validation and
-encrypted JSON envelope helpers for secret-bearing config. Credential
+`civiccore.security` now ships shared connector-host validation,
+startup config validation, and encrypted JSON envelope helpers for secret-bearing config. Credential
 orchestration, vendor-specific network adapters, and vendor write-back remain unshipped.
 Unshipped
 namespaces are reserved for future Phase work and must not be relied on
@@ -51,17 +51,19 @@ by downstream modules until they ship.
 
 ## Status
 
-**v0.19.0 is the current development-line release.** This line adds shared
-vendor delta request planning plus reusable no-network mock-city proof
-contracts for agenda vendors, municipal OIDC, and backup retention/off-host
-storage, on top of shared live connector sync retry/circuit-breaker primitives,
+**v0.20.0 is the current development-line release.** This line adds shared
+startup config validation helpers for placeholder detection, CSV env parsing,
+generic secret checks, Fernet key validation, and common-password rejection,
+on top of shared vendor delta request planning plus reusable no-network
+mock-city proof contracts for agenda vendors, municipal OIDC, and backup
+retention/off-host storage, on top of shared live connector sync retry/circuit-breaker primitives,
 including run-result normalization, operator health copy, retry delay policy, and async HTTP retry,
 on top of shared persisted audit-log hash and verification helpers for
 database-backed module audit rows on top of shared trusted-header auth config
 loading and proxy-source enforcement helpers on top of shipped
 trusted-header auth helpers on top of shipped
 `civiccore.ingest` discovery/fetch and cited-source validation contracts on top of shipped
-`civiccore.security` connector host-validation and encrypted-config helpers on top of shipped
+`civiccore.security` connector host-validation, startup config validation, and encrypted-config helpers on top of shipped
 `civiccore.onboarding` profile interview helpers on top of shipped
 `civiccore.notifications` notice deadline planning and publication
 compliance helpers on top of the shipped `civiccore.connectors`
@@ -97,10 +99,10 @@ shared-schema baseline extracted from CivicRecords AI).
 
 ## Install
 
-From the current GitHub release wheel (`v0.19.0`, once published):
+From the current GitHub release wheel (`v0.20.0`, once published):
 
 ```bash
-pip install https://github.com/CivicSuite/civiccore/releases/download/v0.19.0/civiccore-0.19.0-py3-none-any.whl
+pip install https://github.com/CivicSuite/civiccore/releases/download/v0.20.0/civiccore-0.20.0-py3-none-any.whl
 ```
 
 Each GitHub release also publishes `SHA256SUMS.txt` alongside the wheel and
@@ -470,7 +472,7 @@ Extraction Spec** in
 
 Every CivicSuite module's README declares its CivicCore dependency contract.
 Current v0.1.0 module foundations pin older civiccore lines. Production-depth
-consumers can move to `==0.19.0` once the release is published and the
+consumers can move to `==0.20.0` once the release is published and the
 compatibility matrix is updated. The suite-wide compatibility matrix — which
 module versions work with which CivicCore versions — is maintained at
 [CivicSuite/civicsuite/docs/compatibility/](https://github.com/CivicSuite/civicsuite/tree/main/docs/compatibility).

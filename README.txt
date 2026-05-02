@@ -26,8 +26,8 @@ What ships in the current development line:
     retry/circuit-breaker primitives.
   - civiccore.testing - no-network mock-city proof contracts for supported
     agenda vendors, municipal OIDC, and backup-retention/off-host readiness.
-  - civiccore.security - connector host validation plus encrypted JSON
-    envelope helpers for secret-bearing config.
+  - civiccore.security - connector host validation, startup config
+    validation, and encrypted JSON envelope helpers for secret-bearing config.
   - civiccore.exports - static export-bundle manifest and checksum helpers.
   - civiccore.city_profile - local city/deployment configuration models.
   - civiccore.auth - bearer-token role helpers for protected or mixed
@@ -52,11 +52,11 @@ determinations are still not shipped platform behaviors.
 Status
 ------
 
-v0.19.0 is the current development-line release target. The current line now
-includes vendor delta planning, reusable mock-city proof contracts, live
-connector sync retry/circuit-breaker primitives, and persisted
-audit-log hash and verification helpers on top of shared connector
-security/config helpers, onboarding profile helpers, auth helpers,
+v0.20.0 is the current development-line release target. The current line now
+includes shared startup config validation helpers, vendor delta planning,
+reusable mock-city proof contracts, live connector sync retry/circuit-breaker
+primitives, and persisted audit-log hash and verification helpers on top of
+shared connector security/config helpers, onboarding profile helpers, auth helpers,
 verification helpers, shared search helpers, local-first connector import
 helpers, and notice deadline/compliance helpers on top of the audit,
 provenance, manifest, export-bundle, city-profile, migration, and LLM
@@ -68,7 +68,7 @@ Install
 
 From the current published GitHub release wheel:
 
-    pip install https://github.com/CivicSuite/civiccore/releases/download/v0.19.0/civiccore-0.19.0-py3-none-any.whl
+    pip install https://github.com/CivicSuite/civiccore/releases/download/v0.20.0/civiccore-0.20.0-py3-none-any.whl
 
 CivicCore is distributed as versioned GitHub release artifacts (not on PyPI).
 Each release publishes SHA256SUMS.txt alongside the wheel and sdist. Verify
@@ -126,7 +126,7 @@ Compatibility
 -------------
 
 Current v0.1.0 module foundations still pin older civiccore lines.
-Production-depth consumers can move to civiccore ==0.19.0 once the release is published and the suite
+Production-depth consumers can move to civiccore ==0.20.0 once the release is published and the suite
 compatibility matrix are updated.
 
 The suite-wide compatibility matrix is maintained at:
