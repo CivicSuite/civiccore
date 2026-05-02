@@ -1,7 +1,7 @@
 CivicCore User Manual
 =====================
 
-Version: v0.17.0 (current development-line release target)
+Version: v0.18.0 (current development-line release target)
 Repository: https://github.com/CivicSuite/civiccore
 License: Apache 2.0
 
@@ -29,8 +29,9 @@ What the current development line ships:
   - civiccore.audit - hash-chained audit primitives plus persisted audit-log
     hash and verification helpers.
   - civiccore.provenance - source/provenance metadata contracts.
-  - civiccore.connectors - offline import/export manifest schemas plus
-    local-first import helpers for supported agenda-platform payloads.
+  - civiccore.connectors - offline import/export manifest schemas,
+    local-first import helpers for supported agenda-platform payloads, and
+    storage-neutral live-sync retry/circuit-breaker primitives.
   - civiccore.exports - static export-bundle manifest and checksum helpers.
   - civiccore.city_profile - local city/deployment configuration models.
   - civiccore.auth - bearer-token role helpers for protected or mixed
@@ -46,8 +47,8 @@ What the current development line ships:
 Not shipped yet:
 
   civiccore.catalog, civiccore.exemptions, civiccore.ingest,
-  civiccore.scaffold, live connector sync,
-  credential storage, vendor write-back, document ingestion, search
+  civiccore.scaffold,
+  credential storage, vendor-specific network adapters, vendor write-back, document ingestion, search
   indexing, notification delivery queues, and legal determinations.
   civiccore.onboarding web UI/persistence flows are also still not shipped.
 
@@ -62,12 +63,12 @@ Technical Guide
 
 Install from the GitHub release wheel:
 
-    pip install https://github.com/CivicSuite/civiccore/releases/download/v0.17.0/civiccore-0.17.0-py3-none-any.whl
+    pip install https://github.com/CivicSuite/civiccore/releases/download/v0.18.0/civiccore-0.18.0-py3-none-any.whl
 
 Verify the release artifact:
 
     curl -L -o SHA256SUMS.txt \
-      https://github.com/CivicSuite/civiccore/releases/download/v0.17.0/SHA256SUMS.txt
+      https://github.com/CivicSuite/civiccore/releases/download/v0.18.0/SHA256SUMS.txt
     sha256sum -c SHA256SUMS.txt
 
 For local development:
@@ -127,7 +128,8 @@ Shipped implementation in the current development line:
 
   audit, city_profile, connectors, db, exports, llm, migrations,
   notifications, onboarding, provenance
-  connectors include offline manifests plus local-first import helpers
+  connectors include offline manifests, local-first import helpers, and
+  live-sync retry/circuit-breaker primitives
   notifications include notice deadline + compliance helpers
 
 Still planned namespaces:
@@ -142,7 +144,7 @@ Compatibility
 -------------
 
 Current v0.1.0 module foundations still pin older civiccore lines.
-Production-depth consumers can move to civiccore ==0.17.0 once the release is published and
+Production-depth consumers can move to civiccore ==0.18.0 once the release is published and
 the suite compatibility matrix is updated.
 
 Compatibility matrix:
