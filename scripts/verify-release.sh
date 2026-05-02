@@ -150,6 +150,7 @@ def main() -> int:
                     "assert callable(upgrade_to_head); "
                     "assert callable(civiccore.validate_manifest); "
                     "assert callable(civiccore.import_meeting_payload); "
+                    "assert callable(civiccore.plan_vendor_delta_request); "
                     "assert callable(civiccore.build_deadline_plan); "
                     "assert callable(civiccore.evaluate_notice_compliance); "
                     "assert callable(civiccore.compute_onboarding_status); "

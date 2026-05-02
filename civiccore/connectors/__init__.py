@@ -7,6 +7,11 @@ from civiccore.connectors.imports import (
     SUPPORTED_CONNECTORS,
     import_meeting_payload,
 )
+from civiccore.connectors.delta import (
+    DELTA_QUERY_PARAMS,
+    VendorDeltaRequestPlan,
+    plan_vendor_delta_request,
+)
 from civiccore.connectors.manifest import (
     ExportManifest,
     ImportManifest,
@@ -31,6 +36,7 @@ from civiccore.connectors.sync import (
 
 __all__ = [
     "ConnectorImportError",
+    "DELTA_QUERY_PARAMS",
     "ExportManifest",
     "ImportedAgendaItem",
     "ImportedMeeting",
@@ -45,11 +51,13 @@ __all__ = [
     "SyncRetryExhausted",
     "SyncRetryPolicy",
     "SyncRunResult",
+    "VendorDeltaRequestPlan",
     "apply_sync_run_result",
     "build_sync_operator_status",
     "compute_retry_delay",
     "compute_sync_health_status",
     "import_meeting_payload",
+    "plan_vendor_delta_request",
     "validate_manifest",
     "with_http_retry",
 ]

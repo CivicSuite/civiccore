@@ -1,6 +1,6 @@
 # CivicCore User Manual
 
-Version: v0.18.1 (current development-line release)
+Version: v0.19.0 (current development-line release)
 Repository: https://github.com/CivicSuite/civiccore
 License: Apache 2.0
 
@@ -39,7 +39,10 @@ shared foundation those applications import.
   contracts.
 - `civiccore.connectors` - offline import/export manifest schemas,
   local-first import helpers for supported agenda-platform payloads, and
-  storage-neutral live-sync retry/circuit-breaker primitives.
+  storage-neutral live-sync retry/circuit-breaker primitives plus vendor
+  delta request planning.
+- `civiccore.testing` - no-network mock-city proof contracts for supported
+  agenda vendors, municipal OIDC, and backup-retention/off-host readiness.
 - `civiccore.exports` - static export-bundle manifest and checksum helpers.
 - `civiccore.city_profile` - local city/deployment configuration models.
 - `civiccore.auth` - bearer-token role helpers plus trusted-header config and
@@ -85,7 +88,7 @@ not promote those behaviors as shipped CivicCore capability.
 CivicCore is distributed as GitHub release artifacts, not PyPI packages:
 
 ```bash
-pip install https://github.com/CivicSuite/civiccore/releases/download/v0.18.1/civiccore-0.18.1-py3-none-any.whl
+pip install https://github.com/CivicSuite/civiccore/releases/download/v0.19.0/civiccore-0.19.0-py3-none-any.whl
 ```
 
 Each release publishes `SHA256SUMS.txt` next to the wheel and source
@@ -93,7 +96,7 @@ distribution. Verify checksums before promoting a release artifact:
 
 ```bash
 curl -L -o SHA256SUMS.txt \
-  https://github.com/CivicSuite/civiccore/releases/download/v0.18.1/SHA256SUMS.txt
+  https://github.com/CivicSuite/civiccore/releases/download/v0.19.0/SHA256SUMS.txt
 sha256sum -c SHA256SUMS.txt
 ```
 
@@ -282,7 +285,7 @@ them.
 ### Compatibility
 
 Current v0.1.0 module foundations still pin older civiccore lines.
-Production-depth consumers can move to `civiccore==0.18.1` once the release is published
+Production-depth consumers can move to `civiccore==0.19.0` once the release is published
 and the suite compatibility matrix is updated.
 
 The suite-wide matrix lives at:
