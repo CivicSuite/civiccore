@@ -1,6 +1,6 @@
 # CivicCore User Manual
 
-Version: v0.18.0 (current development-line release)
+Version: v0.18.1 (current development-line release)
 Repository: https://github.com/CivicSuite/civiccore
 License: Apache 2.0
 
@@ -85,7 +85,7 @@ not promote those behaviors as shipped CivicCore capability.
 CivicCore is distributed as GitHub release artifacts, not PyPI packages:
 
 ```bash
-pip install https://github.com/CivicSuite/civiccore/releases/download/v0.18.0/civiccore-0.18.0-py3-none-any.whl
+pip install https://github.com/CivicSuite/civiccore/releases/download/v0.18.1/civiccore-0.18.1-py3-none-any.whl
 ```
 
 Each release publishes `SHA256SUMS.txt` next to the wheel and source
@@ -93,7 +93,7 @@ distribution. Verify checksums before promoting a release artifact:
 
 ```bash
 curl -L -o SHA256SUMS.txt \
-  https://github.com/CivicSuite/civiccore/releases/download/v0.18.0/SHA256SUMS.txt
+  https://github.com/CivicSuite/civiccore/releases/download/v0.18.1/SHA256SUMS.txt
 sha256sum -c SHA256SUMS.txt
 ```
 
@@ -282,7 +282,7 @@ them.
 ### Compatibility
 
 Current v0.1.0 module foundations still pin older civiccore lines.
-Production-depth consumers can move to `civiccore==0.18.0` once the release is published
+Production-depth consumers can move to `civiccore==0.18.1` once the release is published
 and the suite compatibility matrix is updated.
 
 The suite-wide matrix lives at:

@@ -31,7 +31,7 @@ class SyncRetryPolicy:
     base_delay_seconds: float = 1.0
     jitter_factor: float = 0.2
     max_backoff_seconds: float = 30.0
-    max_retry_after_seconds: float = 600.0
+    retry_after_cap_seconds: float = 600.0
 
 
 class SyncRetryExhausted(Exception):
@@ -130,9 +130,7 @@ def compute_retry_delay(
     if attempt < 0:
         raise ValueError("attempt must be zero or greater.")
     if retry_after_seconds is not None:
-        if retry_after_seconds > active_policy.max_retry_after_seconds:
-            return None
-        delay = retry_after_seconds
+        return max(0.0, min(retry_after_seconds, active_policy.retry_after_cap_seconds))
     else:
         delay = active_policy.base_delay_seconds * (2**attempt)
         if delay > active_policy.max_backoff_seconds:

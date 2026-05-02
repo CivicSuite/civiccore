@@ -49,7 +49,7 @@ by downstream modules until they ship.
 
 ## Status
 
-**v0.18.0 is the current development-line release.** This line adds shared
+**v0.18.1 is the current development-line release.** This line adds shared
 live connector sync retry/circuit-breaker primitives, including run-result
 normalization, operator health copy, retry delay policy, and async HTTP retry,
 on top of shared persisted audit-log hash and verification helpers for
@@ -93,10 +93,10 @@ shared-schema baseline extracted from CivicRecords AI).
 
 ## Install
 
-From the current GitHub release wheel (`v0.18.0`, once published):
+From the current GitHub release wheel (`v0.18.1`, once published):
 
 ```bash
-pip install https://github.com/CivicSuite/civiccore/releases/download/v0.18.0/civiccore-0.18.0-py3-none-any.whl
+pip install https://github.com/CivicSuite/civiccore/releases/download/v0.18.1/civiccore-0.18.1-py3-none-any.whl
 ```
 
 Each GitHub release also publishes `SHA256SUMS.txt` alongside the wheel and
@@ -466,7 +466,7 @@ Extraction Spec** in
 
 Every CivicSuite module's README declares its CivicCore dependency contract.
 Current v0.1.0 module foundations pin older civiccore lines. Production-depth
-consumers can move to `==0.18.0` once the release is published and the
+consumers can move to `==0.18.1` once the release is published and the
 compatibility matrix is updated. The suite-wide compatibility matrix — which
 module versions work with which CivicCore versions — is maintained at
 [CivicSuite/civicsuite/docs/compatibility/](https://github.com/CivicSuite/civicsuite/tree/main/docs/compatibility).

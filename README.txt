@@ -49,7 +49,7 @@ determinations are still not shipped platform behaviors.
 Status
 ------
 
-v0.18.0 is the current development-line release target. The current line now
+v0.18.1 is the current development-line release target. The current line now
 includes live connector sync retry/circuit-breaker primitives and persisted
 audit-log hash and verification helpers on top of shared connector
 security/config helpers, onboarding profile helpers, auth helpers,
@@ -64,7 +64,7 @@ Install
 
 From the current published GitHub release wheel:
 
-    pip install https://github.com/CivicSuite/civiccore/releases/download/v0.18.0/civiccore-0.18.0-py3-none-any.whl
+    pip install https://github.com/CivicSuite/civiccore/releases/download/v0.18.1/civiccore-0.18.1-py3-none-any.whl
 
 CivicCore is distributed as versioned GitHub release artifacts (not on PyPI).
 Each release publishes SHA256SUMS.txt alongside the wheel and sdist. Verify
@@ -122,7 +122,7 @@ Compatibility
 -------------
 
 Current v0.1.0 module foundations still pin older civiccore lines.
-Production-depth consumers can move to civiccore ==0.18.0 once the release is published and the suite
+Production-depth consumers can move to civiccore ==0.18.1 once the release is published and the suite
 compatibility matrix are updated.
 
 The suite-wide compatibility matrix is maintained at:

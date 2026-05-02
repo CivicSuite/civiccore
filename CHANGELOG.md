@@ -11,6 +11,14 @@ breaking changes to the public API surface (Appendix A of that spec) ship
 as MAJOR releases; new symbols or backward-compatible behavior ship as
 MINOR; bug fixes ship as PATCH.
 
+## [0.18.1] - 2026-05-02
+
+### Fixed
+- `civiccore.connectors.compute_retry_delay()` now preserves the proven
+  CivicRecords AI `Retry-After` behavior: honor valid header values exactly,
+  cap oversized values at 600 seconds by default, and do not add jitter to
+  server-directed `Retry-After` sleeps.
+
 ## [0.18.0] - 2026-05-02
 
 ### Added
