@@ -24,7 +24,8 @@ primitives with actionable operator health copy, connector delta request
 planning, reusable mock-city proof contracts for vendor, municipal IdP, and
 backup-retention readiness, shared ingest contracts for connector discovery/fetch
 records and cited-source validation, plus shared notice deadline planning
-and publication compliance helpers with actionable warning codes.
+and publication compliance helpers with actionable warning codes, plus shared
+cron schedule validation helpers for module background jobs.
 
 **Still planned extraction targets (placeholder packages exist; not yet
 implemented today):** `civiccore.catalog`, `civiccore.exemptions`
@@ -43,7 +44,9 @@ surface, while sovereignty verification remains future work.
 `civiccore.connectors` now also ships shared local-payload import
 normalization helpers and live-sync retry/circuit-breaker primitives for supported agenda platforms, while
 `civiccore.security` now ships shared connector-host validation,
-startup config validation, and encrypted JSON envelope helpers for secret-bearing config. Credential
+startup config validation, and encrypted JSON envelope helpers for secret-bearing config.
+`civiccore.scheduling` now ships storage-neutral cron validation and next-run
+helpers, but not a scheduler runtime or task queue. Credential
 orchestration, vendor-specific network adapters, and vendor write-back remain unshipped.
 Unshipped
 namespaces are reserved for future Phase work and must not be relied on
@@ -51,7 +54,8 @@ by downstream modules until they ship.
 
 ## Status
 
-**v0.20.0 is the current development-line release.** This line adds shared
+**v0.21.0 is the current development-line release.** This line adds shared
+cron schedule validation helpers for module background jobs on top of shared
 startup config validation helpers for placeholder detection, CSV env parsing,
 generic secret checks, Fernet key validation, and common-password rejection,
 on top of shared vendor delta request planning plus reusable no-network
@@ -99,10 +103,10 @@ shared-schema baseline extracted from CivicRecords AI).
 
 ## Install
 
-From the current GitHub release wheel (`v0.20.0`, once published):
+From the current GitHub release wheel (`v0.21.0`, once published):
 
 ```bash
-pip install https://github.com/CivicSuite/civiccore/releases/download/v0.20.0/civiccore-0.20.0-py3-none-any.whl
+pip install https://github.com/CivicSuite/civiccore/releases/download/v0.21.0/civiccore-0.21.0-py3-none-any.whl
 ```
 
 Each GitHub release also publishes `SHA256SUMS.txt` alongside the wheel and
@@ -417,6 +421,20 @@ This ships the field order, skip-aware next-question selection, text
 trimming, and yes/no normalization contract. Full web onboarding flows,
 router integration, and persistence orchestration remain future work.
 
+## Scheduling helper
+
+`civiccore.scheduling` exposes the shared cron expression contract used by
+module background jobs. Modules keep their own Celery/worker/runtime wiring,
+but should reuse this validation so one-minute accidental or adversarial
+schedules are blocked consistently across CivicSuite.
+
+```python
+from civiccore.scheduling import compute_next_sync_at, validate_cron_expression
+
+validate_cron_expression("*/5 * * * *")
+next_run = compute_next_sync_at("0 2 * * *", last_sync_at=None)
+```
+
 ## Verification helper
 
 `civiccore.verification` now ships a small browser-evidence helper for
@@ -472,7 +490,7 @@ Extraction Spec** in
 
 Every CivicSuite module's README declares its CivicCore dependency contract.
 Current v0.1.0 module foundations pin older civiccore lines. Production-depth
-consumers can move to `==0.20.0` once the release is published and the
+consumers can move to `==0.21.0` once the release is published and the
 compatibility matrix is updated. The suite-wide compatibility matrix — which
 module versions work with which CivicCore versions — is maintained at
 [CivicSuite/civicsuite/docs/compatibility/](https://github.com/CivicSuite/civicsuite/tree/main/docs/compatibility).

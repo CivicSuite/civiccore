@@ -11,6 +11,18 @@ breaking changes to the public API surface (Appendix A of that spec) ship
 as MAJOR releases; new symbols or backward-compatible behavior ship as
 MINOR; bug fixes ship as PATCH.
 
+## [0.21.0] - 2026-05-02
+
+### Added
+- `civiccore.scheduling` now ships shared cron schedule validation helpers:
+  `min_interval_minutes()`, `validate_cron_expression()`, and
+  `compute_next_sync_at()`.
+- Package-root exports expose the scheduling helpers so downstream modules can
+  block too-frequent background schedules consistently without copying the
+  CivicRecords AI cron utility.
+- Release docs now identify scheduling as a shipped helper namespace while
+  keeping scheduler runtimes and task queues module-owned.
+
 ## [0.20.0] - 2026-05-02
 
 ### Added

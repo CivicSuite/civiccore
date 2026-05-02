@@ -1,6 +1,6 @@
 # CivicCore User Manual
 
-Version: v0.20.0 (current development-line release)
+Version: v0.21.0 (current development-line release)
 Repository: https://github.com/CivicSuite/civiccore
 License: Apache 2.0
 
@@ -54,6 +54,8 @@ shared foundation those applications import.
   compliance helpers with actionable warning codes.
 - `civiccore.onboarding` - storage-neutral onboarding profile field order,
   answer parsing, completion-state, and next-question helpers.
+- `civiccore.scheduling` - storage-neutral cron validation and next-run
+  helpers for module background jobs.
 
 ### What the current development line does not ship yet
 
@@ -88,7 +90,7 @@ not promote those behaviors as shipped CivicCore capability.
 CivicCore is distributed as GitHub release artifacts, not PyPI packages:
 
 ```bash
-pip install https://github.com/CivicSuite/civiccore/releases/download/v0.20.0/civiccore-0.20.0-py3-none-any.whl
+pip install https://github.com/CivicSuite/civiccore/releases/download/v0.21.0/civiccore-0.21.0-py3-none-any.whl
 ```
 
 Each release publishes `SHA256SUMS.txt` next to the wheel and source
@@ -96,7 +98,7 @@ distribution. Verify checksums before promoting a release artifact:
 
 ```bash
 curl -L -o SHA256SUMS.txt \
-  https://github.com/CivicSuite/civiccore/releases/download/v0.20.0/SHA256SUMS.txt
+  https://github.com/CivicSuite/civiccore/releases/download/v0.21.0/SHA256SUMS.txt
 sha256sum -c SHA256SUMS.txt
 ```
 
@@ -251,6 +253,7 @@ civiccore/
   migrations/   migration runner and shared schema baseline
   notifications/ notice deadline + compliance helpers
   onboarding/   shared onboarding profile field-order/progress helpers
+  scheduling/   cron validation and next-run helpers
   provenance/   source/citation/provenance metadata contracts
 ```
 
@@ -263,6 +266,7 @@ civiccore/
   ingest/        future document ingestion
   notifications/ delivery queues and outbound orchestration remain future work
   onboarding/    future web onboarding UI/persistence flows
+  scheduling/    scheduler runtime and task queue remain module-owned
   scaffold/      future scaffolding helpers
   verification/  future sovereignty verification
 ```
@@ -285,7 +289,7 @@ them.
 ### Compatibility
 
 Current v0.1.0 module foundations still pin older civiccore lines.
-Production-depth consumers can move to `civiccore==0.20.0` once the release is published
+Production-depth consumers can move to `civiccore==0.21.0` once the release is published
 and the suite compatibility matrix is updated.
 
 The suite-wide matrix lives at:

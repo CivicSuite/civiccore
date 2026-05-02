@@ -7,13 +7,14 @@ local city profile configuration, and small auth helpers for protected or
 mixed public/staff FastAPI routes, including bearer-token and trusted-header
 reverse-proxy bridges, live connector sync retry and circuit-breaker
 primitives, connector delta planning, reusable mock-city proof contracts, and
-startup config validation helpers for placeholder-free module settings.
+startup config validation helpers for placeholder-free module settings, and
+shared cron schedule validation helpers for module background jobs.
 CivicCore is a library, not an end-user application.
 """
 
 from __future__ import annotations
 
-__version__ = "0.20.0"
+__version__ = "0.21.0"
 
 from civiccore.audit import (
     AuditActor,
@@ -134,10 +135,17 @@ from civiccore.search import (
     roles_grant_access,
     search_text_matches_query,
 )
+from civiccore.scheduling import (
+    UTC,
+    compute_next_sync_at,
+    min_interval_minutes,
+    validate_cron_expression,
+)
 from civiccore.verification import normalized_text_sha256, validate_release_browser_evidence
 
 __all__ = [
     "__version__",
+    "UTC",
     "AuditActor",
     "AuditEvent",
     "AuditHashChain",
@@ -148,6 +156,7 @@ __all__ = [
     "canonical_audit_details",
     "canonical_audit_timestamp",
     "compute_persisted_audit_hash",
+    "compute_next_sync_at",
     "verify_persisted_audit_chain",
     "SourceKind",
     "SourceReference",
@@ -226,12 +235,14 @@ __all__ = [
     "next_profile_prompt",
     "normalize_search_query",
     "normalize_search_text",
+    "min_interval_minutes",
     "parse_profile_answer",
     "roles_grant_access",
     "search_text_matches_query",
     "reciprocal_rank_fusion",
     "SourceMaterial",
     "validate_cited_sentences",
+    "validate_cron_expression",
     "validate_fernet_key_setting",
     "validate_odbc_connection_string",
     "validate_password_setting",
