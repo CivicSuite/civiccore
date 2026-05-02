@@ -19,7 +19,8 @@ browser-evidence verification helpers for current-facing release pages,
 small shared search helpers for deterministic text matching, generic
 permission-aware access checks, hybrid ranking fusion, and local-first connector import helpers for
 agenda-platform payload normalization with actionable error contracts and
-source provenance, shared ingest contracts for connector discovery/fetch
+source provenance, storage-neutral live connector sync retry/circuit-breaker
+primitives with actionable operator health copy, shared ingest contracts for connector discovery/fetch
 records and cited-source validation, plus shared notice deadline planning
 and publication compliance helpers with actionable warning codes.
 
@@ -38,20 +39,22 @@ helpers, but not delivery queues or outbound notification orchestration.
 `civiccore.verification` now ships the first release-evidence helper
 surface, while sovereignty verification remains future work.
 `civiccore.connectors` now also ships shared local-payload import
-normalization helpers for supported agenda platforms, while
+normalization helpers and live-sync retry/circuit-breaker primitives for supported agenda platforms, while
 `civiccore.security` now ships shared connector-host validation and
-encrypted JSON envelope helpers for secret-bearing config. Live sync,
-full credential orchestration, and vendor write-back remain unshipped.
+encrypted JSON envelope helpers for secret-bearing config. Credential
+orchestration, vendor-specific network adapters, and vendor write-back remain unshipped.
 Unshipped
 namespaces are reserved for future Phase work and must not be relied on
 by downstream modules until they ship.
 
 ## Status
 
-**v0.17.0 is the current development-line release.** This line adds shared
-persisted audit-log hash and verification helpers for database-backed module
-audit rows on top of shared trusted-header auth config loading and proxy-source
-enforcement helpers on top of shipped
+**v0.18.0 is the current development-line release.** This line adds shared
+live connector sync retry/circuit-breaker primitives, including run-result
+normalization, operator health copy, retry delay policy, and async HTTP retry,
+on top of shared persisted audit-log hash and verification helpers for
+database-backed module audit rows on top of shared trusted-header auth config
+loading and proxy-source enforcement helpers on top of shipped
 trusted-header auth helpers on top of shipped
 `civiccore.ingest` discovery/fetch and cited-source validation contracts on top of shipped
 `civiccore.security` connector host-validation and encrypted-config helpers on top of shipped
@@ -90,10 +93,10 @@ shared-schema baseline extracted from CivicRecords AI).
 
 ## Install
 
-From the current GitHub release wheel (`v0.17.0`, once published):
+From the current GitHub release wheel (`v0.18.0`, once published):
 
 ```bash
-pip install https://github.com/CivicSuite/civiccore/releases/download/v0.17.0/civiccore-0.17.0-py3-none-any.whl
+pip install https://github.com/CivicSuite/civiccore/releases/download/v0.18.0/civiccore-0.18.0-py3-none-any.whl
 ```
 
 Each GitHub release also publishes `SHA256SUMS.txt` alongside the wheel and
@@ -273,9 +276,38 @@ assert verify_persisted_audit_chain([
 ```
 
 These APIs are deliberately offline-first. They do not provide JWT
-issuance, SSO, user directories, live connector sync, credential storage,
-document ingestion, search indexing, legal determinations, or vendor
+issuance, SSO, user directories, credential storage, vendor-specific network
+adapters, document ingestion, search indexing, legal determinations, or vendor
 write-back.
+
+## Live connector sync primitives
+
+CivicCore ships the storage-neutral pieces of the CivicRecords AI sync pattern
+so every CivicSuite module can share one retry and circuit-breaker contract
+without inheriting product-specific tables, credentials, or vendor adapters.
+
+```python
+from civiccore.connectors import (
+    SyncCircuitState,
+    SyncRunResult,
+    apply_sync_run_result,
+    build_sync_operator_status,
+)
+
+state = SyncCircuitState(connector="legistar", source_name="Legistar production")
+state = apply_sync_run_result(
+    state,
+    SyncRunResult(records_discovered=1, records_succeeded=0, records_failed=1),
+)
+status = build_sync_operator_status(state)
+assert status.public_dict()["health_status"] == "degraded"
+```
+
+The shared circuit opens after five consecutive full-run failures by default,
+or after two failures when the source is in a configured grace period. Modules
+still own their ORM rows, scheduler, credential store, vendor-specific fetch
+logic, and UI, but they should use this shared state machine and operator copy
+instead of reimplementing it.
 
 ## Auth helper
 
@@ -434,7 +466,7 @@ Extraction Spec** in
 
 Every CivicSuite module's README declares its CivicCore dependency contract.
 Current v0.1.0 module foundations pin older civiccore lines. Production-depth
-consumers can move to `==0.17.0` once the release is published and the
+consumers can move to `==0.18.0` once the release is published and the
 compatibility matrix is updated. The suite-wide compatibility matrix — which
 module versions work with which CivicCore versions — is maintained at
 [CivicSuite/civicsuite/docs/compatibility/](https://github.com/CivicSuite/civicsuite/tree/main/docs/compatibility).

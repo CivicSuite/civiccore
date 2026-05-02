@@ -14,6 +14,20 @@ from civiccore.connectors.manifest import (
     ManifestValidationError,
     validate_manifest,
 )
+from civiccore.connectors.sync import (
+    SyncCircuitPolicy,
+    SyncCircuitState,
+    SyncHealthStatus,
+    SyncOperatorStatus,
+    SyncRetryExhausted,
+    SyncRetryPolicy,
+    SyncRunResult,
+    apply_sync_run_result,
+    build_sync_operator_status,
+    compute_retry_delay,
+    compute_sync_health_status,
+    with_http_retry,
+)
 
 __all__ = [
     "ConnectorImportError",
@@ -24,6 +38,18 @@ __all__ = [
     "ManifestFile",
     "ManifestValidationError",
     "SUPPORTED_CONNECTORS",
+    "SyncCircuitPolicy",
+    "SyncCircuitState",
+    "SyncHealthStatus",
+    "SyncOperatorStatus",
+    "SyncRetryExhausted",
+    "SyncRetryPolicy",
+    "SyncRunResult",
+    "apply_sync_run_result",
+    "build_sync_operator_status",
+    "compute_retry_delay",
+    "compute_sync_health_status",
     "import_meeting_payload",
     "validate_manifest",
+    "with_http_retry",
 ]

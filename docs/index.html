@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="CivicCore v0.17.0 - shared platform library for the open-source CivicSuite municipal operations suite. Not an end-user app. Apache 2.0.">
-<title>CivicCore v0.17.0 - CivicSuite shared platform library</title>
+<meta name="description" content="CivicCore v0.18.0 - shared platform library for the open-source CivicSuite municipal operations suite. Not an end-user app. Apache 2.0.">
+<title>CivicCore v0.18.0 - CivicSuite shared platform library</title>
   <style>
     :root {
       --text: #1f2328;
@@ -136,7 +136,7 @@
         <li><code>civiccore.llm</code> - providers, templates, model registry, context utilities, and structured output.</li>
         <li><code>civiccore.audit</code> - hash-chained audit primitives plus legacy-compatible persisted audit-log verification helpers.</li>
         <li><code>civiccore.provenance</code> - source, citation, document, and provenance metadata contracts.</li>
-        <li><code>civiccore.connectors</code> - offline import/export manifest schemas plus local-first import helpers for supported agenda-platform payloads.</li>
+        <li><code>civiccore.connectors</code> - offline import/export manifest schemas, local-first import helpers, and live-sync retry/circuit-breaker primitives for supported agenda-platform payloads.</li>
         <li><code>civiccore.exports</code> - static export-bundle manifest and checksum helpers.</li>
         <li><code>civiccore.auth</code> - bearer-token auth helpers plus trusted-header reverse-proxy config and source-boundary helpers for protected staff routes.</li>
         <li><code>civiccore.city_profile</code> - local city/deployment configuration models.</li>
@@ -148,6 +148,7 @@
         <li><code>civiccore.verification</code> - content-bound browser QA release-evidence validation helpers.</li>
         <li><code>civiccore.search</code> - deterministic query normalization, shared text matching, permission-aware access checks, and reciprocal-rank-fusion helpers.</li>
         <li><code>civiccore.connectors</code> - local-payload meeting import normalization with shared source provenance and actionable fix-path errors.</li>
+        <li><code>civiccore.connectors</code> - storage-neutral live connector sync retry/circuit-breaker primitives with actionable operator health copy.</li>
         <li><code>civiccore.notifications</code> - deterministic notice deadline planning plus publication-compliance warning helpers.</li>
         <li><code>civiccore.onboarding</code> - storage-neutral profile interview field-order, answer-parsing, completion-state, and next-question helpers.</li>
       </ul>
@@ -163,7 +164,7 @@
         <li><code>civiccore.scaffold</code> - scaffolding helpers.</li>
         <li><code>civiccore.search</code> - full search engine, index storage, and database-backed retrieval orchestration.</li>
         <li><code>civiccore.verification</code> - sovereignty verification.</li>
-        <li>Live connector sync, credential storage, vendor write-back, and legal determinations.</li>
+        <li>Credential storage, vendor-specific network adapters, vendor write-back, and legal determinations.</li>
       </ul>
 
       <figure style="margin: 2em 0;">
@@ -174,8 +175,8 @@
 
     <section aria-labelledby="install">
       <h2 id="install">Install</h2>
-      <p>From the current GitHub release wheel (<code>v0.17.0</code>, once published) - civiccore is GitHub-wheel-only, not on PyPI:</p>
-      <pre><code>pip install https://github.com/CivicSuite/civiccore/releases/download/v0.17.0/civiccore-0.17.0-py3-none-any.whl</code></pre>
+      <p>From the current GitHub release wheel (<code>v0.18.0</code>, once published) - civiccore is GitHub-wheel-only, not on PyPI:</p>
+      <pre><code>pip install https://github.com/CivicSuite/civiccore/releases/download/v0.18.0/civiccore-0.18.0-py3-none-any.whl</code></pre>
       <p>For development from a clone:</p>
       <pre><code>git clone https://github.com/CivicSuite/civiccore.git
 cd civiccore
@@ -191,8 +192,9 @@ pip install -e .[dev]</code></pre>
       <h2 id="status">Status</h2>
       <div class="status">
         <p>
-          <strong>v0.17.0 is the current development-line release.</strong>
-          The current development line adds persisted audit-log hash and verification helpers for
+          <strong>v0.18.0 is the current development-line release.</strong>
+          The current development line adds live connector sync retry/circuit-breaker primitives
+          and persisted audit-log hash and verification helpers for
           database-backed module audit rows on top of shared <code>civiccore.ingest</code>
           discovery/fetch and cited-source validation contracts on top of shared <code>civiccore.security</code>
           connector host-validation and encrypted-config helpers on top of shared <code>civiccore.onboarding</code>
@@ -216,6 +218,7 @@ pip install -e .[dev]</code></pre>
         <li><strong>Audit chains</strong> - <code>AuditActor</code>, <code>AuditSubject</code>, <code>AuditEvent</code>, <code>AuditHashChain</code>, <code>PersistedAuditLogEntry</code>, <code>compute_persisted_audit_hash</code>, and <code>verify_persisted_audit_chain</code>.</li>
         <li><strong>Provenance</strong> - <code>SourceReference</code>, <code>SourceKind</code>, <code>CitationTarget</code>, <code>DocumentMetadata</code>, <code>ProvenanceBundle</code>.</li>
         <li><strong>Manifests and exports</strong> - <code>ImportManifest</code>, <code>ExportManifest</code>, <code>validate_manifest</code>, <code>ExportBundle</code>, <code>write_manifest</code>, <code>validate_bundle</code>.</li>
+        <li><strong>Connector sync</strong> - <code>SyncCircuitState</code>, <code>SyncRunResult</code>, <code>apply_sync_run_result</code>, <code>build_sync_operator_status</code>, <code>SyncRetryPolicy</code>, and <code>with_http_retry</code>.</li>
         <li><strong>City profiles</strong> - <code>CityProfile</code>, <code>DepartmentProfile</code>, <code>DeploymentProfile</code>, <code>ModuleEnablement</code>, <code>load_city_profile</code>.</li>
         <li><strong>Auth helper</strong> - <code>civiccore.auth</code> bearer-token role checks plus trusted-header config loading and proxy-source enforcement for non-public FastAPI routes.</li>
         <li><strong>Verification helper</strong> - <code>civiccore.verification</code> content-bound browser QA release evidence validation.</li>
@@ -234,7 +237,7 @@ pip install -e .[dev]</code></pre>
       <h2 id="compat">Compatibility</h2>
       <p>
         <strong>Current module foundations span older civiccore lines while newer product-depth consumers already target later releases.</strong>
-          Production-depth consumers can target civiccore v0.17.0 once the compatibility matrix is updated. Every CivicSuite
+          Production-depth consumers can target civiccore v0.18.0 once the compatibility matrix is updated. Every CivicSuite
           module's README declares a CivicCore version range.
         </p>
     </section>

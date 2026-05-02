@@ -1,6 +1,6 @@
 # CivicCore User Manual
 
-Version: v0.17.0 (current development-line release)
+Version: v0.18.0 (current development-line release)
 Repository: https://github.com/CivicSuite/civiccore
 License: Apache 2.0
 
@@ -37,8 +37,9 @@ shared foundation those applications import.
   helpers.
 - `civiccore.provenance` - source, citation, document, and provenance metadata
   contracts.
-- `civiccore.connectors` - offline import/export manifest schemas plus
-  local-first import helpers for supported agenda-platform payloads.
+- `civiccore.connectors` - offline import/export manifest schemas,
+  local-first import helpers for supported agenda-platform payloads, and
+  storage-neutral live-sync retry/circuit-breaker primitives.
 - `civiccore.exports` - static export-bundle manifest and checksum helpers.
 - `civiccore.city_profile` - local city/deployment configuration models.
 - `civiccore.auth` - bearer-token role helpers plus trusted-header config and
@@ -61,10 +62,10 @@ and `civiccore.scaffold`.
 full web onboarding flows and persistence orchestration are still not
 shipped platform behavior.
 
-Live connector sync, credential storage, vendor write-back, document ingestion,
-search indexing, notification delivery queues, and legal determinations are also not
-shipped platform behaviors. Downstream modules must not promote those behaviors
-as shipped CivicCore capability.
+Credential storage, vendor-specific network adapters, vendor write-back,
+document ingestion, search indexing, notification delivery queues, and legal
+determinations are also not shipped platform behaviors. Downstream modules must
+not promote those behaviors as shipped CivicCore capability.
 
 ### Why Municipal Teams Should Care
 
@@ -84,7 +85,7 @@ as shipped CivicCore capability.
 CivicCore is distributed as GitHub release artifacts, not PyPI packages:
 
 ```bash
-pip install https://github.com/CivicSuite/civiccore/releases/download/v0.17.0/civiccore-0.17.0-py3-none-any.whl
+pip install https://github.com/CivicSuite/civiccore/releases/download/v0.18.0/civiccore-0.18.0-py3-none-any.whl
 ```
 
 Each release publishes `SHA256SUMS.txt` next to the wheel and source
@@ -92,7 +93,7 @@ distribution. Verify checksums before promoting a release artifact:
 
 ```bash
 curl -L -o SHA256SUMS.txt \
-  https://github.com/CivicSuite/civiccore/releases/download/v0.17.0/SHA256SUMS.txt
+  https://github.com/CivicSuite/civiccore/releases/download/v0.18.0/SHA256SUMS.txt
 sha256sum -c SHA256SUMS.txt
 ```
 
@@ -189,6 +190,34 @@ assert verify_persisted_audit_chain([
 These primitives are storage-neutral. They give downstream modules a consistent
 contract without dictating where records are stored.
 
+### Use Live Connector Sync Primitives
+
+Use `civiccore.connectors` for the shared retry and circuit-breaker state
+machine when a module pulls from a live vendor system. The module still owns
+its scheduler, tables, credentials, and vendor-specific fetch adapter.
+
+```python
+from civiccore.connectors import (
+    SyncCircuitState,
+    SyncRunResult,
+    apply_sync_run_result,
+    build_sync_operator_status,
+)
+
+state = SyncCircuitState(connector="granicus", source_name="Granicus production")
+state = apply_sync_run_result(
+    state,
+    SyncRunResult(records_discovered=4, records_succeeded=3, records_failed=1),
+)
+status = build_sync_operator_status(state)
+print(status.public_dict()["message"])
+```
+
+Default behavior matches the CivicRecords AI pattern: healthy after successful
+runs, degraded while failures remain, and circuit-open after five consecutive
+full-run failures. Grace-period sources open after two full-run failures so
+operators see the problem before scheduled pulls keep compounding it.
+
 ### Run Migrations from a Consumer
 
 CivicCore migrations run before a downstream module's migrations. Consumer
@@ -212,7 +241,7 @@ Shipped implementation in the current development line:
 civiccore/
   audit/        hash-chained audit primitives and persisted audit-log helpers
   city_profile/ local city/deployment configuration models
-  connectors/   offline manifests plus local-first import helpers
+  connectors/   offline manifests, local-first import helpers, live-sync primitives
   db/           shared SQLAlchemy declarative Base
   exports/      static export-bundle helpers
   llm/          providers, templates, registry, context, structured output
@@ -253,7 +282,7 @@ them.
 ### Compatibility
 
 Current v0.1.0 module foundations still pin older civiccore lines.
-Production-depth consumers can move to `civiccore==0.17.0` once the release is published
+Production-depth consumers can move to `civiccore==0.18.0` once the release is published
 and the suite compatibility matrix is updated.
 
 The suite-wide matrix lives at:

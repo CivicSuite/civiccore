@@ -5,12 +5,13 @@ Current development-line surface includes migrations, a shared SQLAlchemy
 metadata contracts, offline import/export manifests, export bundle helpers,
 local city profile configuration, and small auth helpers for protected or
 mixed public/staff FastAPI routes, including bearer-token and trusted-header
-reverse-proxy bridges. CivicCore is a library, not an end-user application.
+reverse-proxy bridges, plus live connector sync retry and circuit-breaker
+primitives. CivicCore is a library, not an end-user application.
 """
 
 from __future__ import annotations
 
-__version__ = "0.17.0"
+__version__ = "0.18.0"
 
 from civiccore.audit import (
     AuditActor,
@@ -41,8 +42,20 @@ from civiccore.connectors import (
     ManifestFile,
     ManifestValidationError,
     SUPPORTED_CONNECTORS,
+    SyncCircuitPolicy,
+    SyncCircuitState,
+    SyncHealthStatus,
+    SyncOperatorStatus,
+    SyncRetryExhausted,
+    SyncRetryPolicy,
+    SyncRunResult,
+    apply_sync_run_result,
+    build_sync_operator_status,
+    compute_retry_delay,
+    compute_sync_health_status,
     import_meeting_payload,
     validate_manifest,
+    with_http_retry,
 )
 from civiccore.exports import (
     BundleFile,
@@ -138,8 +151,20 @@ __all__ = [
     "ManifestFile",
     "ManifestValidationError",
     "SUPPORTED_CONNECTORS",
+    "SyncCircuitPolicy",
+    "SyncCircuitState",
+    "SyncHealthStatus",
+    "SyncOperatorStatus",
+    "SyncRetryExhausted",
+    "SyncRetryPolicy",
+    "SyncRunResult",
+    "apply_sync_run_result",
+    "build_sync_operator_status",
+    "compute_retry_delay",
+    "compute_sync_health_status",
     "import_meeting_payload",
     "validate_manifest",
+    "with_http_retry",
     "BundleFile",
     "ExportBundle",
     "build_sha256sums",

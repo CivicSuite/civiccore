@@ -11,6 +11,21 @@ breaking changes to the public API surface (Appendix A of that spec) ship
 as MAJOR releases; new symbols or backward-compatible behavior ship as
 MINOR; bug fixes ship as PATCH.
 
+## [0.18.0] - 2026-05-02
+
+### Added
+- `civiccore.connectors.SyncCircuitState`, `SyncRunResult`, and
+  `apply_sync_run_result()` now ship the storage-neutral CivicRecords AI
+  live-sync circuit-breaker pattern for downstream modules.
+- `civiccore.connectors.SyncCircuitPolicy` and
+  `build_sync_operator_status()` now provide configurable thresholds and
+  actionable operator copy for healthy, degraded, and circuit-open sync states.
+- `civiccore.connectors.SyncRetryPolicy`, `compute_retry_delay()`,
+  `with_http_retry()`, and `SyncRetryExhausted` now ship a shared async HTTP
+  retry helper for `429`, `5xx`, timeout, and connection-error paths.
+- Package-root exports now expose the sync primitives so CivicRecords AI,
+  CivicClerk, and future modules can consume one shared implementation.
+
 ## [0.17.0] - 2026-05-01
 
 ### Added

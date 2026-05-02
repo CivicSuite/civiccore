@@ -20,8 +20,9 @@ What ships in the current development line:
   - civiccore.audit - hash-chained audit primitives plus persisted audit-log
     hash and verification helpers.
   - civiccore.provenance - source/provenance metadata contracts.
-  - civiccore.connectors - offline import/export manifest schemas plus
-    local-first import helpers for supported agenda-platform payloads.
+  - civiccore.connectors - offline import/export manifest schemas,
+    local-first import helpers for supported agenda-platform payloads, and
+    storage-neutral live-sync retry/circuit-breaker primitives.
   - civiccore.security - connector host validation plus encrypted JSON
     envelope helpers for secret-bearing config.
   - civiccore.exports - static export-bundle manifest and checksum helpers.
@@ -41,16 +42,17 @@ Still planned extraction targets:
   civiccore.onboarding now ships storage-neutral profile interview
   helpers, but not a web onboarding UI or persistence router.
 
-Live connector sync, credential storage, vendor write-back, document ingestion,
-search indexing, notification delivery queues, and legal determinations are
-still not shipped platform behaviors.
+Credential storage, vendor-specific network adapters, vendor write-back,
+document ingestion, search indexing, notification delivery queues, and legal
+determinations are still not shipped platform behaviors.
 
 Status
 ------
 
-v0.17.0 is the current development-line release target. The current line now
-includes persisted audit-log hash and verification helpers on top of shared
-connector security/config helpers, onboarding profile helpers, auth helpers,
+v0.18.0 is the current development-line release target. The current line now
+includes live connector sync retry/circuit-breaker primitives and persisted
+audit-log hash and verification helpers on top of shared connector
+security/config helpers, onboarding profile helpers, auth helpers,
 verification helpers, shared search helpers, local-first connector import
 helpers, and notice deadline/compliance helpers on top of the audit,
 provenance, manifest, export-bundle, city-profile, migration, and LLM
@@ -62,7 +64,7 @@ Install
 
 From the current published GitHub release wheel:
 
-    pip install https://github.com/CivicSuite/civiccore/releases/download/v0.17.0/civiccore-0.17.0-py3-none-any.whl
+    pip install https://github.com/CivicSuite/civiccore/releases/download/v0.18.0/civiccore-0.18.0-py3-none-any.whl
 
 CivicCore is distributed as versioned GitHub release artifacts (not on PyPI).
 Each release publishes SHA256SUMS.txt alongside the wheel and sdist. Verify
@@ -97,6 +99,9 @@ Public API surface (high level)
   civiccore.connectors / civiccore.exports
     ConnectorImportError, ImportedAgendaItem, ImportedMeeting,
     SUPPORTED_CONNECTORS, import_meeting_payload,
+    SyncCircuitPolicy, SyncCircuitState, SyncRunResult,
+    apply_sync_run_result, build_sync_operator_status,
+    SyncRetryPolicy, with_http_retry,
     ImportManifest, ExportManifest, ManifestFile, validate_manifest,
     ExportBundle, BundleFile, write_manifest, build_sha256sums,
     validate_bundle
@@ -117,7 +122,7 @@ Compatibility
 -------------
 
 Current v0.1.0 module foundations still pin older civiccore lines.
-Production-depth consumers can move to civiccore ==0.17.0 once the release is published and the suite
+Production-depth consumers can move to civiccore ==0.18.0 once the release is published and the suite
 compatibility matrix are updated.
 
 The suite-wide compatibility matrix is maintained at:
