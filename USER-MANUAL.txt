@@ -1,7 +1,7 @@
 CivicCore User Manual
 =====================
 
-Version: v0.18.0 (current development-line release target)
+Version: v0.18.1 (current development-line release target)
 Repository: https://github.com/CivicSuite/civiccore
 License: Apache 2.0
 
@@ -63,12 +63,12 @@ Technical Guide
 
 Install from the GitHub release wheel:
 
-    pip install https://github.com/CivicSuite/civiccore/releases/download/v0.18.0/civiccore-0.18.0-py3-none-any.whl
+    pip install https://github.com/CivicSuite/civiccore/releases/download/v0.18.1/civiccore-0.18.1-py3-none-any.whl
 
 Verify the release artifact:
 
     curl -L -o SHA256SUMS.txt \
-      https://github.com/CivicSuite/civiccore/releases/download/v0.18.0/SHA256SUMS.txt
+      https://github.com/CivicSuite/civiccore/releases/download/v0.18.1/SHA256SUMS.txt
     sha256sum -c SHA256SUMS.txt
 
 For local development:
@@ -144,7 +144,7 @@ Compatibility
 -------------
 
 Current v0.1.0 module foundations still pin older civiccore lines.
-Production-depth consumers can move to civiccore ==0.18.0 once the release is published and
+Production-depth consumers can move to civiccore ==0.18.1 once the release is published and
 the suite compatibility matrix is updated.
 
 Compatibility matrix:

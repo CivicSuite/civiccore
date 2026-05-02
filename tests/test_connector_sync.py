@@ -96,8 +96,8 @@ def test_build_sync_operator_status_returns_actionable_fix_copy() -> None:
     assert status.public_dict()["fix"] == status.fix
 
 
-def test_compute_retry_delay_honors_retry_after_ceiling_and_deterministic_jitter() -> None:
-    policy = SyncRetryPolicy(jitter_factor=0.2, max_retry_after_seconds=10.0)
+def test_compute_retry_delay_honors_retry_after_cap_without_jitter() -> None:
+    policy = SyncRetryPolicy(jitter_factor=0.2, retry_after_cap_seconds=10.0)
 
     assert compute_retry_delay(1, policy=policy, random_value=0.5) == 2.0
     assert compute_retry_delay(
@@ -105,8 +105,8 @@ def test_compute_retry_delay_honors_retry_after_ceiling_and_deterministic_jitter
         retry_after_seconds=4.0,
         policy=policy,
         random_value=1.0,
-    ) == 4.8
-    assert compute_retry_delay(0, retry_after_seconds=11.0, policy=policy) is None
+    ) == 4.0
+    assert compute_retry_delay(0, retry_after_seconds=11.0, policy=policy) == 10.0
 
 
 @pytest.mark.asyncio
