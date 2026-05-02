@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="CivicCore v0.20.0 - shared platform library for the open-source CivicSuite municipal operations suite. Not an end-user app. Apache 2.0.">
-<title>CivicCore v0.20.0 - CivicSuite shared platform library</title>
+<meta name="description" content="CivicCore v0.21.0 - shared platform library for the open-source CivicSuite municipal operations suite. Not an end-user app. Apache 2.0.">
+<title>CivicCore v0.21.0 - CivicSuite shared platform library</title>
   <style>
     :root {
       --text: #1f2328;
@@ -151,6 +151,7 @@
         <li><code>civiccore.connectors</code> - storage-neutral live connector sync retry/circuit-breaker primitives with actionable operator health copy.</li>
         <li><code>civiccore.notifications</code> - deterministic notice deadline planning plus publication-compliance warning helpers.</li>
         <li><code>civiccore.onboarding</code> - storage-neutral profile interview field-order, answer-parsing, completion-state, and next-question helpers.</li>
+        <li><code>civiccore.scheduling</code> - cron validation and next-run helpers for module background jobs.</li>
       </ul>
 
       <h3>Still planned extraction targets</h3>
@@ -161,6 +162,7 @@
         <li><code>civiccore.ingest</code> - shared discovery/fetch record contracts plus cited-source validation helpers.</li>
         <li><code>civiccore.notifications</code> - delivery queues and outbound notification orchestration.</li>
         <li><code>civiccore.onboarding</code> - web onboarding UI and persistence orchestration.</li>
+        <li><code>civiccore.scheduling</code> - scheduler runtime and task queue orchestration.</li>
         <li><code>civiccore.scaffold</code> - scaffolding helpers.</li>
         <li><code>civiccore.search</code> - full search engine, index storage, and database-backed retrieval orchestration.</li>
         <li><code>civiccore.verification</code> - sovereignty verification.</li>
@@ -175,8 +177,8 @@
 
     <section aria-labelledby="install">
       <h2 id="install">Install</h2>
-      <p>From the current GitHub release wheel (<code>v0.20.0</code>, once published) - civiccore is GitHub-wheel-only, not on PyPI:</p>
-      <pre><code>pip install https://github.com/CivicSuite/civiccore/releases/download/v0.20.0/civiccore-0.20.0-py3-none-any.whl</code></pre>
+      <p>From the current GitHub release wheel (<code>v0.21.0</code>, once published) - civiccore is GitHub-wheel-only, not on PyPI:</p>
+      <pre><code>pip install https://github.com/CivicSuite/civiccore/releases/download/v0.21.0/civiccore-0.21.0-py3-none-any.whl</code></pre>
       <p>For development from a clone:</p>
       <pre><code>git clone https://github.com/CivicSuite/civiccore.git
 cd civiccore
@@ -192,8 +194,9 @@ pip install -e .[dev]</code></pre>
       <h2 id="status">Status</h2>
       <div class="status">
         <p>
-          <strong>v0.20.0 is the current development-line release.</strong>
-          The current development line adds startup config validation helpers,
+          <strong>v0.21.0 is the current development-line release.</strong>
+          The current development line adds cron schedule validation helpers,
+          startup config validation helpers,
           vendor delta request planning, reusable mock-city proof contracts, live connector sync retry/circuit-breaker primitives
           and persisted audit-log hash and verification helpers for
           database-backed module audit rows on top of shared <code>civiccore.ingest</code>
@@ -227,6 +230,7 @@ pip install -e .[dev]</code></pre>
         <li><strong>Connector import helpers</strong> - <code>civiccore.connectors</code> local-first meeting import normalization, actionable fix-path errors, and source provenance builders.</li>
         <li><strong>Notice helpers</strong> - <code>civiccore.notifications</code> deadline planning plus publication-compliance warning contracts.</li>
         <li><strong>Onboarding helpers</strong> - <code>civiccore.onboarding</code> field order, answer normalization, completion-state, and skip-aware next-question selection.</li>
+        <li><strong>Scheduling helpers</strong> - <code>civiccore.scheduling</code> cron interval validation and next-run calculation for module background jobs.</li>
         <li><strong>Mock-city contracts</strong> - <code>civiccore.testing.mock_city</code> no-network vendor, municipal OIDC, and backup-retention proof contracts.</li>
       </ul>
       <figure style="margin: 2em 0;">
@@ -239,7 +243,7 @@ pip install -e .[dev]</code></pre>
       <h2 id="compat">Compatibility</h2>
       <p>
         <strong>Current module foundations span older civiccore lines while newer product-depth consumers already target later releases.</strong>
-          Production-depth consumers can target civiccore v0.20.0 once the compatibility matrix is updated. Every CivicSuite
+          Production-depth consumers can target civiccore v0.21.0 once the compatibility matrix is updated. Every CivicSuite
           module's README declares a CivicCore version range.
         </p>
     </section>

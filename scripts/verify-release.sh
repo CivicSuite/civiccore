@@ -153,6 +153,8 @@ def main() -> int:
                     "assert callable(civiccore.plan_vendor_delta_request); "
                     "assert callable(civiccore.build_deadline_plan); "
                     "assert callable(civiccore.evaluate_notice_compliance); "
+                    "assert callable(civiccore.validate_cron_expression); "
+                    "assert callable(civiccore.compute_next_sync_at); "
                     "assert callable(civiccore.compute_onboarding_status); "
                     "assert callable(civiccore.next_profile_prompt); "
                     "assert civiccore.AuditHashChain; "
