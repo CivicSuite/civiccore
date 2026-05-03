@@ -14,7 +14,7 @@ CivicCore is a library, not an end-user application.
 
 from __future__ import annotations
 
-__version__ = "0.21.0"
+__version__ = "0.22.0"
 
 from civiccore.audit import (
     AuditActor,
@@ -53,9 +53,11 @@ from civiccore.connectors import (
     SyncRetryExhausted,
     SyncRetryPolicy,
     SyncRunResult,
+    SyncSourceStatus,
     VendorDeltaRequestPlan,
     apply_sync_run_result,
     build_sync_operator_status,
+    build_sync_source_status,
     compute_retry_delay,
     compute_sync_health_status,
     import_meeting_payload,
@@ -179,9 +181,11 @@ __all__ = [
     "SyncRetryExhausted",
     "SyncRetryPolicy",
     "SyncRunResult",
+    "SyncSourceStatus",
     "VendorDeltaRequestPlan",
     "apply_sync_run_result",
     "build_sync_operator_status",
+    "build_sync_source_status",
     "compute_retry_delay",
     "compute_sync_health_status",
     "import_meeting_payload",

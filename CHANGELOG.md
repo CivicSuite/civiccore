@@ -11,6 +11,19 @@ breaking changes to the public API surface (Appendix A of that spec) ship
 as MAJOR releases; new symbols or backward-compatible behavior ship as
 MINOR; bug fixes ship as PATCH.
 
+## [0.22.0] - 2026-05-03
+
+### Added
+- `civiccore.connectors.SyncSourceStatus` and `build_sync_source_status()` now
+  provide a storage-neutral source-list projection for downstream connector
+  workspaces. The helper combines CivicCore circuit health, active failure
+  counts, pause state, last status, actionable operator copy, and next scheduled
+  run calculation without importing any module ORM models.
+- Package-root exports and the release-gate clean-venv smoke now include the new
+  source-status projection so CivicRecords AI, CivicClerk, and future modules can
+  consume one shared health/next-run contract instead of hand-computing it per
+  router.
+
 ## [0.21.0] - 2026-05-02
 
 ### Added

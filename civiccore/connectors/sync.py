@@ -16,6 +16,7 @@ from datetime import UTC, datetime
 from typing import Literal, TypeVar
 
 import httpx
+from civiccore.scheduling import compute_next_sync_at
 
 logger = logging.getLogger(__name__)
 
@@ -112,6 +113,38 @@ class SyncOperatorStatus:
             "active_failure_count": self.active_failure_count,
             "sync_paused": self.sync_paused,
             "sync_paused_reason": self.sync_paused_reason,
+            "message": self.message,
+            "fix": self.fix,
+        }
+
+
+@dataclass(frozen=True)
+class SyncSourceStatus:
+    """Storage-neutral status projection for module connector source lists."""
+
+    connector: str
+    source_name: str
+    health_status: SyncHealthStatus
+    consecutive_failure_count: int
+    active_failure_count: int
+    sync_paused: bool
+    sync_paused_reason: str | None
+    last_sync_status: str | None
+    next_sync_at: datetime | None
+    message: str
+    fix: str
+
+    def public_dict(self) -> dict[str, str | int | bool | datetime | None]:
+        return {
+            "connector": self.connector,
+            "source_name": self.source_name,
+            "health_status": self.health_status,
+            "consecutive_failure_count": self.consecutive_failure_count,
+            "active_failure_count": self.active_failure_count,
+            "sync_paused": self.sync_paused,
+            "sync_paused_reason": self.sync_paused_reason,
+            "last_sync_status": self.last_sync_status,
+            "next_sync_at": self.next_sync_at,
             "message": self.message,
             "fix": self.fix,
         }
@@ -302,6 +335,41 @@ def build_sync_operator_status(
         sync_paused_reason=state.sync_paused_reason,
         message=message,
         fix=fix,
+    )
+
+
+def build_sync_source_status(
+    state: SyncCircuitState,
+    *,
+    sync_schedule: str | None = None,
+    schedule_enabled: bool = True,
+    last_sync_at: datetime | None = None,
+    policy: SyncCircuitPolicy | None = None,
+) -> SyncSourceStatus:
+    """Return shared source-list health, pause, and next-run projection.
+
+    Product modules own persistence and authorization. CivicCore owns the
+    repeated semantics: circuit-open beats degraded, active failures degrade
+    health, paused sources do not advertise a next scheduled run, and operator
+    copy always includes a fix path.
+    """
+
+    operator = build_sync_operator_status(state, policy=policy)
+    next_sync_at = None
+    if sync_schedule and schedule_enabled and not state.sync_paused:
+        next_sync_at = compute_next_sync_at(sync_schedule, last_sync_at)
+    return SyncSourceStatus(
+        connector=operator.connector,
+        source_name=operator.source_name,
+        health_status=operator.health_status,
+        consecutive_failure_count=operator.consecutive_failure_count,
+        active_failure_count=operator.active_failure_count,
+        sync_paused=operator.sync_paused,
+        sync_paused_reason=operator.sync_paused_reason,
+        last_sync_status=state.last_sync_status,
+        next_sync_at=next_sync_at,
+        message=operator.message,
+        fix=operator.fix,
     )
 
 

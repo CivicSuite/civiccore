@@ -1,7 +1,7 @@
 CivicCore User Manual
 =====================
 
-Version: v0.21.0 (current development-line release target)
+Version: v0.22.0 (current development-line release target)
 Repository: https://github.com/CivicSuite/civiccore
 License: Apache 2.0
 
@@ -30,8 +30,8 @@ What the current development line ships:
     hash and verification helpers.
   - civiccore.provenance - source/provenance metadata contracts.
   - civiccore.connectors - offline import/export manifest schemas,
-    local-first import helpers for supported agenda-platform payloads, and
-    storage-neutral live-sync retry/circuit-breaker primitives.
+    local-first import helpers for supported agenda-platform payloads,
+    storage-neutral live-sync retry/circuit-breaker primitives, and source-list status projections.
   - civiccore.exports - static export-bundle manifest and checksum helpers.
   - civiccore.city_profile - local city/deployment configuration models.
   - civiccore.auth - bearer-token role helpers for protected or mixed
@@ -65,12 +65,12 @@ Technical Guide
 
 Install from the GitHub release wheel:
 
-    pip install https://github.com/CivicSuite/civiccore/releases/download/v0.21.0/civiccore-0.21.0-py3-none-any.whl
+    pip install https://github.com/CivicSuite/civiccore/releases/download/v0.22.0/civiccore-0.22.0-py3-none-any.whl
 
 Verify the release artifact:
 
     curl -L -o SHA256SUMS.txt \
-      https://github.com/CivicSuite/civiccore/releases/download/v0.21.0/SHA256SUMS.txt
+      https://github.com/CivicSuite/civiccore/releases/download/v0.22.0/SHA256SUMS.txt
     sha256sum -c SHA256SUMS.txt
 
 For local development:
@@ -130,8 +130,8 @@ Shipped implementation in the current development line:
 
   audit, city_profile, connectors, db, exports, llm, migrations,
   notifications, onboarding, provenance, scheduling
-  connectors include offline manifests, local-first import helpers, and
-  live-sync retry/circuit-breaker primitives
+  connectors include offline manifests, local-first import helpers,
+  live-sync retry/circuit-breaker primitives, and source-list status projections
   notifications include notice deadline + compliance helpers
   scheduling includes cron validation and next-run helpers
 
@@ -147,7 +147,7 @@ Compatibility
 -------------
 
 Current v0.1.0 module foundations still pin older civiccore lines.
-Production-depth consumers can move to civiccore ==0.21.0 once the release is published and
+Production-depth consumers can move to civiccore ==0.22.0 once the release is published and
 the suite compatibility matrix is updated.
 
 Compatibility matrix:

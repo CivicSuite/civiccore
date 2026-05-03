@@ -22,8 +22,8 @@ What ships in the current development line:
   - civiccore.provenance - source/provenance metadata contracts.
   - civiccore.connectors - offline import/export manifest schemas,
     local-first import helpers for supported agenda-platform payloads,
-    vendor delta request planning, and storage-neutral live-sync
-    retry/circuit-breaker primitives.
+    vendor delta request planning, storage-neutral live-sync
+    retry/circuit-breaker primitives, and source-list status projections.
   - civiccore.testing - no-network mock-city proof contracts for supported
     agenda vendors, municipal OIDC, and backup-retention/off-host readiness.
   - civiccore.security - connector host validation, startup config
@@ -54,8 +54,8 @@ determinations are still not shipped platform behaviors.
 Status
 ------
 
-v0.21.0 is the current development-line release target. The current line now
-includes shared cron schedule validation helpers, startup config validation helpers, vendor delta planning,
+v0.22.0 is the current development-line release target. The current line now
+includes shared connector source-list status projection helpers, cron schedule validation helpers, startup config validation helpers, vendor delta planning,
 reusable mock-city proof contracts, live connector sync retry/circuit-breaker
 primitives, and persisted audit-log hash and verification helpers on top of
 shared connector security/config helpers, onboarding profile helpers, auth helpers,
@@ -70,7 +70,7 @@ Install
 
 From the current published GitHub release wheel:
 
-    pip install https://github.com/CivicSuite/civiccore/releases/download/v0.21.0/civiccore-0.21.0-py3-none-any.whl
+    pip install https://github.com/CivicSuite/civiccore/releases/download/v0.22.0/civiccore-0.22.0-py3-none-any.whl
 
 CivicCore is distributed as versioned GitHub release artifacts (not on PyPI).
 Each release publishes SHA256SUMS.txt alongside the wheel and sdist. Verify
@@ -105,8 +105,8 @@ Public API surface (high level)
   civiccore.connectors / civiccore.exports
     ConnectorImportError, ImportedAgendaItem, ImportedMeeting,
     SUPPORTED_CONNECTORS, import_meeting_payload,
-    SyncCircuitPolicy, SyncCircuitState, SyncRunResult,
-    apply_sync_run_result, build_sync_operator_status,
+    SyncCircuitPolicy, SyncCircuitState, SyncRunResult, SyncSourceStatus,
+    apply_sync_run_result, build_sync_operator_status, build_sync_source_status,
     SyncRetryPolicy, with_http_retry,
     ImportManifest, ExportManifest, ManifestFile, validate_manifest,
     ExportBundle, BundleFile, write_manifest, build_sha256sums,
@@ -131,7 +131,7 @@ Compatibility
 -------------
 
 Current v0.1.0 module foundations still pin older civiccore lines.
-Production-depth consumers can move to civiccore ==0.21.0 once the release is published and the suite
+Production-depth consumers can move to civiccore ==0.22.0 once the release is published and the suite
 compatibility matrix are updated.
 
 The suite-wide compatibility matrix is maintained at:

@@ -1,6 +1,6 @@
 # CivicCore User Manual
 
-Version: v0.21.0 (current development-line release)
+Version: v0.22.0 (current development-line release)
 Repository: https://github.com/CivicSuite/civiccore
 License: Apache 2.0
 
@@ -40,7 +40,7 @@ shared foundation those applications import.
 - `civiccore.connectors` - offline import/export manifest schemas,
   local-first import helpers for supported agenda-platform payloads, and
   storage-neutral live-sync retry/circuit-breaker primitives plus vendor
-  delta request planning.
+  delta request planning and source-list status projection.
 - `civiccore.testing` - no-network mock-city proof contracts for supported
   agenda vendors, municipal OIDC, and backup-retention/off-host readiness.
 - `civiccore.exports` - static export-bundle manifest and checksum helpers.
@@ -90,7 +90,7 @@ not promote those behaviors as shipped CivicCore capability.
 CivicCore is distributed as GitHub release artifacts, not PyPI packages:
 
 ```bash
-pip install https://github.com/CivicSuite/civiccore/releases/download/v0.21.0/civiccore-0.21.0-py3-none-any.whl
+pip install https://github.com/CivicSuite/civiccore/releases/download/v0.22.0/civiccore-0.22.0-py3-none-any.whl
 ```
 
 Each release publishes `SHA256SUMS.txt` next to the wheel and source
@@ -98,7 +98,7 @@ distribution. Verify checksums before promoting a release artifact:
 
 ```bash
 curl -L -o SHA256SUMS.txt \
-  https://github.com/CivicSuite/civiccore/releases/download/v0.21.0/SHA256SUMS.txt
+  https://github.com/CivicSuite/civiccore/releases/download/v0.22.0/SHA256SUMS.txt
 sha256sum -c SHA256SUMS.txt
 ```
 
@@ -207,6 +207,7 @@ from civiccore.connectors import (
     SyncRunResult,
     apply_sync_run_result,
     build_sync_operator_status,
+    build_sync_source_status,
 )
 
 state = SyncCircuitState(connector="granicus", source_name="Granicus production")
@@ -216,12 +217,17 @@ state = apply_sync_run_result(
 )
 status = build_sync_operator_status(state)
 print(status.public_dict()["message"])
+source_status = build_sync_source_status(state, sync_schedule="0 2 * * *")
+print(source_status.public_dict()["next_sync_at"])
 ```
 
 Default behavior matches the CivicRecords AI pattern: healthy after successful
 runs, degraded while failures remain, and circuit-open after five consecutive
 full-run failures. Grace-period sources open after two full-run failures so
 operators see the problem before scheduled pulls keep compounding it.
+Use `build_sync_source_status()` for list/card views that need the same health
+decision plus active failure counts, pause state, last status, actionable fix
+copy, and next scheduled run.
 
 ### Run Migrations from a Consumer
 
@@ -289,7 +295,7 @@ them.
 ### Compatibility
 
 Current v0.1.0 module foundations still pin older civiccore lines.
-Production-depth consumers can move to `civiccore==0.21.0` once the release is published
+Production-depth consumers can move to `civiccore==0.22.0` once the release is published
 and the suite compatibility matrix is updated.
 
 The suite-wide matrix lives at:
