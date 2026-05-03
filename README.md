@@ -20,7 +20,8 @@ small shared search helpers for deterministic text matching, generic
 permission-aware access checks, hybrid ranking fusion, and local-first connector import helpers for
 agenda-platform payload normalization with actionable error contracts and
 source provenance, storage-neutral live connector sync retry/circuit-breaker
-primitives with actionable operator health copy, connector delta request
+primitives with actionable operator health copy and shared source-list status
+projection, connector delta request
 planning, reusable mock-city proof contracts for vendor, municipal IdP, and
 backup-retention readiness, shared ingest contracts for connector discovery/fetch
 records and cited-source validation, plus shared notice deadline planning
@@ -42,7 +43,8 @@ helpers, but not delivery queues or outbound notification orchestration.
 `civiccore.verification` now ships the first release-evidence helper
 surface, while sovereignty verification remains future work.
 `civiccore.connectors` now also ships shared local-payload import
-normalization helpers and live-sync retry/circuit-breaker primitives for supported agenda platforms, while
+normalization helpers, live-sync retry/circuit-breaker primitives, and source-list
+status projection helpers for supported agenda platforms, while
 `civiccore.security` now ships shared connector-host validation,
 startup config validation, and encrypted JSON envelope helpers for secret-bearing config.
 `civiccore.scheduling` now ships storage-neutral cron validation and next-run
@@ -54,8 +56,11 @@ by downstream modules until they ship.
 
 ## Status
 
-**v0.21.0 is the current development-line release.** This line adds shared
-cron schedule validation helpers for module background jobs on top of shared
+**v0.22.0 is the current development-line release.** This line adds a shared
+connector source-list status projection that combines circuit health, active
+failure counts, pause state, actionable operator copy, and next-run calculation
+for module workspaces on top of shared cron schedule validation helpers for
+module background jobs on top of shared
 startup config validation helpers for placeholder detection, CSV env parsing,
 generic secret checks, Fernet key validation, and common-password rejection,
 on top of shared vendor delta request planning plus reusable no-network
@@ -103,10 +108,10 @@ shared-schema baseline extracted from CivicRecords AI).
 
 ## Install
 
-From the current GitHub release wheel (`v0.21.0`, once published):
+From the current GitHub release wheel (`v0.22.0`, once published):
 
 ```bash
-pip install https://github.com/CivicSuite/civiccore/releases/download/v0.21.0/civiccore-0.21.0-py3-none-any.whl
+pip install https://github.com/CivicSuite/civiccore/releases/download/v0.22.0/civiccore-0.22.0-py3-none-any.whl
 ```
 
 Each GitHub release also publishes `SHA256SUMS.txt` alongside the wheel and
@@ -302,6 +307,7 @@ from civiccore.connectors import (
     SyncRunResult,
     apply_sync_run_result,
     build_sync_operator_status,
+    build_sync_source_status,
 )
 
 state = SyncCircuitState(connector="legistar", source_name="Legistar production")
@@ -311,13 +317,15 @@ state = apply_sync_run_result(
 )
 status = build_sync_operator_status(state)
 assert status.public_dict()["health_status"] == "degraded"
+source_status = build_sync_source_status(state, sync_schedule="*/15 * * * *")
+assert source_status.public_dict()["active_failure_count"] == 0
 ```
 
 The shared circuit opens after five consecutive full-run failures by default,
 or after two failures when the source is in a configured grace period. Modules
 still own their ORM rows, scheduler, credential store, vendor-specific fetch
-logic, and UI, but they should use this shared state machine and operator copy
-instead of reimplementing it.
+logic, and UI, but they should use this shared state machine, operator copy, and
+source-list projection instead of reimplementing it.
 
 ## Auth helper
 
@@ -490,7 +498,7 @@ Extraction Spec** in
 
 Every CivicSuite module's README declares its CivicCore dependency contract.
 Current v0.1.0 module foundations pin older civiccore lines. Production-depth
-consumers can move to `==0.21.0` once the release is published and the
+consumers can move to `==0.22.0` once the release is published and the
 compatibility matrix is updated. The suite-wide compatibility matrix — which
 module versions work with which CivicCore versions — is maintained at
 [CivicSuite/civicsuite/docs/compatibility/](https://github.com/CivicSuite/civicsuite/tree/main/docs/compatibility).

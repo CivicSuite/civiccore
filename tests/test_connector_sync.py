@@ -13,6 +13,7 @@ from civiccore.connectors import (
     SyncRunResult,
     apply_sync_run_result,
     build_sync_operator_status,
+    build_sync_source_status,
     compute_retry_delay,
     compute_sync_health_status,
     with_http_retry,
@@ -161,3 +162,39 @@ def test_custom_sync_circuit_policy_changes_operator_copy_threshold() -> None:
 
     assert status.health_status == "degraded"
     assert "after 7 consecutive full-run failures" in status.fix
+
+
+def test_build_sync_source_status_includes_health_copy_and_next_run() -> None:
+    status = build_sync_source_status(
+        SyncCircuitState(
+            connector="rest_api",
+            source_name="Records vendor API",
+            active_failure_count=2,
+            last_sync_status="partial",
+        ),
+        sync_schedule="0 2 * * *",
+        last_sync_at=None,
+    )
+
+    assert status.health_status == "degraded"
+    assert status.active_failure_count == 2
+    assert status.last_sync_status == "partial"
+    assert status.next_sync_at == datetime(1970, 1, 1, 2, 0, tzinfo=UTC)
+    assert status.public_dict()["fix"] == status.fix
+
+
+def test_build_sync_source_status_suppresses_next_run_when_paused() -> None:
+    status = build_sync_source_status(
+        SyncCircuitState(
+            connector="legistar",
+            source_name="Legistar production",
+            sync_paused=True,
+            sync_paused_reason="Circuit open after 5 consecutive full-run failures.",
+        ),
+        sync_schedule="*/5 * * * *",
+        last_sync_at=datetime(2026, 5, 2, tzinfo=UTC),
+    )
+
+    assert status.health_status == "circuit_open"
+    assert status.next_sync_at is None
+    assert "correct the vendor credentials or endpoint" in status.fix
