@@ -1,50 +1,134 @@
 # Release Signing and Provenance
 
-CivicCore is now the canonical home for CivicSuite release-provenance gate
-logic. Downstream modules should call `python -m civiccore.release_provenance`
-or their local wrapper around `civiccore.release_provenance.main()` instead of
-copying release checks by hand.
+CivicCore is the canonical home for CivicSuite release-provenance gate logic.
+Downstream modules should call `python -m civiccore.release_provenance` or a
+thin local wrapper around `civiccore.release_provenance.main()`.
 
 Release provenance is a pre-flight gate, not post-publication forensics. A
 failing gate produces no release assets. There is no dev-process exemption, no
 localhost identity exception, and no "fix it in the next release" path.
 
-## Why This Gate Exists
+## Current Trust Model
 
 GitHub release pages can show a "Verified" badge for the target commit even
-when the release tag itself is lightweight or when the annotated tag object is
-unsigned. That visual presentation is misleading for procurement review: the
-commit may be GitHub-verified while the release pointer is not a verified tag
-object. CivicSuite therefore verifies the GitHub tag ref, tag object, target
-commit, committer identity, and release tree explicitly.
-
-## Current v0.22.x Signing Model
+when the release tag itself is lightweight or when an annotated tag object is
+unsigned. CivicSuite does not treat the tag as the trust root. The tag is a
+release pointer. The trust artifact is a Sigstore-signed
+`release-attestation.json` produced by the exact release workflow for the exact
+repo and tag.
 
 The acceptable release shape is:
 
 1. Merge the release PR through GitHub so the target commit is web-flow signed.
-2. Create a GitHub-verified annotated release tag object that points at that
-   verified target commit.
-3. Run the adversarial fixture suite before checking the real tag:
+2. Build release artifacts and `SHA256SUMS.txt`.
+3. Generate `release-attestation.json` using the version 1 schema in
+   `docs/ops/release-attestation.schema.json`.
+4. Serialize the attestation canonically with sorted JSON object keys, no extra
+   whitespace, and UTF-8 bytes. In Python, use
+   `civiccore.release_provenance.canonical_json_bytes()`.
+5. Sign the attestation with keyless Sigstore/cosign from GitHub Actions OIDC.
+6. Run the adversarial fixture suite before checking the real release:
 
    ```bash
    python scripts/verify-release-provenance.py --fixtures-dir tests/fixtures/release_provenance
    ```
 
-4. Run the live provenance gate before publishing release assets:
+7. Run the live provenance gate before publishing release assets:
 
    ```bash
    python scripts/verify-release-provenance.py vX.Y.Z \
      --repo CivicSuite/civiccore \
+     --attestation release-attestation.json \
+     --bundle release-attestation.json.bundle \
+     --artifacts-dir dist \
      --expected-target <verified-target-commit-sha> \
      --expected-tree <verified-release-tree-sha>
    ```
 
-5. Publish the GitHub Release and assets only after the pre-flight gate passes.
+8. Publish the GitHub Release and assets only after the pre-flight gate passes.
 
-The gate rejects lightweight tags, unsigned annotated tag objects, unsigned
-target commits, non-GitHub web-flow committer identities, mismatched committer
-fields, release-tree mismatch, and localhost/local tagger identities.
+The exact Sigstore certificate identity must be pinned per repo and per tag:
+
+```text
+https://github.com/CivicSuite/civiccore/.github/workflows/release.yml@refs/tags/vX.Y.Z
+```
+
+Do not replace this with an org-wide or repo-wide wildcard. A wildcard requires
+a written auditor-reviewed justification and a fixture proving the widened
+scope cannot verify another repo's release.
+
+## Version 1 Attestation Contract
+
+`release-attestation.json` has schema version `1` and must include:
+
+- `subject.repo`
+- `subject.tag`
+- `subject.tag_ref_type`
+- `subject.tag_ref_sha`
+- `subject.target_commit`
+- `subject.target_tree`
+- `build.workflow_identity`
+- `build.workflow_path`
+- `build.workflow_run_id`
+- `build.oidc_issuer`
+- `artifacts[].name`
+- `artifacts[].sha256`
+- `evidence_bundles[].name`
+- `evidence_bundles[].sha256`
+
+The schema is locked in `docs/ops/release-attestation.schema.json`. Schema
+changes require a new schema version and consumer rollout plan; do not add
+ad-hoc per-release fields.
+
+## Consumer Verification
+
+For online verification, download the release assets and run:
+
+```bash
+cosign verify-blob release-attestation.json \
+  --bundle release-attestation.json.bundle \
+  --certificate-identity "https://github.com/CivicSuite/civiccore/.github/workflows/release.yml@refs/tags/vX.Y.Z" \
+  --certificate-oidc-issuer https://token.actions.githubusercontent.com
+
+sha256sum -c SHA256SUMS.txt
+python scripts/verify-release-provenance.py vX.Y.Z \
+  --repo CivicSuite/civiccore \
+  --attestation release-attestation.json \
+  --bundle release-attestation.json.bundle \
+  --artifacts-dir .
+```
+
+For disconnected procurement review, preserve the cosign bundle, release
+attestation, release assets, `SHA256SUMS.txt`, the pinned cosign version, and
+the Sigstore trust-root bundle used by the release workflow. Offline review
+uses the bundle and pinned trust roots; if the trust root has rotated and the
+review environment cannot validate the bundle, the auditor treats that as
+"not yet independently verified," not as a pass.
+
+## Failure Modes The Gate Must Reject
+
+- Missing or wrong attestation schema version: fail closed and regenerate using
+  the versioned CivicCore schema.
+- Wrong workflow identity: fail closed. Identity must be exact repo + exact
+  `.github/workflows/release.yml` + exact `refs/tags/<tag>`.
+- Workflow rename or migration: fail closed until the runbook, fixture suite,
+  and expected identity are updated through review.
+- Wrong OIDC issuer: fail closed unless the issuer is
+  `https://token.actions.githubusercontent.com`.
+- Artifact hash mismatch: fail closed and rebuild from the verified target
+  commit before signing.
+- Tag target mismatch: fail closed if the attestation subject does not match
+  GitHub's tag ref, target commit, and target tree.
+- Transparency-log unavailability: fail closed for release publication. For
+  already-published releases, use the preserved cosign bundle and documented
+  offline verification path.
+- Sigstore/Fulcio trust-root rotation: fail closed until pinned trust-root
+  material and the runbook are updated. Root rotation is expected over time,
+  but it is not silently accepted.
+- Bootstrap trust problem: auditors must know which Sigstore roots and cosign
+  version were used. Release evidence bundles preserve those inputs so an
+  offline reviewer can distinguish "signature invalid" from "reviewer lacks
+  the required trust-root material."
 
 ## CivicCore v0.22.0 Defect Statement
 
@@ -55,30 +139,54 @@ Defect an outside auditor can verify:
 - GitHub tag ref `refs/tags/v0.22.0` points directly at commit
   `483a224aaf2ae08868bd4cd4caf842bfda97db94`.
 - The target commit is GitHub-verified and uses key ID `B5690EEEBB952194`.
-- The release tag is lightweight, so there is no verified annotated tag object.
-- Therefore v0.22.0 fails the strengthened release provenance bar.
+- The release tag is lightweight.
+- Under the current trust model, that lightweight tag may remain a pointer, but
+  v0.22.0 does not yet have a Sigstore-signed `release-attestation.json`.
+- Therefore v0.22.0 is not yet attestation-verified.
 
-Reproducer:
+Reproducer after the new model is active:
 
 ```bash
-python scripts/verify-release-provenance.py v0.22.0 --repo CivicSuite/civiccore
+python scripts/verify-release-provenance.py v0.22.0 \
+  --repo CivicSuite/civiccore \
+  --attestation release-attestation.json \
+  --bundle release-attestation.json.bundle \
+  --artifacts-dir .
 ```
 
-Expected output:
+Expected current result until an authorized attestation is added:
 
 ```text
-FAIL: v0.22.0 is a lightweight tag pointing at commit 483a224aaf2ae08868bd4cd4caf842bfda97db94; create a signed annotated release tag instead.
+FAIL: Live release verification requires --attestation and --bundle under the Sigstore attestation provenance model.
 ```
 
-This release is part of the Tier 1 live-surface correction window. Do not delete
-or recreate it without explicit chat authorization for that specific release.
+This release is part of the Tier 1 live-surface attestation window. Do not add
+attestation assets, edit release notes, delete, or recreate it without explicit
+chat authorization for that specific release.
+
+## v0.1.17 Correction Note
+
+The first v0.1.17 correction was performed in good faith against an unachievable
+target: "GitHub-verified signed annotated tag object." The auditor authorized
+that target before confirming that GitHub can produce it. The correction
+preserved an audit trail, but it did not establish the final provenance model.
+Under this model, v0.1.17 should receive an additive Sigstore attestation and a
+second release-note audit entry only after explicit per-release authorization.
+
+This is not recorded as a swarm execution failure. It is recorded as a model
+correction: the human-provided target was mutually unsatisfiable with the
+available GitHub tooling and no-local-key constraint, and the swarm stopped
+instead of inventing a false path.
 
 ## Historical Baseline
 
 The strengthened gate surfaced an org-wide historical provenance baseline
 problem during the synthetic development phase: all 119 checked historical
-CivicSuite release tags failed under the new bar, split between lightweight tags
-and unsigned annotated tag objects. That is uncomfortable but useful evidence:
-the gate is strict enough to catch real provenance defects before municipal
-deployment. Current/live releases are corrected surgically; historical releases
-are disclosed honestly rather than mass-deleted.
+CivicSuite release tags failed under the earlier tag-signature bar, split
+between lightweight tags and unsigned annotated tag objects. That finding is
+now understood as evidence that GitHub-native tags cannot carry the trust
+burden for CivicSuite.
+
+Historical releases are disclosed honestly rather than mass-deleted. The new
+baseline begins with releases that include Sigstore-signed release attestations
+and exact workflow-identity verification commands.

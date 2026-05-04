@@ -144,9 +144,13 @@ from civiccore.scheduling import (
     validate_cron_expression,
 )
 from civiccore.release_provenance import (
+    ATTESTATION_SCHEMA_VERSION,
     FixtureProvenanceClient,
     GitHubProvenanceClient,
     ProvenanceError,
+    canonical_json_bytes,
+    expected_workflow_identity,
+    load_attestation,
     run_fixtures,
     verify_release_provenance,
 )
@@ -264,6 +268,10 @@ __all__ = [
     "FixtureProvenanceClient",
     "GitHubProvenanceClient",
     "ProvenanceError",
+    "ATTESTATION_SCHEMA_VERSION",
+    "canonical_json_bytes",
+    "expected_workflow_identity",
+    "load_attestation",
     "run_fixtures",
     "verify_release_provenance",
 ]

@@ -1,13 +1,15 @@
 """Release provenance checks shared across CivicSuite modules.
 
-The gate is deliberately strict because GitHub release pages can show a
-Verified badge for the target commit even when the release tag is lightweight
-or the annotated tag object is unsigned.
+GitHub release pages can show a Verified badge for the target commit even when
+the release tag is lightweight or when an annotated tag object is unsigned.
+Under the CivicSuite v1 provenance model, tags are release pointers and the
+Sigstore-signed release attestation is the trust artifact.
 """
 
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import subprocess
 import sys
@@ -15,9 +17,10 @@ from pathlib import Path
 from typing import Any, Protocol
 
 
+ATTESTATION_SCHEMA_VERSION = 1
+GITHUB_ACTIONS_ISSUER = "https://token.actions.githubusercontent.com"
 WEB_FLOW_KEY_ID = "B5690EEEBB952194"
 ALLOWED_WEB_FLOW_COMMITTER = ("GitHub", "noreply@github.com")
-ALLOWED_RELEASE_TAGGER_EMAILS = {"noreply@github.com", "web-flow@github.com"}
 
 
 class ProvenanceError(RuntimeError):
@@ -30,6 +33,17 @@ class ProvenanceClient(Protocol):
     def tag_object(self, repo: str, tag_sha: str) -> dict[str, Any]: ...
 
     def commit(self, repo: str, commit_sha: str) -> dict[str, Any]: ...
+
+
+class SigstoreVerifier(Protocol):
+    def verify_blob(
+        self,
+        *,
+        blob_path: Path,
+        bundle_path: Path,
+        expected_identity: str,
+        expected_issuer: str,
+    ) -> None: ...
 
 
 class GitHubProvenanceClient:
@@ -54,6 +68,43 @@ class GitHubProvenanceClient:
         return self._gh_api(f"repos/{repo}/commits/{commit_sha}")
 
 
+class CosignSigstoreVerifier:
+    """Verify Sigstore/cosign keyless bundles using the local cosign binary."""
+
+    def verify_blob(
+        self,
+        *,
+        blob_path: Path,
+        bundle_path: Path,
+        expected_identity: str,
+        expected_issuer: str,
+    ) -> None:
+        if not bundle_path.exists():
+            raise ProvenanceError(f"Missing Sigstore bundle: {bundle_path}")
+        result = subprocess.run(
+            [
+                "cosign",
+                "verify-blob",
+                str(blob_path),
+                "--bundle",
+                str(bundle_path),
+                "--certificate-identity",
+                expected_identity,
+                "--certificate-oidc-issuer",
+                expected_issuer,
+            ],
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+        if result.returncode != 0:
+            detail = (result.stderr or result.stdout).strip()
+            raise ProvenanceError(
+                "Sigstore verification failed for release attestation "
+                f"with identity {expected_identity!r}: {detail}"
+            )
+
+
 class FixtureProvenanceClient:
     """Fixture-backed client for adversarial provenance test cases."""
 
@@ -65,10 +116,73 @@ class FixtureProvenanceClient:
         return self.responses["ref"]
 
     def tag_object(self, repo: str, tag_sha: str) -> dict[str, Any]:
-        return self.responses["tag"]
+        return self.responses.get("tag", {})
 
     def commit(self, repo: str, commit_sha: str) -> dict[str, Any]:
         return self.responses["commit"]
+
+
+class FixtureSigstoreVerifier:
+    """Fixture-backed Sigstore verifier for offline adversarial tests."""
+
+    def __init__(self, fixture: dict[str, Any]) -> None:
+        self.sigstore = fixture.get("sigstore", {})
+
+    def verify_blob(
+        self,
+        *,
+        blob_path: Path,
+        bundle_path: Path,
+        expected_identity: str,
+        expected_issuer: str,
+    ) -> None:
+        if self.sigstore.get("availability") == "offline":
+            raise ProvenanceError(
+                "Sigstore transparency log is unavailable; use the documented offline "
+                "bundle verification path or retry when online transparency proof is available."
+            )
+        if self.sigstore.get("trust_root_status") == "rotated":
+            raise ProvenanceError(
+                "Sigstore trust root changed; update the pinned trust-root bundle through "
+                "the release-signing runbook before accepting this release."
+            )
+        actual_identity = self.sigstore.get("identity")
+        if actual_identity != expected_identity:
+            raise ProvenanceError(
+                f"Sigstore identity {actual_identity!r} does not match expected "
+                f"{expected_identity!r}."
+            )
+        actual_issuer = self.sigstore.get("issuer")
+        if actual_issuer != expected_issuer:
+            raise ProvenanceError(
+                f"Sigstore issuer {actual_issuer!r} does not match expected "
+                f"{expected_issuer!r}."
+            )
+        if not self.sigstore.get("verified", False):
+            reason = self.sigstore.get("reason", "invalid")
+            raise ProvenanceError(f"Sigstore bundle is not verified (reason: {reason}).")
+
+
+def canonical_json_bytes(payload: dict[str, Any]) -> bytes:
+    """Return CivicSuite's canonical JSON serialization for attestations."""
+
+    return json.dumps(payload, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode(
+        "utf-8"
+    )
+
+
+def expected_workflow_identity(repo: str, tag_name: str, workflow: str = "release.yml") -> str:
+    """Return the exact Sigstore workflow identity for a repo/tag release."""
+
+    return f"https://github.com/{repo}/.github/workflows/{workflow}@refs/tags/{tag_name}"
+
+
+def _sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
 
 
 def _verification_reason(payload: dict[str, Any]) -> str:
@@ -93,17 +207,7 @@ def _require_web_flow_committer(commit: dict[str, Any], tag_name: str) -> None:
     if actual != ALLOWED_WEB_FLOW_COMMITTER:
         raise ProvenanceError(
             f"{tag_name} target commit committer is {actual[0]} <{actual[1]}>, "
-            "expected GitHub <noreply@github.com> for the current web-flow release model."
-        )
-
-
-def _require_release_tagger(tag_object: dict[str, Any], tag_name: str) -> None:
-    tagger = tag_object.get("tagger") or {}
-    email = tagger.get("email")
-    if email not in ALLOWED_RELEASE_TAGGER_EMAILS:
-        raise ProvenanceError(
-            f"{tag_name} release tagger email is {email!r}; expected a GitHub/org-associated "
-            "release identity, not a maintainer-local identity."
+            "expected GitHub <noreply@github.com> for the current web-flow commit model."
         )
 
 
@@ -118,44 +222,174 @@ def _require_expected_tree(commit: dict[str, Any], expected_tree: str | None, ta
         )
 
 
+def _target_from_ref(
+    client: ProvenanceClient,
+    repo: str,
+    tag_name: str,
+    ref_object: dict[str, Any],
+) -> tuple[str, str, str]:
+    ref_type = ref_object["type"]
+    ref_sha = ref_object["sha"]
+    if ref_type == "commit":
+        return ref_type, ref_sha, ref_sha
+    if ref_type != "tag":
+        raise ProvenanceError(f"{tag_name} tag ref points at {ref_type} {ref_sha}, not a commit.")
+    tag_object = client.tag_object(repo, ref_sha)
+    target = tag_object.get("object") or {}
+    if target.get("type") != "commit":
+        raise ProvenanceError(
+            f"{tag_name} tag object points at {target.get('type')} {target.get('sha')}, "
+            "not a commit."
+        )
+    return ref_type, ref_sha, target["sha"]
+
+
+def _require_attestation_shape(attestation: dict[str, Any]) -> None:
+    if attestation.get("schema_version") != ATTESTATION_SCHEMA_VERSION:
+        raise ProvenanceError(
+            "release-attestation.json schema_version must be 1; regenerate using the "
+            "versioned CivicCore attestation contract."
+        )
+    required_top = ("subject", "build", "artifacts")
+    for key in required_top:
+        if key not in attestation:
+            raise ProvenanceError(f"release-attestation.json missing required field: {key}")
+    if not isinstance(attestation["artifacts"], list) or not attestation["artifacts"]:
+        raise ProvenanceError("release-attestation.json artifacts must be a non-empty list.")
+
+
+def _require_attestation_subject(
+    attestation: dict[str, Any],
+    *,
+    repo: str,
+    tag_name: str,
+    tag_ref_type: str,
+    tag_ref_sha: str,
+    target_commit: str,
+    target_tree: str | None,
+) -> None:
+    subject = attestation["subject"]
+    expected = {
+        "repo": repo,
+        "tag": tag_name,
+        "tag_ref_type": tag_ref_type,
+        "tag_ref_sha": tag_ref_sha,
+        "target_commit": target_commit,
+    }
+    if target_tree:
+        expected["target_tree"] = target_tree
+    for key, expected_value in expected.items():
+        actual = subject.get(key)
+        if actual != expected_value:
+            raise ProvenanceError(
+                f"release-attestation.json subject.{key} {actual!r} does not match "
+                f"expected {expected_value!r}."
+            )
+
+
+def _require_attestation_build(
+    attestation: dict[str, Any],
+    *,
+    expected_identity: str,
+    expected_issuer: str,
+) -> None:
+    build = attestation["build"]
+    identity = build.get("workflow_identity")
+    if identity != expected_identity:
+        raise ProvenanceError(
+            f"release-attestation.json build.workflow_identity {identity!r} does not match "
+            f"expected {expected_identity!r}."
+        )
+    issuer = build.get("oidc_issuer")
+    if issuer != expected_issuer:
+        raise ProvenanceError(
+            f"release-attestation.json build.oidc_issuer {issuer!r} does not match "
+            f"expected {expected_issuer!r}."
+        )
+    workflow_path = build.get("workflow_path")
+    if workflow_path != ".github/workflows/release.yml":
+        raise ProvenanceError(
+            f"release-attestation.json build.workflow_path {workflow_path!r} is not "
+            "the approved release workflow path."
+        )
+    if not str(build.get("workflow_run_id") or "").strip():
+        raise ProvenanceError("release-attestation.json build.workflow_run_id is required.")
+
+
+def _require_artifact_hashes(attestation: dict[str, Any], artifacts_dir: Path | None) -> None:
+    for artifact in attestation["artifacts"]:
+        name = artifact.get("name")
+        expected_hash = artifact.get("sha256")
+        if not name or not expected_hash:
+            raise ProvenanceError(
+                "release-attestation.json artifact entries require name and sha256 fields."
+            )
+        if artifacts_dir is None:
+            continue
+        path = artifacts_dir / name
+        if not path.exists():
+            raise ProvenanceError(f"Attested artifact is missing from release assets: {name}")
+        actual_hash = _sha256_file(path)
+        if actual_hash != expected_hash:
+            raise ProvenanceError(
+                f"Attested artifact {name} sha256 {expected_hash} does not match "
+                f"actual {actual_hash}."
+            )
+
+
 def verify_release_provenance(
     client: ProvenanceClient,
     repo: str,
     tag_name: str,
     *,
+    attestation: dict[str, Any],
+    sigstore_verifier: SigstoreVerifier,
+    attestation_path: Path,
+    bundle_path: Path,
+    artifacts_dir: Path | None = None,
     expected_target: str | None = None,
     expected_tree: str | None = None,
 ) -> tuple[str, str]:
-    """Verify a release tag and return ``(tag_object_sha, target_commit_sha)``."""
+    """Verify a release pointer, target commit, signed attestation, and artifacts."""
 
     ref = client.tag_ref(repo, tag_name)
     tag_ref = ref["object"]
-    if tag_ref["type"] != "tag":
+    tag_ref_type, tag_ref_sha, target_sha = _target_from_ref(client, repo, tag_name, tag_ref)
+    if expected_target and target_sha != expected_target:
         raise ProvenanceError(
-            f"{tag_name} is a lightweight tag pointing at {tag_ref['type']} "
-            f"{tag_ref['sha']}; create a signed annotated release tag instead."
+            f"{tag_name} tag target {target_sha} does not match expected target {expected_target}."
         )
 
-    tag_object = client.tag_object(repo, tag_ref["sha"])
-    _require_verified(tag_object, f"{tag_name} tag object {tag_ref['sha']}")
-    _require_release_tagger(tag_object, tag_name)
-
-    target = tag_object["object"]
-    if target["type"] != "commit":
-        raise ProvenanceError(
-            f"{tag_name} tag object points at {target['type']} {target['sha']}, not a commit."
-        )
-    if expected_target and target["sha"] != expected_target:
-        raise ProvenanceError(
-            f"{tag_name} tag target {target['sha']} does not match expected target "
-            f"{expected_target}."
-        )
-
-    commit = client.commit(repo, target["sha"])
-    _require_verified(commit["commit"], f"{tag_name} target commit {target['sha']}")
+    commit = client.commit(repo, target_sha)
+    _require_verified(commit["commit"], f"{tag_name} target commit {target_sha}")
     _require_web_flow_committer(commit, tag_name)
     _require_expected_tree(commit, expected_tree, tag_name)
-    return tag_ref["sha"], target["sha"]
+    target_tree = commit.get("commit", {}).get("tree", {}).get("sha")
+
+    _require_attestation_shape(attestation)
+    _require_attestation_subject(
+        attestation,
+        repo=repo,
+        tag_name=tag_name,
+        tag_ref_type=tag_ref_type,
+        tag_ref_sha=tag_ref_sha,
+        target_commit=target_sha,
+        target_tree=target_tree,
+    )
+    expected_identity = expected_workflow_identity(repo, tag_name)
+    _require_attestation_build(
+        attestation,
+        expected_identity=expected_identity,
+        expected_issuer=GITHUB_ACTIONS_ISSUER,
+    )
+    _require_artifact_hashes(attestation, artifacts_dir)
+    sigstore_verifier.verify_blob(
+        blob_path=attestation_path,
+        bundle_path=bundle_path,
+        expected_identity=expected_identity,
+        expected_issuer=GITHUB_ACTIONS_ISSUER,
+    )
+    return tag_ref_sha, target_sha
 
 
 def _load_fixtures(fixtures_dir: Path) -> list[dict[str, Any]]:
@@ -170,6 +404,20 @@ def _load_fixtures(fixtures_dir: Path) -> list[dict[str, Any]]:
     return fixtures
 
 
+def _write_fixture_files(fixture: dict[str, Any], fixture_dir: Path) -> tuple[Path, Path, Path]:
+    work_dir = fixture_dir / ".generated" / fixture["name"].replace(" ", "_")
+    work_dir.mkdir(parents=True, exist_ok=True)
+    attestation_path = work_dir / "release-attestation.json"
+    bundle_path = work_dir / "release-attestation.json.bundle"
+    artifacts_dir = work_dir / "artifacts"
+    artifacts_dir.mkdir(exist_ok=True)
+    attestation_path.write_bytes(canonical_json_bytes(fixture["attestation"]))
+    bundle_path.write_text(json.dumps(fixture.get("bundle", {"fixture": True})), encoding="utf-8")
+    for artifact in fixture.get("artifact_payloads", []):
+        (artifacts_dir / artifact["name"]).write_bytes(artifact["content"].encode("utf-8"))
+    return attestation_path, bundle_path, artifacts_dir
+
+
 def run_fixtures(fixtures_dir: Path, repo: str) -> None:
     """Run adversarial release provenance fixtures."""
 
@@ -179,10 +427,19 @@ def run_fixtures(fixtures_dir: Path, repo: str) -> None:
         expected = fixture["expected"]
         expected_error = fixture.get("expected_error", "")
         try:
+            attestation_path, bundle_path, artifacts_dir = _write_fixture_files(
+                fixture,
+                fixtures_dir,
+            )
             verify_release_provenance(
                 FixtureProvenanceClient(fixture),
                 repo,
                 tag_name,
+                attestation=fixture["attestation"],
+                sigstore_verifier=FixtureSigstoreVerifier(fixture),
+                attestation_path=attestation_path,
+                bundle_path=bundle_path,
+                artifacts_dir=artifacts_dir,
                 expected_target=fixture.get("expected_target"),
                 expected_tree=fixture.get("expected_tree"),
             )
@@ -209,6 +466,13 @@ def run_fixtures(fixtures_dir: Path, repo: str) -> None:
         raise ProvenanceError("\n".join(failures))
 
 
+def load_attestation(path: Path) -> dict[str, Any]:
+    """Load a release attestation from disk."""
+
+    with path.open(encoding="utf-8") as handle:
+        return json.load(handle)
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("tag_name", nargs="?", help="Release tag to verify, for example v0.22.0.")
@@ -221,6 +485,21 @@ def main(argv: list[str] | None = None) -> int:
         "--fixtures-dir",
         type=Path,
         help="Run the adversarial fixture suite before checking a live tag.",
+    )
+    parser.add_argument(
+        "--attestation",
+        type=Path,
+        help="Path to release-attestation.json for the live release check.",
+    )
+    parser.add_argument(
+        "--bundle",
+        type=Path,
+        help="Path to the cosign bundle for release-attestation.json.",
+    )
+    parser.add_argument(
+        "--artifacts-dir",
+        type=Path,
+        help="Directory containing release assets named by the attestation.",
     )
     parser.add_argument(
         "--expected-target",
@@ -236,16 +515,27 @@ def main(argv: list[str] | None = None) -> int:
         if args.fixtures_dir:
             run_fixtures(args.fixtures_dir, args.repo)
         if args.tag_name:
+            if args.attestation is None or args.bundle is None:
+                raise ProvenanceError(
+                    "Live release verification requires --attestation and --bundle under "
+                    "the Sigstore attestation provenance model."
+                )
             tag_sha, target_sha = verify_release_provenance(
                 GitHubProvenanceClient(),
                 args.repo,
                 args.tag_name,
+                attestation=load_attestation(args.attestation),
+                sigstore_verifier=CosignSigstoreVerifier(),
+                attestation_path=args.attestation,
+                bundle_path=args.bundle,
+                artifacts_dir=args.artifacts_dir,
                 expected_target=args.expected_target,
                 expected_tree=args.expected_tree,
             )
             print(
                 "PASS: release provenance verified "
-                f"tag={args.tag_name} tag_object={tag_sha} target_commit={target_sha}"
+                f"tag={args.tag_name} tag_ref={tag_sha} target_commit={target_sha} "
+                f"attestation={args.attestation}"
             )
     except ProvenanceError as exc:
         print(f"FAIL: {exc}", file=sys.stderr)
