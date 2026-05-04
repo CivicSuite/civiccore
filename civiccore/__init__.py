@@ -143,6 +143,13 @@ from civiccore.scheduling import (
     min_interval_minutes,
     validate_cron_expression,
 )
+from civiccore.release_provenance import (
+    FixtureProvenanceClient,
+    GitHubProvenanceClient,
+    ProvenanceError,
+    run_fixtures,
+    verify_release_provenance,
+)
 from civiccore.verification import normalized_text_sha256, validate_release_browser_evidence
 
 __all__ = [
@@ -254,4 +261,9 @@ __all__ = [
     "normalized_text_sha256",
     "validate_url_host",
     "validate_release_browser_evidence",
+    "FixtureProvenanceClient",
+    "GitHubProvenanceClient",
+    "ProvenanceError",
+    "run_fixtures",
+    "verify_release_provenance",
 ]

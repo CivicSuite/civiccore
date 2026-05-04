@@ -146,6 +146,7 @@
       <ul>
         <li><code>civiccore.auth</code> - minimal bearer-token role checks for non-public FastAPI routes, with actionable <code>401</code>, <code>403</code>, and <code>503</code> responses.</li>
         <li><code>civiccore.verification</code> - content-bound browser QA release-evidence validation helpers.</li>
+        <li><code>civiccore.release_provenance</code> - shared release-tag provenance checks that reject lightweight tags, unsigned annotated tag objects, and misleading commit-only verification.</li>
         <li><code>civiccore.search</code> - deterministic query normalization, shared text matching, permission-aware access checks, and reciprocal-rank-fusion helpers.</li>
         <li><code>civiccore.connectors</code> - local-payload meeting import normalization with shared source provenance and actionable fix-path errors.</li>
         <li><code>civiccore.connectors</code> - storage-neutral live connector sync retry/circuit-breaker primitives with actionable operator health copy and source-list status projection.</li>
@@ -184,6 +185,7 @@
 cd civiccore
 pip install -e .[dev]</code></pre>
       <p>Each release publishes <code>SHA256SUMS.txt</code> alongside the wheel and sdist. Verify the checksum before promoting an artifact downstream.</p>
+      <p><strong>Release provenance note:</strong> GitHub release pages can show a target commit as Verified even when the release tag itself is lightweight or unsigned. CivicCore now ships the canonical <code>civiccore.release_provenance</code> gate; see <code>docs/ops/release-signing.md</code>. The current public <code>v0.22.0</code> artifact is held in the Tier 1 correction window until it is republished with a verified annotated tag object.</p>
       <figure style="margin: 2em 0;">
         <img src="diagrams/migration-order.svg" alt="Consumer apps invoke civiccore migrations before their own Alembic chain." style="max-width: 100%; height: auto; display: block; margin: 0 auto;">
         <figcaption style="text-align: center; color: #666; font-size: 0.9em; margin-top: 0.5em;">Migration order - civiccore runs first; consumer chain runs second.</figcaption>
@@ -227,6 +229,7 @@ pip install -e .[dev]</code></pre>
         <li><strong>City profiles</strong> - <code>CityProfile</code>, <code>DepartmentProfile</code>, <code>DeploymentProfile</code>, <code>ModuleEnablement</code>, <code>load_city_profile</code>.</li>
         <li><strong>Auth helper</strong> - <code>civiccore.auth</code> bearer-token role checks plus trusted-header config loading and proxy-source enforcement for non-public FastAPI routes.</li>
         <li><strong>Verification helper</strong> - <code>civiccore.verification</code> content-bound browser QA release evidence validation.</li>
+        <li><strong>Release provenance helper</strong> - <code>civiccore.release_provenance</code> pre-flight tag-object and target-commit verification for CivicSuite releases.</li>
         <li><strong>Search helpers</strong> - <code>civiccore.search</code> normalization, deterministic text matching, permission-aware access checks, and reciprocal-rank-fusion.</li>
         <li><strong>Connector import helpers</strong> - <code>civiccore.connectors</code> local-first meeting import normalization, actionable fix-path errors, and source provenance builders.</li>
         <li><strong>Notice helpers</strong> - <code>civiccore.notifications</code> deadline planning plus publication-compliance warning contracts.</li>

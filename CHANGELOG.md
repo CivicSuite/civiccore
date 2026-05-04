@@ -11,6 +11,18 @@ breaking changes to the public API surface (Appendix A of that spec) ship
 as MAJOR releases; new symbols or backward-compatible behavior ship as
 MINOR; bug fixes ship as PATCH.
 
+## [Unreleased]
+
+### Added
+- `civiccore.release_provenance` now provides the canonical CivicSuite
+  release-provenance gate, including GitHub-backed tag-ref/tag-object/target
+  commit checks and adversarial fixture execution.
+- Release preflight workflow now verifies release provenance before publishing
+  GitHub Release assets.
+- Release-signing runbook documents the CivicCore v0.22.0 lightweight-tag
+  defect, the misleading GitHub release-page commit badge, and the historical
+  provenance baseline discovered by the strengthened gate.
+
 ## [0.22.0] - 2026-05-03
 
 ### Added

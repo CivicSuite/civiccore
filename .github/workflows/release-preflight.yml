@@ -1,0 +1,60 @@
+name: release-preflight
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Existing signed release tag to verify before publishing the GitHub Release
+        required: true
+        type: string
+      expected_target:
+        description: Expected target commit SHA for the release tag
+        required: false
+        type: string
+      expected_tree:
+        description: Expected target tree SHA from the verified release build
+        required: false
+        type: string
+      fixtures_only:
+        description: Run only the adversarial fixture suite as a hypothetical corrected-release dry-run
+        required: false
+        default: "false"
+        type: choice
+        options:
+          - "false"
+          - "true"
+
+jobs:
+  preflight-release-provenance:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+          cache: pip
+      - name: Install dev dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e .[dev]
+      - name: Run release verification before publication
+        if: ${{ inputs.fixtures_only != 'true' }}
+        run: bash scripts/verify-release.sh
+      - name: Verify adversarial release provenance fixtures
+        run: python scripts/verify-release-provenance.py --fixtures-dir tests/fixtures/release_provenance
+      - name: Verify prospective release tag provenance
+        if: ${{ inputs.fixtures_only != 'true' }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ inputs.tag }}
+          EXPECTED_TARGET: ${{ inputs.expected_target }}
+          EXPECTED_TREE: ${{ inputs.expected_tree }}
+        run: >
+          python scripts/verify-release-provenance.py "${RELEASE_TAG}"
+          --repo "${{ github.repository }}"
+          --expected-target "${EXPECTED_TARGET}"
+          --expected-tree "${EXPECTED_TREE}"

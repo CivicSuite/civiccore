@@ -118,6 +118,19 @@ Each GitHub release also publishes `SHA256SUMS.txt` alongside the wheel and
 sdist. Verify the checksum before promoting a release artifact into a downstream
 module or internal package mirror.
 
+### Release Provenance
+
+CivicCore now carries the canonical CivicSuite release-provenance gate in
+`civiccore.release_provenance`. The gate exists because GitHub release pages can
+show the target commit as "Verified" even when the release tag is lightweight or
+the annotated tag object is unsigned. Treat the release-page badge as a commit
+signal only; use `scripts/verify-release-provenance.py` and
+`docs/ops/release-signing.md` for release-tag provenance.
+
+The current public `v0.22.0` release is in the Tier 1 correction window because
+its tag is lightweight. Do not republish, mirror, or rely on it as the corrected
+provenance baseline until the Tier 1 correction is complete.
+
 For development from a clone:
 
 ```bash
