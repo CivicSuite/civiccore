@@ -28,6 +28,9 @@ MINOR; bug fixes ship as PATCH.
   and the bootstrap trust problem.
 - Draft historical provenance disclosure records the boundary between
   GitHub-native historical releases and future Sigstore-attested releases.
+- Release workflow now installs cosign, generates and signs
+  `release-attestation.json`, verifies the attestation before publication, and
+  uploads the attestation plus bundle alongside wheel, sdist, and checksums.
 
 ## [0.22.0] - 2026-05-03
 

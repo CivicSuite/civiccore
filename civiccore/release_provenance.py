@@ -473,6 +473,49 @@ def load_attestation(path: Path) -> dict[str, Any]:
         return json.load(handle)
 
 
+def build_release_attestation(
+    *,
+    repo: str,
+    tag_name: str,
+    tag_ref_type: str,
+    tag_ref_sha: str,
+    target_commit: str,
+    target_tree: str,
+    workflow_run_id: str,
+    artifacts_dir: Path,
+    evidence_bundles: list[dict[str, str]] | None = None,
+    workflow_path: str = ".github/workflows/release.yml",
+) -> dict[str, Any]:
+    """Build a version 1 release attestation from local release artifacts."""
+
+    artifacts = []
+    for path in sorted(artifacts_dir.iterdir()):
+        if not path.is_file() or path.name.endswith(".bundle"):
+            continue
+        artifacts.append({"name": path.name, "sha256": _sha256_file(path)})
+    if not artifacts:
+        raise ProvenanceError(f"No release artifacts found in {artifacts_dir}.")
+    return {
+        "schema_version": ATTESTATION_SCHEMA_VERSION,
+        "subject": {
+            "repo": repo,
+            "tag": tag_name,
+            "tag_ref_type": tag_ref_type,
+            "tag_ref_sha": tag_ref_sha,
+            "target_commit": target_commit,
+            "target_tree": target_tree,
+        },
+        "build": {
+            "workflow_identity": expected_workflow_identity(repo, tag_name, "release.yml"),
+            "workflow_path": workflow_path,
+            "workflow_run_id": workflow_run_id,
+            "oidc_issuer": GITHUB_ACTIONS_ISSUER,
+        },
+        "artifacts": artifacts,
+        "evidence_bundles": evidence_bundles or [],
+    }
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("tag_name", nargs="?", help="Release tag to verify, for example v0.22.0.")
