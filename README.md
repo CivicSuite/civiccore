@@ -50,6 +50,11 @@ startup config validation, and encrypted JSON envelope helpers for secret-bearin
 `civiccore.scheduling` now ships storage-neutral cron validation and next-run
 helpers, but not a scheduler runtime or task queue. Credential
 orchestration, vendor-specific network adapters, and vendor write-back remain unshipped.
+`civiccore.release_provenance` now uses the attestation trust model for release
+verification: Git tags are treated as release pointers, while
+`release-attestation.json` plus its Sigstore/cosign bundle are the verifiable
+trust artifacts. The exact workflow identity is pinned per repo and per tag;
+org-wide wildcard identities are not accepted.
 Unshipped
 namespaces are reserved for future Phase work and must not be relied on
 by downstream modules until they ship.

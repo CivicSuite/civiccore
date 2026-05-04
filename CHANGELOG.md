@@ -15,13 +15,19 @@ MINOR; bug fixes ship as PATCH.
 
 ### Added
 - `civiccore.release_provenance` now provides the canonical CivicSuite
-  release-provenance gate, including GitHub-backed tag-ref/tag-object/target
-  commit checks and adversarial fixture execution.
-- Release preflight workflow now verifies release provenance before publishing
-  GitHub Release assets.
-- Release-signing runbook documents the CivicCore v0.22.0 lightweight-tag
-  defect, the misleading GitHub release-page commit badge, and the historical
-  provenance baseline discovered by the strengthened gate.
+  release-provenance gate for the Sigstore attestation trust model, including
+  GitHub-backed tag-ref/target-commit checks, exact per-repo/per-tag workflow
+  identity validation, artifact hash validation, and adversarial fixture
+  execution.
+- `docs/ops/release-attestation.schema.json` locks
+  `release-attestation.json` schema version 1 before the first attested
+  release-class operation.
+- Release-signing runbook now documents the GitHub tag-signing ceiling, the
+  Sigstore/cosign attestation model, failure modes for trust-root rotation,
+  transparency-log availability, workflow identity drift, offline verification,
+  and the bootstrap trust problem.
+- Draft historical provenance disclosure records the boundary between
+  GitHub-native historical releases and future Sigstore-attested releases.
 
 ## [0.22.0] - 2026-05-03
 

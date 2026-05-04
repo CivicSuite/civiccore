@@ -11,5 +11,6 @@
 - Mobile focus after first Tab: `pip install https://github.com/CivicSuite/civiccore/releases/download/v0.22.0/civiccore-0.22.0-py3-none-any.whl`
 - Provenance helper copy visible: `True`
 - Verified-badge warning visible: `True`
-- Tier 1 correction-window copy visible: `True`
+- Sigstore attestation trust-model copy visible: `True`
+- Explicit per-release authorization copy visible: `True`
 - Runbook path visible: `True`
