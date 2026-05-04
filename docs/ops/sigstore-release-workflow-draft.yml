@@ -38,8 +38,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip build
           python -m pip install -e .[dev]
-          # Authorized implementation will pin the cosign installer/action version.
-          echo "Install cosign here before first authorized release-class use."
+          echo "Install cosign with sigstore/cosign-installer@v4.1.1."
 
       - name: Build artifacts
         run: |
@@ -58,4 +57,3 @@ jobs:
         run: |
           python scripts/verify-release-provenance.py --fixtures-dir tests/fixtures/release_provenance
           echo "python scripts/verify-release-provenance.py ${{ inputs.tag }} --attestation release-attestation.json --bundle release-attestation.json.bundle --artifacts-dir dist"
-
