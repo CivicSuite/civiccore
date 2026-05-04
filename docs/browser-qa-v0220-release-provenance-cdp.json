@@ -1,0 +1,33 @@
+{
+  "url": "file:///C:/Users/scott/OneDrive/Desktop/Claude/civiccore/docs/index.html",
+  "desktop": {
+    "title": "CivicCore v0.22.0 - CivicSuite shared platform library",
+    "innerWidth": 1440,
+    "scrollWidth": 1440,
+    "bodyScrollWidth": 1440,
+    "horizontalOverflow": false,
+    "activeElement": "pip install https://github.com/CivicSuite/civiccore/releases/download/v0.22.0/civiccore-0.22.0-py3-none-any.whl",
+    "hasReleaseProvenance": true,
+    "hasVerifiedBadgeWarning": true,
+    "hasCorrectionWindow": true,
+    "hasRunbookPath": true,
+    "consoleMessages": [],
+    "consoleErrorCount": 0,
+    "screenshot": "C:\\Users\\scott\\OneDrive\\Desktop\\Claude\\civiccore\\docs\\browser-qa-v0220-release-provenance-desktop.png"
+  },
+  "mobile": {
+    "title": "CivicCore v0.22.0 - CivicSuite shared platform library",
+    "innerWidth": 390,
+    "scrollWidth": 390,
+    "bodyScrollWidth": 390,
+    "horizontalOverflow": false,
+    "activeElement": "pip install https://github.com/CivicSuite/civiccore/releases/download/v0.22.0/civiccore-0.22.0-py3-none-any.whl",
+    "hasReleaseProvenance": true,
+    "hasVerifiedBadgeWarning": true,
+    "hasCorrectionWindow": true,
+    "hasRunbookPath": true,
+    "consoleMessages": [],
+    "consoleErrorCount": 0,
+    "screenshot": "C:\\Users\\scott\\OneDrive\\Desktop\\Claude\\civiccore\\docs\\browser-qa-v0220-release-provenance-mobile.png"
+  }
+}

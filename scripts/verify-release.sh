@@ -9,6 +9,7 @@
 #   5. Build artifacts (sdist + wheel via python -m build)
 #   6. Fresh virtualenv install from the built wheel, exact version check,
 #      and import smoke for the migration runner
+#   7. Release-provenance adversarial fixture suite
 #
 # Exit 0 when every check passes; exit 1 on any failure.
 
@@ -68,6 +69,14 @@ if [ -n "$PY_VER" ] && [ -n "$INIT_VER" ] && [ "$PY_VER" = "$INIT_VER" ]; then
     pass "two surfaces agree on $PY_VER"
 else
     fail "version mismatch - surfaces do not agree"
+fi
+
+# --- 3b. release provenance fixtures ----------------------------------------
+info "3b. release provenance fixtures"
+if "${PYTHON_CMD[@]}" scripts/verify-release-provenance.py --fixtures-dir tests/fixtures/release_provenance; then
+    pass "release provenance fixture suite enforced"
+else
+    fail "release provenance fixture suite failed"
 fi
 
 # --- 4. required docs --------------------------------------------------------

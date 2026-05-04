@@ -14,6 +14,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
 
       - name: Set up Python 3.13
         uses: actions/setup-python@v6
@@ -28,6 +30,19 @@ jobs:
 
       - name: Run release verification
         run: bash scripts/verify-release.sh
+
+      - name: Verify adversarial release provenance fixtures
+        run: python scripts/verify-release-provenance.py --fixtures-dir tests/fixtures/release_provenance
+
+      - name: Verify release tag provenance before publication
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          expected_tree="$(git show -s --format=%T "${{ github.sha }}")"
+          python scripts/verify-release-provenance.py "${{ github.ref_name }}" \
+            --repo "${{ github.repository }}" \
+            --expected-target "${{ github.sha }}" \
+            --expected-tree "$expected_tree"
 
   build:
     name: Build wheel, sdist, and checksums
