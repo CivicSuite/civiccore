@@ -1,14 +1,25 @@
 from __future__ import annotations
 
+import importlib.util
 import json
 import subprocess
 import sys
 from pathlib import Path
+from types import ModuleType
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 LEDGER = REPO_ROOT / "docs" / "ops" / "civiccore-tier1-retrofit-ledger.json"
 LEDGER_CHECK = REPO_ROOT / "scripts" / "check-tier1-ledger.py"
+
+
+def _ledger_check_module() -> ModuleType:
+    spec = importlib.util.spec_from_file_location("check_tier1_ledger", LEDGER_CHECK)
+    assert spec is not None
+    assert spec.loader is not None
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
 
 
 def _ledger() -> dict:
@@ -43,6 +54,35 @@ def test_tier1_retrofit_ledger_marks_only_v0221_as_attested_baseline() -> None:
     assert len(pre_gate) == 24
     assert all(entry["attestation_status"] == "none_pre_gate" for entry in pre_gate)
     assert all("release-attestation.json" not in entry["release_assets"] for entry in pre_gate)
+
+
+def test_live_parity_allows_new_post_baseline_releases_with_attestation_assets() -> None:
+    module = _ledger_check_module()
+    entries = _ledger()["entries"]
+    live_releases = {entry["tag"]: set(entry["release_assets"]) for entry in entries}
+    live_releases["v1.0"] = {
+        "civiccore-1.0.0-py3-none-any.whl",
+        "civiccore-1.0.0.tar.gz",
+        "SHA256SUMS.txt",
+        "release-attestation.json",
+        "release-attestation.json.bundle",
+    }
+
+    assert module.validate_live_release_parity(entries, live_releases) == ["v1.0"]
+
+
+def test_live_parity_rejects_unledgered_releases_without_attestation_assets() -> None:
+    module = _ledger_check_module()
+    entries = _ledger()["entries"]
+    live_releases = {entry["tag"]: set(entry["release_assets"]) for entry in entries}
+    live_releases["v0.22.2"] = {"civiccore-0.22.2-py3-none-any.whl"}
+
+    try:
+        module.validate_live_release_parity(entries, live_releases)
+    except module.LedgerError as exc:
+        assert "v0.22.2" in str(exc)
+    else:  # pragma: no cover - assertion branch
+        raise AssertionError("expected unledgered unattested release to fail")
 
 
 def test_current_docs_do_not_describe_v0221_as_staged_or_unpublished() -> None:

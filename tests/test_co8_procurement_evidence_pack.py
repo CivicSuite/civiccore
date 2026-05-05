@@ -24,6 +24,7 @@ REQUIRED_FILES = {
     "preflight.md",
     "sbom-civiccore-m1-freeze-pip-inspect.json",
     "sbom-v0.22.1-pip-inspect.json",
+    "sbom-v1.0-pip-inspect.json",
     "sbom-v1.0-rc-main-3c4c34c-pip-inspect.json",
     "sovereignty-proof.md",
     "threat-model-signature.allowed_signers",
@@ -45,8 +46,9 @@ def test_co8_procurement_pack_manifest_hashes_match() -> None:
 
     expected_manifest_entries = REQUIRED_FILES - {"evidence-pack-manifest.json"}
     assert set(manifest_files) == expected_manifest_entries
-    assert manifest["sprint_id"] == "CO-8"
+    assert manifest["sprint_id"] == "CO-8/CO-9"
     assert manifest["freeze_tag"] == "civiccore-m1-freeze"
+    assert manifest["release_tag"] == "v1.0"
     assert manifest["target_commit"] == "3c4c34ccd153eeae705a57139f6713c356328b6d"
 
     for name, entry in manifest_files.items():
@@ -86,14 +88,17 @@ def test_co8_threat_model_hash_and_signature_verify() -> None:
 
 
 @pytest.mark.parametrize(
-    "filename",
+    ("filename", "expected_version"),
     [
-        "sbom-v0.22.1-pip-inspect.json",
-        "sbom-civiccore-m1-freeze-pip-inspect.json",
-        "sbom-v1.0-rc-main-3c4c34c-pip-inspect.json",
+        ("sbom-v0.22.1-pip-inspect.json", "0.22.1"),
+        ("sbom-civiccore-m1-freeze-pip-inspect.json", "0.22.1"),
+        ("sbom-v1.0-rc-main-3c4c34c-pip-inspect.json", "0.22.1"),
+        ("sbom-v1.0-pip-inspect.json", "1.0.0"),
     ],
 )
-def test_co8_sboms_are_valid_and_include_civiccore(filename: str) -> None:
+def test_co8_sboms_are_valid_and_include_civiccore(
+    filename: str, expected_version: str
+) -> None:
     sbom = json.loads((PACK / filename).read_text(encoding="utf-8-sig"))
     installed = sbom["installed"]
     assert len(installed) >= 80
@@ -103,17 +108,17 @@ def test_co8_sboms_are_valid_and_include_civiccore(filename: str) -> None:
         if item.get("metadata", {}).get("name", "").lower() == "civiccore"
     ]
     assert len(civiccore) == 1
-    assert civiccore[0]["metadata"]["version"] == "0.22.1"
+    assert civiccore[0]["metadata"]["version"] == expected_version
 
 
 def test_co8_license_manifest_matches_freeze_sbom_packages() -> None:
     license_manifest = json.loads((PACK / "license-manifest.json").read_text(encoding="utf-8"))
-    freeze_sbom = json.loads(
-        (PACK / "sbom-civiccore-m1-freeze-pip-inspect.json").read_text(encoding="utf-8-sig")
+    final_sbom = json.loads(
+        (PACK / "sbom-v1.0-pip-inspect.json").read_text(encoding="utf-8-sig")
     )
 
     manifest_names = {pkg["name"].lower() for pkg in license_manifest["packages"]}
-    freeze_names = {item["metadata"]["name"].lower() for item in freeze_sbom["installed"]}
+    final_names = {item["metadata"]["name"].lower() for item in final_sbom["installed"]}
 
-    assert manifest_names == freeze_names
+    assert manifest_names == final_names
     assert "civiccore" in manifest_names

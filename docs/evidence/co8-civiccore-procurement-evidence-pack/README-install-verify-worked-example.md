@@ -2,9 +2,79 @@
 
 Status: CO-8 worked verification path for live CivicCore release assets.
 
-This file records the auditor path for the attested baseline and freeze-line
-release. The final `v1.0` run must be appended in CO-9 after the `v1.0` tag and
-release assets exist.
+This file records the auditor path for the attested baseline, freeze-line
+release, and final `v1.0` downstream productization release.
+
+## Verify The v1.0 Release
+
+From a fresh clone of `CivicSuite/civiccore`, download the v1.0 release assets
+into a single directory:
+
+```bash
+gh release download v1.0 \
+  --repo CivicSuite/civiccore \
+  --dir .tmp-v1-verify
+cd .tmp-v1-verify
+```
+
+Verify Sigstore identity:
+
+```bash
+cosign verify-blob release-attestation.json \
+  --bundle release-attestation.json.bundle \
+  --certificate-identity "https://github.com/CivicSuite/civiccore/.github/workflows/release.yml@refs/tags/v1.0" \
+  --certificate-oidc-issuer https://token.actions.githubusercontent.com
+```
+
+Expected result:
+
+```text
+Verified OK
+```
+
+Verify checksums:
+
+```bash
+sha256sum -c SHA256SUMS.txt
+```
+
+Expected result:
+
+```text
+civiccore-1.0.0-py3-none-any.whl: OK
+civiccore-1.0.0.tar.gz: OK
+```
+
+Verify release provenance from the repo root:
+
+```bash
+python scripts/verify-release-provenance.py v1.0 \
+  --repo CivicSuite/civiccore \
+  --attestation .tmp-v1-verify/release-attestation.json \
+  --bundle .tmp-v1-verify/release-attestation.json.bundle \
+  --artifacts-dir .tmp-v1-verify
+```
+
+Expected result:
+
+```text
+PASS: release provenance verified tag=v1.0
+```
+
+Install the published wheel:
+
+```bash
+python -m venv .tmp-civiccore-v1-install
+. .tmp-civiccore-v1-install/bin/activate
+python -m pip install https://github.com/CivicSuite/civiccore/releases/download/v1.0/civiccore-1.0.0-py3-none-any.whl
+python -c "import civiccore; assert civiccore.__version__ == '1.0.0'; print(civiccore.__version__)"
+```
+
+Expected result:
+
+```text
+1.0.0
+```
 
 ## Verify The Freeze Release
 
@@ -93,8 +163,8 @@ CivicClerk freeze harness -> 553 passed
 CivicCode freeze harness -> 162 passed
 ```
 
-## CO-9 Placeholder For Final v1.0
+## CO-9 Completion Record
 
-CO-9 must repeat this file's release-asset download, Sigstore, SHA256SUMS,
+CO-9 repeats this file's release-asset download, Sigstore, SHA256SUMS,
 provenance, and install checks for the final `v1.0` release. The final v1.0
-SBOM must also be added to this evidence pack after the v1.0 release is live.
+SBOM is recorded as `sbom-v1.0-pip-inspect.json`.

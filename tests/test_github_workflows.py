@@ -30,6 +30,9 @@ def test_release_workflow_uploads_explicit_downloaded_asset_files() -> None:
     assert download_step["with"]["name"] == "civiccore-dist"
     assert download_step["with"]["path"] == "release-assets/"
     assert "civiccore-*-freeze) latest_flag=(--latest=false)" in create_release_script
+    assert "docs/evidence/co8-civiccore-procurement-evidence-pack/index.md" in create_release_script
+    assert "docs/ops/co-9-civiccore-v1-closeout.md" in create_release_script
+    assert "python scripts/verify-release-provenance.py ${{ github.ref_name }}" in create_release_script
     assert '"${latest_flag[@]}" \\' in create_release_script
     assert "release-assets/dist/*" in create_release_script
     assert "release-assets/release-attestation.json \\" in create_release_script

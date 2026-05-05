@@ -2,7 +2,8 @@
   "generated_for": [
     "v0.22.1",
     "civiccore-m1-freeze",
-    "v1.0-rc-main-3c4c34c"
+    "v1.0-rc-main-3c4c34c",
+    "v1.0"
   ],
   "packages": [
     {
@@ -14,7 +15,8 @@
       "present_in": [
         "v0.22.1",
         "civiccore-m1-freeze",
-        "v1.0-rc-main-3c4c34c"
+        "v1.0-rc-main-3c4c34c",
+        "v1.0"
       ],
       "project_urls": [
         "Changelog, https://github.com/Tinche/aiofiles#history",
@@ -24,13 +26,14 @@
       "version": "25.1.0"
     },
     {
-      "license": "UNKNOWN",
+      "license": "MIT",
       "license_classifiers": [],
       "name": "alembic",
       "present_in": [
         "v0.22.1",
         "civiccore-m1-freeze",
-        "v1.0-rc-main-3c4c34c"
+        "v1.0-rc-main-3c4c34c",
+        "v1.0"
       ],
       "project_urls": [
         "Homepage, https://alembic.sqlalchemy.org",
@@ -50,19 +53,21 @@
       "present_in": [
         "v0.22.1",
         "civiccore-m1-freeze",
-        "v1.0-rc-main-3c4c34c"
+        "v1.0-rc-main-3c4c34c",
+        "v1.0"
       ],
       "project_urls": [],
       "version": "5.3.1"
     },
     {
-      "license": "UNKNOWN",
+      "license": "MIT",
       "license_classifiers": [],
       "name": "annotated-doc",
       "present_in": [
         "v0.22.1",
         "civiccore-m1-freeze",
-        "v1.0-rc-main-3c4c34c"
+        "v1.0-rc-main-3c4c34c",
+        "v1.0"
       ],
       "project_urls": [
         "Homepage, https://github.com/fastapi/annotated-doc",
@@ -82,7 +87,8 @@
       "present_in": [
         "v0.22.1",
         "civiccore-m1-freeze",
-        "v1.0-rc-main-3c4c34c"
+        "v1.0-rc-main-3c4c34c",
+        "v1.0"
       ],
       "project_urls": [
         "Homepage, https://github.com/annotated-types/annotated-types",
@@ -92,13 +98,14 @@
       "version": "0.7.0"
     },
     {
-      "license": "UNKNOWN",
+      "license": "MIT",
       "license_classifiers": [],
       "name": "anyio",
       "present_in": [
         "v0.22.1",
         "civiccore-m1-freeze",
-        "v1.0-rc-main-3c4c34c"
+        "v1.0-rc-main-3c4c34c",
+        "v1.0"
       ],
       "project_urls": [
         "Documentation, https://anyio.readthedocs.io/en/latest/",
@@ -109,13 +116,14 @@
       "version": "4.13.0"
     },
     {
-      "license": "UNKNOWN",
+      "license": "MIT",
       "license_classifiers": [],
       "name": "argon2-cffi",
       "present_in": [
         "v0.22.1",
         "civiccore-m1-freeze",
-        "v1.0-rc-main-3c4c34c"
+        "v1.0-rc-main-3c4c34c",
+        "v1.0"
       ],
       "project_urls": [
         "Documentation, https://argon2-cffi.readthedocs.io/",
@@ -127,13 +135,14 @@
       "version": "25.1.0"
     },
     {
-      "license": "UNKNOWN",
+      "license": "MIT",
       "license_classifiers": [],
       "name": "argon2-cffi-bindings",
       "present_in": [
         "v0.22.1",
         "civiccore-m1-freeze",
-        "v1.0-rc-main-3c4c34c"
+        "v1.0-rc-main-3c4c34c",
+        "v1.0"
       ],
       "project_urls": [
         "Tidelift, https://tidelift.com/?utm_source=lifter&utm_medium=referral&utm_campaign=hynek",
@@ -144,13 +153,14 @@
       "version": "25.1.0"
     },
     {
-      "license": "UNKNOWN",
+      "license": "Apache-2.0",
       "license_classifiers": [],
       "name": "asyncpg",
       "present_in": [
         "v0.22.1",
         "civiccore-m1-freeze",
-        "v1.0-rc-main-3c4c34c"
+        "v1.0-rc-main-3c4c34c",
+        "v1.0"
       ],
       "project_urls": [
         "github, https://github.com/MagicStack/asyncpg"
@@ -166,7 +176,8 @@
       "present_in": [
         "v0.22.1",
         "civiccore-m1-freeze",
-        "v1.0-rc-main-3c4c34c"
+        "v1.0-rc-main-3c4c34c",
+        "v1.0"
       ],
       "project_urls": [
         "homepage, https://github.com/pyca/bcrypt/"
@@ -182,7 +193,8 @@
       "present_in": [
         "v0.22.1",
         "civiccore-m1-freeze",
-        "v1.0-rc-main-3c4c34c"
+        "v1.0-rc-main-3c4c34c",
+        "v1.0"
       ],
       "project_urls": [
         "Download, https://www.crummy.com/software/BeautifulSoup/bs4/download/",
@@ -199,7 +211,8 @@
       "present_in": [
         "v0.22.1",
         "civiccore-m1-freeze",
-        "v1.0-rc-main-3c4c34c"
+        "v1.0-rc-main-3c4c34c",
+        "v1.0"
       ],
       "project_urls": [],
       "version": "4.2.4"
@@ -211,7 +224,8 @@
       "present_in": [
         "v0.22.1",
         "civiccore-m1-freeze",
-        "v1.0-rc-main-3c4c34c"
+        "v1.0-rc-main-3c4c34c",
+        "v1.0"
       ],
       "project_urls": [
         "Documentation, https://docs.celeryq.dev/en/stable/",
@@ -231,7 +245,8 @@
       "present_in": [
         "v0.22.1",
         "civiccore-m1-freeze",
-        "v1.0-rc-main-3c4c34c"
+        "v1.0-rc-main-3c4c34c",
+        "v1.0"
       ],
       "project_urls": [
         "Source, https://github.com/certifi/python-certifi"
@@ -239,13 +254,14 @@
       "version": "2026.4.22"
     },
     {
-      "license": "UNKNOWN",
+      "license": "MIT",
       "license_classifiers": [],
       "name": "cffi",
       "present_in": [
         "v0.22.1",
         "civiccore-m1-freeze",
-        "v1.0-rc-main-3c4c34c"
+        "v1.0-rc-main-3c4c34c",
+        "v1.0"
       ],
       "project_urls": [
         "Documentation, https://cffi.readthedocs.io/",
@@ -264,7 +280,8 @@
       "present_in": [
         "v0.22.1",
         "civiccore-m1-freeze",
-        "v1.0-rc-main-3c4c34c"
+        "v1.0-rc-main-3c4c34c",
+        "v1.0"
       ],
       "project_urls": [
         "Changelog, https://github.com/jawah/charset_normalizer/blob/master/CHANGELOG.md",
@@ -275,29 +292,31 @@
       "version": "3.4.7"
     },
     {
-      "license": "UNKNOWN",
+      "license": "Apache-2.0",
       "license_classifiers": [],
       "name": "civiccore",
       "present_in": [
         "v0.22.1",
         "civiccore-m1-freeze",
-        "v1.0-rc-main-3c4c34c"
+        "v1.0-rc-main-3c4c34c",
+        "v1.0"
       ],
       "project_urls": [
         "Homepage, https://github.com/CivicSuite/civiccore",
         "Documentation, https://github.com/CivicSuite/civicsuite",
         "Issues, https://github.com/CivicSuite/civiccore/issues"
       ],
-      "version": "0.22.1"
+      "version": "0.22.1 / 1.0.0"
     },
     {
-      "license": "UNKNOWN",
+      "license": "BSD-3-Clause",
       "license_classifiers": [],
       "name": "click",
       "present_in": [
         "v0.22.1",
         "civiccore-m1-freeze",
-        "v1.0-rc-main-3c4c34c"
+        "v1.0-rc-main-3c4c34c",
+        "v1.0"
       ],
       "project_urls": [
         "Changes, https://click.palletsprojects.com/page/changes/",
@@ -317,7 +336,8 @@
       "present_in": [
         "v0.22.1",
         "civiccore-m1-freeze",
-        "v1.0-rc-main-3c4c34c"
+        "v1.0-rc-main-3c4c34c",
+        "v1.0"
       ],
       "project_urls": [
         "Repository, https://github.com/click-contrib/click-didyoumean"
@@ -333,7 +353,8 @@
       "present_in": [
         "v0.22.1",
         "civiccore-m1-freeze",
-        "v1.0-rc-main-3c4c34c"
+        "v1.0-rc-main-3c4c34c",
+        "v1.0"
       ],
       "project_urls": [],
       "version": "1.1.1.2"
@@ -345,7 +366,8 @@
       "present_in": [
         "v0.22.1",
         "civiccore-m1-freeze",
-        "v1.0-rc-main-3c4c34c"
+        "v1.0-rc-main-3c4c34c",
+        "v1.0"
       ],
       "project_urls": [],
       "version": "0.3.0"
@@ -359,7 +381,8 @@
       "present_in": [
         "v0.22.1",
         "civiccore-m1-freeze",
-        "v1.0-rc-main-3c4c34c"
+        "v1.0-rc-main-3c4c34c",
+        "v1.0"
       ],
       "project_urls": [
         "Homepage, https://github.com/tartley/colorama"
@@ -367,7 +390,7 @@
       "version": "0.4.6"
     },
     {
-      "license": "UNKNOWN",
+      "license": "MIT",
       "license_classifiers": [
         "License :: OSI Approved :: MIT License"
       ],
@@ -375,7 +398,8 @@
       "present_in": [
         "v0.22.1",
         "civiccore-m1-freeze",
-        "v1.0-rc-main-3c4c34c"
+        "v1.0-rc-main-3c4c34c",
+        "v1.0"
       ],
       "project_urls": [
         "Homepage, https://github.com/pallets-eco/croniter"
@@ -383,13 +407,14 @@
       "version": "6.2.2"
     },
     {
-      "license": "UNKNOWN",
+      "license": "Apache-2.0 OR BSD-3-Clause",
       "license_classifiers": [],
       "name": "cryptography",
       "present_in": [
         "v0.22.1",
         "civiccore-m1-freeze",
-        "v1.0-rc-main-3c4c34c"
+        "v1.0-rc-main-3c4c34c",
+        "v1.0"
       ],
       "project_urls": [
         "changelog, https://cryptography.io/en/latest/changelog/",
@@ -409,7 +434,8 @@
       "present_in": [
         "v0.22.1",
         "civiccore-m1-freeze",
-        "v1.0-rc-main-3c4c34c"
+        "v1.0-rc-main-3c4c34c",
+        "v1.0"
       ],
       "project_urls": [
         "homepage, https://www.dnspython.org",
@@ -426,7 +452,8 @@
       "present_in": [
         "v0.22.1",
         "civiccore-m1-freeze",
-        "v1.0-rc-main-3c4c34c"
+        "v1.0-rc-main-3c4c34c",
+        "v1.0"
       ],
       "project_urls": [],
       "version": "0.19.2"
@@ -440,7 +467,8 @@
       "present_in": [
         "v0.22.1",
         "civiccore-m1-freeze",
-        "v1.0-rc-main-3c4c34c"
+        "v1.0-rc-main-3c4c34c",
+        "v1.0"
       ],
       "project_urls": [],
       "version": "2.3.0"
@@ -454,7 +482,8 @@
       "present_in": [
         "v0.22.1",
         "civiccore-m1-freeze",
-        "v1.0-rc-main-3c4c34c"
+        "v1.0-rc-main-3c4c34c",
+        "v1.0"
       ],
       "project_urls": [
         "Documentation, https://openpyxl.pages.heptapod.net/et_xmlfile/",
@@ -464,13 +493,14 @@
       "version": "2.0.0"
     },
     {
-      "license": "UNKNOWN",
+      "license": "MIT",
       "license_classifiers": [],
       "name": "fastapi",
       "present_in": [
         "v0.22.1",
         "civiccore-m1-freeze",
-        "v1.0-rc-main-3c4c34c"
+        "v1.0-rc-main-3c4c34c",
+        "v1.0"
       ],
       "project_urls": [
         "Homepage, https://github.com/fastapi/fastapi",
@@ -490,7 +520,8 @@
       "present_in": [
         "v0.22.1",
         "civiccore-m1-freeze",
-        "v1.0-rc-main-3c4c34c"
+        "v1.0-rc-main-3c4c34c",
+        "v1.0"
       ],
       "project_urls": [
         "Documentation, https://fastapi-users.github.io/fastapi-users/",
@@ -507,7 +538,8 @@
       "present_in": [
         "v0.22.1",
         "civiccore-m1-freeze",
-        "v1.0-rc-main-3c4c34c"
+        "v1.0-rc-main-3c4c34c",
+        "v1.0"
       ],
       "project_urls": [
         "Documentation, https://fastapi-users.github.io/fastapi-users",
@@ -516,13 +548,14 @@
       "version": "7.0.0"
     },
     {
-      "license": "UNKNOWN",
+      "license": "MIT AND PSF-2.0",
       "license_classifiers": [],
       "name": "greenlet",
       "present_in": [
         "v0.22.1",
         "civiccore-m1-freeze",
-        "v1.0-rc-main-3c4c34c"
+        "v1.0-rc-main-3c4c34c",
+        "v1.0"
       ],
       "project_urls": [
         "Homepage, https://greenlet.readthedocs.io",
@@ -542,13 +575,14 @@
       "present_in": [
         "v0.22.1",
         "civiccore-m1-freeze",
-        "v1.0-rc-main-3c4c34c"
+        "v1.0-rc-main-3c4c34c",
+        "v1.0"
       ],
       "project_urls": [],
       "version": "0.16.0"
     },
     {
-      "license": "UNKNOWN",
+      "license": "BSD-3-Clause",
       "license_classifiers": [
         "License :: OSI Approved :: BSD License"
       ],
@@ -556,7 +590,8 @@
       "present_in": [
         "v0.22.1",
         "civiccore-m1-freeze",
-        "v1.0-rc-main-3c4c34c"
+        "v1.0-rc-main-3c4c34c",
+        "v1.0"
       ],
       "project_urls": [
         "Documentation, https://www.encode.io/httpcore",
@@ -566,13 +601,14 @@
       "version": "1.0.9"
     },
     {
-      "license": "UNKNOWN",
+      "license": "MIT",
       "license_classifiers": [],
       "name": "httptools",
       "present_in": [
         "v0.22.1",
         "civiccore-m1-freeze",
-        "v1.0-rc-main-3c4c34c"
+        "v1.0-rc-main-3c4c34c",
+        "v1.0"
       ],
       "project_urls": [
         "Homepage, https://github.com/MagicStack/httptools"
@@ -588,7 +624,8 @@
       "present_in": [
         "v0.22.1",
         "civiccore-m1-freeze",
-        "v1.0-rc-main-3c4c34c"
+        "v1.0-rc-main-3c4c34c",
+        "v1.0"
       ],
       "project_urls": [
         "Changelog, https://github.com/encode/httpx/blob/master/CHANGELOG.md",
@@ -599,13 +636,14 @@
       "version": "0.28.1"
     },
     {
-      "license": "UNKNOWN",
+      "license": "BSD-3-Clause",
       "license_classifiers": [],
       "name": "idna",
       "present_in": [
         "v0.22.1",
         "civiccore-m1-freeze",
-        "v1.0-rc-main-3c4c34c"
+        "v1.0-rc-main-3c4c34c",
+        "v1.0"
       ],
       "project_urls": [
         "Changelog, https://github.com/kjd/idna/blob/master/HISTORY.rst",
@@ -621,7 +659,8 @@
       "present_in": [
         "v0.22.1",
         "civiccore-m1-freeze",
-        "v1.0-rc-main-3c4c34c"
+        "v1.0-rc-main-3c4c34c",
+        "v1.0"
       ],
       "project_urls": [
         "Source, https://github.com/celery/kombu"
@@ -635,7 +674,8 @@
       "present_in": [
         "v0.22.1",
         "civiccore-m1-freeze",
-        "v1.0-rc-main-3c4c34c"
+        "v1.0-rc-main-3c4c34c",
+        "v1.0"
       ],
       "project_urls": [
         "Source, https://github.com/lxml/lxml",
@@ -652,7 +692,8 @@
       "present_in": [
         "v0.22.1",
         "civiccore-m1-freeze",
-        "v1.0-rc-main-3c4c34c"
+        "v1.0-rc-main-3c4c34c",
+        "v1.0"
       ],
       "project_urls": [],
       "version": "1.16.0"
@@ -666,7 +707,8 @@
       "present_in": [
         "v0.22.1",
         "civiccore-m1-freeze",
-        "v1.0-rc-main-3c4c34c"
+        "v1.0-rc-main-3c4c34c",
+        "v1.0"
       ],
       "project_urls": [
         "Documentation, https://docs.makotemplates.org",
@@ -675,13 +717,14 @@
       "version": "1.3.12"
     },
     {
-      "license": "UNKNOWN",
+      "license": "BSD-3-Clause",
       "license_classifiers": [],
       "name": "MarkupSafe",
       "present_in": [
         "v0.22.1",
         "civiccore-m1-freeze",
-        "v1.0-rc-main-3c4c34c"
+        "v1.0-rc-main-3c4c34c",
+        "v1.0"
       ],
       "project_urls": [
         "Donate, https://palletsprojects.com/donate",
@@ -693,13 +736,14 @@
       "version": "3.0.3"
     },
     {
-      "license": "UNKNOWN",
+      "license": "BSD-3-Clause AND 0BSD AND MIT AND Zlib AND CC0-1.0",
       "license_classifiers": [],
       "name": "numpy",
       "present_in": [
         "v0.22.1",
         "civiccore-m1-freeze",
-        "v1.0-rc-main-3c4c34c"
+        "v1.0-rc-main-3c4c34c",
+        "v1.0"
       ],
       "project_urls": [
         "homepage, https://numpy.org",
@@ -720,7 +764,8 @@
       "present_in": [
         "v0.22.1",
         "civiccore-m1-freeze",
-        "v1.0-rc-main-3c4c34c"
+        "v1.0-rc-main-3c4c34c",
+        "v1.0"
       ],
       "project_urls": [
         "Documentation, https://openpyxl.readthedocs.io/en/stable/",
@@ -730,13 +775,14 @@
       "version": "3.1.5"
     },
     {
-      "license": "UNKNOWN",
+      "license": "Apache-2.0 OR BSD-2-Clause",
       "license_classifiers": [],
       "name": "packaging",
       "present_in": [
         "v0.22.1",
         "civiccore-m1-freeze",
-        "v1.0-rc-main-3c4c34c"
+        "v1.0-rc-main-3c4c34c",
+        "v1.0"
       ],
       "project_urls": [
         "Documentation, https://packaging.pypa.io/",
@@ -751,19 +797,21 @@
       "present_in": [
         "v0.22.1",
         "civiccore-m1-freeze",
-        "v1.0-rc-main-3c4c34c"
+        "v1.0-rc-main-3c4c34c",
+        "v1.0"
       ],
       "project_urls": [],
       "version": "1.7.4"
     },
     {
-      "license": "UNKNOWN",
+      "license": "MIT",
       "license_classifiers": [],
       "name": "pdfminer.six",
       "present_in": [
         "v0.22.1",
         "civiccore-m1-freeze",
-        "v1.0-rc-main-3c4c34c"
+        "v1.0-rc-main-3c4c34c",
+        "v1.0"
       ],
       "project_urls": [
         "Homepage, https://github.com/pdfminer/pdfminer.six"
@@ -779,19 +827,21 @@
       "present_in": [
         "v0.22.1",
         "civiccore-m1-freeze",
-        "v1.0-rc-main-3c4c34c"
+        "v1.0-rc-main-3c4c34c",
+        "v1.0"
       ],
       "project_urls": [],
       "version": "0.11.9"
     },
     {
-      "license": "UNKNOWN",
+      "license": "MIT",
       "license_classifiers": [],
       "name": "pgvector",
       "present_in": [
         "v0.22.1",
         "civiccore-m1-freeze",
-        "v1.0-rc-main-3c4c34c"
+        "v1.0-rc-main-3c4c34c",
+        "v1.0"
       ],
       "project_urls": [
         "Homepage, https://github.com/pgvector/pgvector-python"
@@ -799,13 +849,14 @@
       "version": "0.4.2"
     },
     {
-      "license": "UNKNOWN",
+      "license": "MIT-CMU",
       "license_classifiers": [],
       "name": "pillow",
       "present_in": [
         "v0.22.1",
         "civiccore-m1-freeze",
-        "v1.0-rc-main-3c4c34c"
+        "v1.0-rc-main-3c4c34c",
+        "v1.0"
       ],
       "project_urls": [
         "Release notes, https://pillow.readthedocs.io/en/stable/releasenotes/index.html",
@@ -819,13 +870,14 @@
       "version": "12.2.0"
     },
     {
-      "license": "UNKNOWN",
+      "license": "MIT",
       "license_classifiers": [],
       "name": "pip",
       "present_in": [
         "v0.22.1",
         "civiccore-m1-freeze",
-        "v1.0-rc-main-3c4c34c"
+        "v1.0-rc-main-3c4c34c",
+        "v1.0"
       ],
       "project_urls": [
         "Changelog, https://pip.pypa.io/en/stable/news/",
@@ -844,7 +896,8 @@
       "present_in": [
         "v0.22.1",
         "civiccore-m1-freeze",
-        "v1.0-rc-main-3c4c34c"
+        "v1.0-rc-main-3c4c34c",
+        "v1.0"
       ],
       "project_urls": [
         "Homepage, https://github.com/prompt-toolkit/python-prompt-toolkit",
@@ -861,7 +914,8 @@
       "present_in": [
         "v0.22.1",
         "civiccore-m1-freeze",
-        "v1.0-rc-main-3c4c34c"
+        "v1.0-rc-main-3c4c34c",
+        "v1.0"
       ],
       "project_urls": [
         "Documentation, https://frankie567.github.io/pwdlib/",
@@ -876,7 +930,8 @@
       "present_in": [
         "v0.22.1",
         "civiccore-m1-freeze",
-        "v1.0-rc-main-3c4c34c"
+        "v1.0-rc-main-3c4c34c",
+        "v1.0"
       ],
       "project_urls": [
         "Homepage, https://github.com/pyasn1/pyasn1",
@@ -888,13 +943,14 @@
       "version": "0.6.3"
     },
     {
-      "license": "UNKNOWN",
+      "license": "BSD-3-Clause",
       "license_classifiers": [],
       "name": "pycparser",
       "present_in": [
         "v0.22.1",
         "civiccore-m1-freeze",
-        "v1.0-rc-main-3c4c34c"
+        "v1.0-rc-main-3c4c34c",
+        "v1.0"
       ],
       "project_urls": [
         "Homepage, https://github.com/eliben/pycparser"
@@ -902,13 +958,14 @@
       "version": "3.0"
     },
     {
-      "license": "UNKNOWN",
+      "license": "MIT",
       "license_classifiers": [],
       "name": "pydantic",
       "present_in": [
         "v0.22.1",
         "civiccore-m1-freeze",
-        "v1.0-rc-main-3c4c34c"
+        "v1.0-rc-main-3c4c34c",
+        "v1.0"
       ],
       "project_urls": [
         "Homepage, https://github.com/pydantic/pydantic",
@@ -920,7 +977,7 @@
       "version": "2.13.3"
     },
     {
-      "license": "UNKNOWN",
+      "license": "MIT",
       "license_classifiers": [
         "License :: OSI Approved :: MIT License"
       ],
@@ -928,7 +985,8 @@
       "present_in": [
         "v0.22.1",
         "civiccore-m1-freeze",
-        "v1.0-rc-main-3c4c34c"
+        "v1.0-rc-main-3c4c34c",
+        "v1.0"
       ],
       "project_urls": [
         "Homepage, https://github.com/pydantic/pydantic-settings",
@@ -940,13 +998,14 @@
       "version": "2.14.0"
     },
     {
-      "license": "UNKNOWN",
+      "license": "MIT",
       "license_classifiers": [],
       "name": "pydantic_core",
       "present_in": [
         "v0.22.1",
         "civiccore-m1-freeze",
-        "v1.0-rc-main-3c4c34c"
+        "v1.0-rc-main-3c4c34c",
+        "v1.0"
       ],
       "project_urls": [
         "Funding, https://github.com/sponsors/samuelcolvin",
@@ -956,13 +1015,14 @@
       "version": "2.46.3"
     },
     {
-      "license": "UNKNOWN",
+      "license": "MIT",
       "license_classifiers": [],
       "name": "PyJWT",
       "present_in": [
         "v0.22.1",
         "civiccore-m1-freeze",
-        "v1.0-rc-main-3c4c34c"
+        "v1.0-rc-main-3c4c34c",
+        "v1.0"
       ],
       "project_urls": [
         "Homepage, https://github.com/jpadilla/pyjwt"
@@ -976,7 +1036,8 @@
       "present_in": [
         "v0.22.1",
         "civiccore-m1-freeze",
-        "v1.0-rc-main-3c4c34c"
+        "v1.0-rc-main-3c4c34c",
+        "v1.0"
       ],
       "project_urls": [
         "Source, https://github.com/pypdfium2-team/pypdfium2",
@@ -995,7 +1056,8 @@
       "present_in": [
         "v0.22.1",
         "civiccore-m1-freeze",
-        "v1.0-rc-main-3c4c34c"
+        "v1.0-rc-main-3c4c34c",
+        "v1.0"
       ],
       "project_urls": [],
       "version": "0.3.13"
@@ -1003,14 +1065,15 @@
     {
       "license": "Dual License",
       "license_classifiers": [
-        "License :: OSI Approved :: BSD License",
-        "License :: OSI Approved :: Apache Software License"
+        "License :: OSI Approved :: Apache Software License",
+        "License :: OSI Approved :: BSD License"
       ],
       "name": "python-dateutil",
       "present_in": [
         "v0.22.1",
         "civiccore-m1-freeze",
-        "v1.0-rc-main-3c4c34c"
+        "v1.0-rc-main-3c4c34c",
+        "v1.0"
       ],
       "project_urls": [
         "Documentation, https://dateutil.readthedocs.io/en/stable/",
@@ -1027,7 +1090,8 @@
       "present_in": [
         "v0.22.1",
         "civiccore-m1-freeze",
-        "v1.0-rc-main-3c4c34c"
+        "v1.0-rc-main-3c4c34c",
+        "v1.0"
       ],
       "project_urls": [
         "Changelog, https://github.com/python-openxml/python-docx/blob/master/HISTORY.rst",
@@ -1044,7 +1108,8 @@
       "present_in": [
         "v0.22.1",
         "civiccore-m1-freeze",
-        "v1.0-rc-main-3c4c34c"
+        "v1.0-rc-main-3c4c34c",
+        "v1.0"
       ],
       "project_urls": [
         "Source, https://github.com/theskumar/python-dotenv"
@@ -1060,7 +1125,8 @@
       "present_in": [
         "v0.22.1",
         "civiccore-m1-freeze",
-        "v1.0-rc-main-3c4c34c"
+        "v1.0-rc-main-3c4c34c",
+        "v1.0"
       ],
       "project_urls": [
         "Documentation, https://python-jose.readthedocs.io/en/latest/",
@@ -1071,7 +1137,7 @@
       "version": "3.5.0"
     },
     {
-      "license": "UNKNOWN",
+      "license": "Apache-2.0",
       "license_classifiers": [
         "License :: OSI Approved :: Apache Software License"
       ],
@@ -1079,7 +1145,8 @@
       "present_in": [
         "v0.22.1",
         "civiccore-m1-freeze",
-        "v1.0-rc-main-3c4c34c"
+        "v1.0-rc-main-3c4c34c",
+        "v1.0"
       ],
       "project_urls": [
         "Homepage, https://github.com/Kludex/python-multipart",
@@ -1098,7 +1165,8 @@
       "present_in": [
         "v0.22.1",
         "civiccore-m1-freeze",
-        "v1.0-rc-main-3c4c34c"
+        "v1.0-rc-main-3c4c34c",
+        "v1.0"
       ],
       "project_urls": [
         "Bug Tracker, https://github.com/yaml/pyyaml/issues",
@@ -1110,7 +1178,7 @@
       "version": "6.0.3"
     },
     {
-      "license": "UNKNOWN",
+      "license": "MIT",
       "license_classifiers": [
         "License :: OSI Approved :: MIT License"
       ],
@@ -1118,7 +1186,8 @@
       "present_in": [
         "v0.22.1",
         "civiccore-m1-freeze",
-        "v1.0-rc-main-3c4c34c"
+        "v1.0-rc-main-3c4c34c",
+        "v1.0"
       ],
       "project_urls": [
         "Changes, https://github.com/redis/redis-py/releases",
@@ -1130,13 +1199,14 @@
       "version": "7.4.0"
     },
     {
-      "license": "UNKNOWN",
+      "license": "Apache-2.0 AND CNRI-Python",
       "license_classifiers": [],
       "name": "regex",
       "present_in": [
         "v0.22.1",
         "civiccore-m1-freeze",
-        "v1.0-rc-main-3c4c34c"
+        "v1.0-rc-main-3c4c34c",
+        "v1.0"
       ],
       "project_urls": [
         "Homepage, https://github.com/mrabarnett/mrab-regex"
@@ -1152,7 +1222,8 @@
       "present_in": [
         "v0.22.1",
         "civiccore-m1-freeze",
-        "v1.0-rc-main-3c4c34c"
+        "v1.0-rc-main-3c4c34c",
+        "v1.0"
       ],
       "project_urls": [
         "Homepage, https://stuvel.eu/rsa",
@@ -1169,13 +1240,14 @@
       "present_in": [
         "v0.22.1",
         "civiccore-m1-freeze",
-        "v1.0-rc-main-3c4c34c"
+        "v1.0-rc-main-3c4c34c",
+        "v1.0"
       ],
       "project_urls": [],
       "version": "1.17.0"
     },
     {
-      "license": "UNKNOWN",
+      "license": "MIT",
       "license_classifiers": [
         "License :: OSI Approved :: MIT License"
       ],
@@ -1183,7 +1255,8 @@
       "present_in": [
         "v0.22.1",
         "civiccore-m1-freeze",
-        "v1.0-rc-main-3c4c34c"
+        "v1.0-rc-main-3c4c34c",
+        "v1.0"
       ],
       "project_urls": [
         "Homepage, https://github.com/facelessuser/soupsieve"
@@ -1197,7 +1270,8 @@
       "present_in": [
         "v0.22.1",
         "civiccore-m1-freeze",
-        "v1.0-rc-main-3c4c34c"
+        "v1.0-rc-main-3c4c34c",
+        "v1.0"
       ],
       "project_urls": [
         "Documentation, https://docs.sqlalchemy.org",
@@ -1206,13 +1280,14 @@
       "version": "2.0.49"
     },
     {
-      "license": "UNKNOWN",
+      "license": "BSD-3-Clause",
       "license_classifiers": [],
       "name": "starlette",
       "present_in": [
         "v0.22.1",
         "civiccore-m1-freeze",
-        "v1.0-rc-main-3c4c34c"
+        "v1.0-rc-main-3c4c34c",
+        "v1.0"
       ],
       "project_urls": [
         "Homepage, https://github.com/Kludex/starlette",
@@ -1224,13 +1299,14 @@
       "version": "1.0.0"
     },
     {
-      "license": "UNKNOWN",
+      "license": "MIT",
       "license_classifiers": [],
       "name": "typing-inspection",
       "present_in": [
         "v0.22.1",
         "civiccore-m1-freeze",
-        "v1.0-rc-main-3c4c34c"
+        "v1.0-rc-main-3c4c34c",
+        "v1.0"
       ],
       "project_urls": [
         "Homepage, https://github.com/pydantic/typing-inspection",
@@ -1241,13 +1317,14 @@
       "version": "0.4.2"
     },
     {
-      "license": "UNKNOWN",
+      "license": "PSF-2.0",
       "license_classifiers": [],
       "name": "typing_extensions",
       "present_in": [
         "v0.22.1",
         "civiccore-m1-freeze",
-        "v1.0-rc-main-3c4c34c"
+        "v1.0-rc-main-3c4c34c",
+        "v1.0"
       ],
       "project_urls": [
         "Bug Tracker, https://github.com/python/typing_extensions/issues",
@@ -1266,7 +1343,8 @@
       "present_in": [
         "v0.22.1",
         "civiccore-m1-freeze",
-        "v1.0-rc-main-3c4c34c"
+        "v1.0-rc-main-3c4c34c",
+        "v1.0"
       ],
       "project_urls": [
         "Bug Reports, https://github.com/python/tzdata/issues",
@@ -1284,7 +1362,8 @@
       "present_in": [
         "v0.22.1",
         "civiccore-m1-freeze",
-        "v1.0-rc-main-3c4c34c"
+        "v1.0-rc-main-3c4c34c",
+        "v1.0"
       ],
       "project_urls": [
         "Source code, https://github.com/regebro/tzlocal",
@@ -1294,13 +1373,14 @@
       "version": "5.3.1"
     },
     {
-      "license": "UNKNOWN",
+      "license": "BSD-3-Clause",
       "license_classifiers": [],
       "name": "uvicorn",
       "present_in": [
         "v0.22.1",
         "civiccore-m1-freeze",
-        "v1.0-rc-main-3c4c34c"
+        "v1.0-rc-main-3c4c34c",
+        "v1.0"
       ],
       "project_urls": [
         "Changelog, https://uvicorn.dev/release-notes",
@@ -1319,7 +1399,8 @@
       "present_in": [
         "v0.22.1",
         "civiccore-m1-freeze",
-        "v1.0-rc-main-3c4c34c"
+        "v1.0-rc-main-3c4c34c",
+        "v1.0"
       ],
       "project_urls": [],
       "version": "5.1.0"
@@ -1333,7 +1414,8 @@
       "present_in": [
         "v0.22.1",
         "civiccore-m1-freeze",
-        "v1.0-rc-main-3c4c34c"
+        "v1.0-rc-main-3c4c34c",
+        "v1.0"
       ],
       "project_urls": [
         "Homepage, https://github.com/samuelcolvin/watchfiles",
@@ -1345,13 +1427,14 @@
       "version": "1.1.1"
     },
     {
-      "license": "UNKNOWN",
+      "license": "MIT",
       "license_classifiers": [],
       "name": "wcwidth",
       "present_in": [
         "v0.22.1",
         "civiccore-m1-freeze",
-        "v1.0-rc-main-3c4c34c"
+        "v1.0-rc-main-3c4c34c",
+        "v1.0"
       ],
       "project_urls": [
         "Homepage, https://github.com/jquast/wcwidth"
@@ -1359,13 +1442,14 @@
       "version": "0.7.0"
     },
     {
-      "license": "UNKNOWN",
+      "license": "BSD-3-Clause",
       "license_classifiers": [],
       "name": "websockets",
       "present_in": [
         "v0.22.1",
         "civiccore-m1-freeze",
-        "v1.0-rc-main-3c4c34c"
+        "v1.0-rc-main-3c4c34c",
+        "v1.0"
       ],
       "project_urls": [
         "Homepage, https://github.com/python-websockets/websockets",
@@ -1376,6 +1460,5 @@
       ],
       "version": "16.0"
     }
-  ],
-  "schema_version": 1
+  ]
 }

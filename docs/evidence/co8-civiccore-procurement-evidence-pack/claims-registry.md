@@ -8,7 +8,6 @@ Verdict key:
   tests in this session.
 - `Policy-bound`: true as a governing rule, with future enforcement required
   in downstream sprints.
-- `Deferred`: explicitly not shipped or not final until CO-9.
 
 | ID | Claim | Source | Verdict | Evidence |
 |---|---|---|---|---|
@@ -30,5 +29,6 @@ Verdict key:
 | CC-CLAIM-016 | CivicCore ships connector retry/circuit-breaker primitives. | README, tests | Verified | `tests/test_connector_sync.py` passed in `scripts/verify-release.sh`. |
 | CC-CLAIM-017 | CivicCore ships search normalization/access/RRF helpers, not a full search engine. | README, tests | Verified | `tests/test_search_helpers.py` passed; README states full engine remains planned. |
 | CC-CLAIM-018 | CivicCore ships notice deadline/compliance helpers, not outbound delivery queues. | README, tests | Verified | `tests/test_notifications_notice.py` passed; README scopes delivery queues as unshipped. |
-| CC-CLAIM-019 | CO-8 SBOM files cover v0.22.1, freeze, and the current v1.0 release-candidate tree. | CO-8 evidence pack | Verified | Three `sbom-*.json` files generated from isolated installs with 83 packages each. |
-| CC-CLAIM-020 | Final v1.0 SBOM is still pending until CO-9 publishes the v1.0 release. | Directive2 CO-8/CO-9 sequence | Deferred | [`index.md`](index.md) states the explicit sequencing limit. |
+| CC-CLAIM-019 | CO-8/CO-9 SBOM files cover v0.22.1, freeze, the v1.0 release-candidate tree, and the final v1.0 package tree. | CO-8 evidence pack | Verified | Four `sbom-*.json` files generated from isolated installs with 83 packages each. |
+| CC-CLAIM-020 | The final v1.0 SBOM is present in the evidence pack. | Directive2 CO-8/CO-9 sequence | Verified | [`sbom-v1.0-pip-inspect.json`](sbom-v1.0-pip-inspect.json), [`index.md`](index.md). |
+| CC-CLAIM-021 | CivicCore v1.0 is the downstream productization release and v0.22.1 remains the first attested baseline release. | README, USER-MANUAL, docs index | Verified | `pyproject.toml`/`civiccore.__version__` are `1.0.0`; release notes and closeout point to the v1.0 tag while historical policy keeps v0.22.1 as baseline. |

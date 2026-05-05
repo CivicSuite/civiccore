@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="CivicCore v0.22.1 - shared platform library for the open-source CivicSuite municipal operations suite. Not an end-user app. Apache 2.0.">
-<title>CivicCore v0.22.1 - CivicSuite shared platform library</title>
+<meta name="description" content="CivicCore v1.0 - shared platform library for the open-source CivicSuite municipal operations suite. Not an end-user app. Apache 2.0.">
+<title>CivicCore v1.0 - CivicSuite shared platform library</title>
   <style>
     :root {
       --text: #1f2328;
@@ -178,14 +178,14 @@
 
     <section aria-labelledby="install">
       <h2 id="install">Install</h2>
-      <p>From the current GitHub release wheel (<code>v0.22.1</code>) - civiccore is GitHub-wheel-only, not on PyPI:</p>
-      <pre><code>pip install https://github.com/CivicSuite/civiccore/releases/download/v0.22.1/civiccore-0.22.1-py3-none-any.whl</code></pre>
+      <p>From the current GitHub release wheel (<code>v1.0</code>) - civiccore is GitHub-wheel-only, not on PyPI:</p>
+      <pre><code>pip install https://github.com/CivicSuite/civiccore/releases/download/v1.0/civiccore-1.0.0-py3-none-any.whl</code></pre>
       <p>For development from a clone:</p>
       <pre><code>git clone https://github.com/CivicSuite/civiccore.git
 cd civiccore
 pip install -e .[dev]</code></pre>
       <p>Each release publishes <code>SHA256SUMS.txt</code> alongside the wheel and sdist. Verify the checksum before promoting an artifact downstream.</p>
-      <p><strong>Release provenance note:</strong> GitHub release pages can show a target commit as Verified even when the release tag itself is lightweight or unsigned. CivicCore treats tags as release pointers and verifies <code>release-attestation.json</code> plus its Sigstore/cosign bundle as the trust artifact. The exact workflow identity is pinned per repo and per tag; see <code>docs/ops/release-signing.md</code>, <code>docs/ops/release-attestation.schema.json</code>, <code>docs/ops/civiccore-tier1-retrofit-ledger.md</code>, and <code>docs/ops/historical-provenance.md</code>. The published <code>v0.22.1</code> release is the first attested baseline. Earlier CivicCore releases are retained for historical installs only and must not be promoted as provenance baselines unless a future additive attestation is explicitly authorized, published, and ledgered.</p>
+      <p><strong>Release provenance note:</strong> GitHub release pages can show a target commit as Verified even when the release tag itself is lightweight or unsigned. CivicCore treats tags as release pointers and verifies <code>release-attestation.json</code> plus its Sigstore/cosign bundle as the trust artifact. The exact workflow identity is pinned per repo and per tag; see <code>docs/ops/release-signing.md</code>, <code>docs/ops/release-attestation.schema.json</code>, <code>docs/ops/civiccore-tier1-retrofit-ledger.md</code>, and <code>docs/ops/historical-provenance.md</code>. The published <code>v1.0</code> release is the downstream productization release; <code>v0.22.1</code> remains the first attested baseline. Earlier CivicCore releases are retained for historical installs only and must not be promoted as provenance baselines unless a future additive attestation is explicitly authorized, published, and ledgered.</p>
       <figure style="margin: 2em 0;">
         <img src="diagrams/migration-order.svg" alt="Consumer apps invoke civiccore migrations before their own Alembic chain." style="max-width: 100%; height: auto; display: block; margin: 0 auto;">
         <figcaption style="text-align: center; color: #666; font-size: 0.9em; margin-top: 0.5em;">Migration order - civiccore runs first; consumer chain runs second.</figcaption>
@@ -196,8 +196,9 @@ pip install -e .[dev]</code></pre>
       <h2 id="status">Status</h2>
       <div class="status">
         <p>
-          <strong>v0.22.1 is the first attested baseline release.</strong>
-          The current development line adds the canonical Sigstore release-provenance helper,
+          <strong>v1.0 is the downstream productization release.</strong>
+          It carries the CO-7 freeze-line trust anchor, the CO-8 procurement evidence pack, and the CO-9 closeout trail.
+          <code>v0.22.1</code> remains the first attested baseline release. The current development line includes the canonical Sigstore release-provenance helper,
           versioned attestation schema, fixture-driven gate, and release workflow that signs and verifies
           <code>release-attestation.json</code> before publication, plus source-list status projection helpers for connector workspaces,
           cron schedule validation helpers,
@@ -249,7 +250,7 @@ pip install -e .[dev]</code></pre>
       <h2 id="compat">Compatibility</h2>
       <p>
         <strong>Current module foundations span older civiccore lines while newer product-depth consumers already target later releases.</strong>
-          Production-depth consumers can target civiccore v0.22.1 when their compatibility matrix is updated. Every CivicSuite
+          Production-depth consumers can target civiccore v1.0 when their compatibility matrix is updated. Every CivicSuite
           module's README declares a CivicCore version range.
         </p>
     </section>
@@ -263,6 +264,7 @@ pip install -e .[dev]</code></pre>
         <li><a href="https://github.com/CivicSuite/civiccore/blob/main/CHANGELOG.md">CHANGELOG</a> - Keep a Changelog format.</li>
         <li><a href="https://github.com/CivicSuite/civiccore/blob/main/docs/adr/index.md">Placeholder ADRs</a> - CO-7 deferral rationale and downstream consumption rules for reserved namespaces.</li>
         <li><a href="https://github.com/CivicSuite/civiccore/blob/main/docs/evidence/co8-civiccore-procurement-evidence-pack/index.md">CO-8 procurement evidence pack</a> - threat model, SBOMs, license manifest, incident drills, sovereignty proof, patch cadence, claims registry, and worked install-and-verify path.</li>
+        <li><a href="https://github.com/CivicSuite/civiccore/blob/main/docs/ops/co-9-civiccore-v1-closeout.md">CO-9 closeout report</a> - release authorization payload, attested release chain, freeze-line tag, audit gate, and CivicClerk unblock record.</li>
         <li><a href="https://github.com/CivicSuite/civiccore/blob/main/docs/ops/cleanroom-harness.md">Cleanroom harness</a> - pinned CO-6 container for reproducing release, Sigstore, SHA256SUMS, and offline runtime checks.</li>
         <li><a href="https://github.com/CivicSuite/civiccore/blob/main/docs/ops/historical-provenance.md">Historical provenance policy</a> - operative disclosure for the attested baseline and historical release boundary.</li>
         <li><a href="https://github.com/CivicSuite/civiccore/blob/main/docs/ops/civiccore-tier1-retrofit-ledger.md">Tier 1 retrofit ledger</a> - live CivicCore release-tag provenance decisions.</li>

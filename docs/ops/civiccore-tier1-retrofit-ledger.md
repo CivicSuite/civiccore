@@ -29,6 +29,11 @@ python scripts/check-tier1-ledger.py
 python scripts/check-tier1-ledger.py --live
 ```
 
+The live check requires every historical/pre-baseline release in this ledger to
+remain visible. Newer post-baseline releases do not need retroactive CO-3 rows,
+but the live check permits them only when the GitHub release exposes both
+`release-attestation.json` and `release-attestation.json.bundle`.
+
 ## Live Scan Summary
 
 - Repo: `CivicSuite/civiccore`
@@ -73,9 +78,10 @@ python scripts/check-tier1-ledger.py --live
 
 ## Auditor Interpretation
 
-Zero live CivicCore release tags are intentionally left unledgered. The
-pre-baseline entries are explicit no-attestation decisions, not implied
-backfills. If a future sprint publishes additive attestations for any
+Zero CO-3 historical CivicCore release tags are intentionally left unledgered.
+The pre-baseline entries are explicit no-attestation decisions, not implied
+backfills. Later post-baseline releases are governed by their own release
+attestation and closeout evidence. If a future sprint publishes additive attestations for any
 pre-baseline release, that release must be moved out of
 `pre_gate_no_attestation_do_not_promote` in the JSON ledger and verified with
 `python scripts/check-tier1-ledger.py --live`.
