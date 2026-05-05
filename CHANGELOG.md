@@ -13,6 +13,8 @@ MINOR; bug fixes ship as PATCH.
 
 ## [Unreleased]
 
+## [0.22.1] - 2026-05-05
+
 ### Added
 - `civiccore.release_provenance` now provides the canonical CivicSuite
   release-provenance gate for the Sigstore attestation trust model, including

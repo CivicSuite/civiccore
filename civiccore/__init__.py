@@ -14,7 +14,7 @@ CivicCore is a library, not an end-user application.
 
 from __future__ import annotations
 
-__version__ = "0.22.0"
+__version__ = "0.22.1"
 
 from civiccore.audit import (
     AuditActor,

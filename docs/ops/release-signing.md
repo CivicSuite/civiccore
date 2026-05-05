@@ -210,3 +210,26 @@ auditor output. Auditor decisions become operative only when explicitly written
 in the chat as directives, approvals, or authorizations. Code, PRs, fixtures,
 and runbooks produced by the development swarm are separate artifact classes
 and must preserve that distinction in the audit trail.
+
+## PR Review Report Format
+
+When reporting a PR for audit review, copy review-surface file paths verbatim
+from `git diff --name-only` or `git show --name-only --format=` output. Do not
+retype paths from memory. A mismatched path in a review report is an
+audit-trail-integrity defect even when the underlying artifact is correct,
+because it forces reviewers to spend evidence-gathering effort finding the
+actual file.
+
+## Historical Disclosure Publication
+
+The historical provenance disclosure remains a draft while it is named
+`docs/ops/historical-provenance-draft.md`. Final policy publication is a
+two-step operation in one verified PR:
+
+1. Remove draft-specific language and fill the authorized baseline date and
+   baseline tag.
+2. Rename the file to `docs/ops/historical-provenance.md` so the canonical
+   public disclosure is discoverable without the `-draft` suffix.
+
+Do not publish the disclosure as operative policy until both steps land
+together and the auditor explicitly authorizes publication.
