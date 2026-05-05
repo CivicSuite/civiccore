@@ -34,6 +34,13 @@ MINOR; bug fixes ship as PATCH.
   `release-attestation.json`, verifies the attestation before publication, and
   uploads the attestation plus bundle alongside wheel, sdist, and checksums.
 
+### Fixed
+- Release workflow now writes GitHub Release notes from a generated Markdown
+  file so the workflow remains valid YAML before the first attested baseline
+  tag is published.
+- Test coverage now parses every GitHub workflow file to catch release-workflow
+  YAML regressions before tag-push release operations.
+
 ## [0.22.0] - 2026-05-03
 
 ### Added

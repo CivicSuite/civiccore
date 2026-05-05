@@ -136,21 +136,24 @@ jobs:
           GH_REPO: ${{ github.repository }}
           GH_TOKEN: ${{ github.token }}
         run: |
+          cat > release-notes.md <<'EOF'
+          CivicCore ${{ github.ref_name }} release.
+
+          Release provenance:
+          - The Git tag is a release pointer; the trust artifact is release-attestation.json plus release-attestation.json.bundle.
+          - Pre-flight provenance fixtures and live attestation verification ran before publication in workflow run ${{ github.run_id }}.
+          - Verify with:
+
+          ```bash
+          cosign verify-blob release-attestation.json \
+            --bundle release-attestation.json.bundle \
+            --certificate-identity "https://github.com/${{ github.repository }}/.github/workflows/release.yml@refs/tags/${{ github.ref_name }}" \
+            --certificate-oidc-issuer https://token.actions.githubusercontent.com
+
+          sha256sum -c SHA256SUMS.txt
+          ```
+          EOF
           gh release create "${{ github.ref_name }}" dist/* \
             --repo "$GH_REPO" \
             --title "civiccore ${{ github.ref_name }}" \
-            --notes "CivicCore ${{ github.ref_name }} release.
-
-Release provenance:
-- The Git tag is a release pointer; the trust artifact is release-attestation.json plus release-attestation.json.bundle.
-- Pre-flight provenance fixtures and live attestation verification ran before publication in workflow run ${{ github.run_id }}.
-- Verify with:
-
-\`\`\`bash
-cosign verify-blob release-attestation.json \\
-  --bundle release-attestation.json.bundle \\
-  --certificate-identity \"https://github.com/${{ github.repository }}/.github/workflows/release.yml@refs/tags/${{ github.ref_name }}\" \\
-  --certificate-oidc-issuer https://token.actions.githubusercontent.com
-
-sha256sum -c SHA256SUMS.txt
-\`\`\`"
+            --notes-file release-notes.md
