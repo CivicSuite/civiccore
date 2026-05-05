@@ -14,6 +14,11 @@ MINOR; bug fixes ship as PATCH.
 ## [Unreleased]
 
 ### Added
+- Added the CO-8 CivicCore procurement evidence pack with a signed threat
+  model, generated SBOM inputs for `v0.22.1`, `civiccore-m1-freeze`, and the
+  current v1.0 release-candidate tree, dependency license manifest, incident
+  drills, patch cadence evidence, sovereignty proof, claims registry, and
+  worked install-and-verify commands.
 - Added the CO-7 placeholder ADRs and freeze-readiness evidence for the
   `civiccore.catalog`, `civiccore.exemptions`, and `civiccore.scaffold`
   deferrals.
