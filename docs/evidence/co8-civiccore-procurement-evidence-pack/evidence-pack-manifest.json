@@ -1,15 +1,16 @@
 {
     "schema_version":  1,
-    "sprint_id":  "CO-8",
+    "sprint_id":  "CO-8/CO-9",
     "repo":  "CivicSuite/civiccore",
     "generated_on":  "2026-05-05",
     "target_commit":  "3c4c34ccd153eeae705a57139f6713c356328b6d",
     "freeze_tag":  "civiccore-m1-freeze",
+    "release_tag":  "v1.0",
     "files":  [
                   {
                       "path":  "claims-registry.md",
-                      "bytes":  4460,
-                      "sha256":  "1f835e70ae2b60414a98c14b4df19e7112b9620052412c72c0bee896dfe3f962"
+                      "bytes":  4760,
+                      "sha256":  "6dc5ed1f7e7c40b3aa66503703390201942ec3d0b99517e527e3737943f0d584"
                   },
                   {
                       "path":  "incident-response-runbook.md",
@@ -18,23 +19,23 @@
                   },
                   {
                       "path":  "index.md",
-                      "bytes":  4222,
-                      "sha256":  "ed706893704b1d6bb9ff51cafb2857c09560e5ee8cffff86d7671d441d34a7d4"
+                      "bytes":  4523,
+                      "sha256":  "5c25894bf90dad6ad0e8dc51b11f275d9815840d81435f87bc98f0d32053b064"
                   },
                   {
                       "path":  "license-manifest.json",
-                      "bytes":  40827,
-                      "sha256":  "2b245a4d6fcfa1ac4a4f65b6e3fde281731036e387fb731dfc069b82e2a2488c"
+                      "bytes":  42312,
+                      "sha256":  "b1709d749e467e3ea342ea0d655641a13f97a78def0e226bfd9fc8c9d9374fff"
                   },
                   {
                       "path":  "license-manifest.md",
-                      "bytes":  9432,
-                      "sha256":  "cd8d79fc5790b9044593fa8dda637e39c7514723872be5b94d22b776e5b24c22"
+                      "bytes":  10171,
+                      "sha256":  "2ff8cd439b4146218d597b3028bdae9da5abd76206e079c3ca726aeeeedc3b46"
                   },
                   {
                       "path":  "patch-cadence.md",
-                      "bytes":  2348,
-                      "sha256":  "2cdb11a1e40eadecefb8179c77b4bd554423706ae321c5a92299cbcdb11c1fcb"
+                      "bytes":  2584,
+                      "sha256":  "a4b62e745d0115af9de92cad002dc01c59cbad858fae476a36104a6402de36ad"
                   },
                   {
                       "path":  "preflight.md",
@@ -43,23 +44,28 @@
                   },
                   {
                       "path":  "README-install-verify-worked-example.md",
-                      "bytes":  2685,
-                      "sha256":  "18c0061e56a8527ffaaeeacb88bbf000e5b9686614da41d22fa13ab4cf435a99"
+                      "bytes":  4109,
+                      "sha256":  "aa0cba0dee599c5e1fbdcd68748ad1f695ddea3f24648af3333259434c021cc4"
                   },
                   {
                       "path":  "sbom-civiccore-m1-freeze-pip-inspect.json",
-                      "bytes":  1043035,
-                      "sha256":  "eb5420a55dd142d269b2758378030785bdf2dd4ace23dc1213fd52f0fa6162a9"
+                      "bytes":  1038447,
+                      "sha256":  "17a3a870a7010b9e0d0e82ed7592b2cad9d5aeee87ac365fbf3ab231faf5f9e0"
                   },
                   {
                       "path":  "sbom-v0.22.1-pip-inspect.json",
-                      "bytes":  1042368,
-                      "sha256":  "303add34689dec0a9e9d654431c7458b628bb59fb4a2cc575cb48fd6e3908f17"
+                      "bytes":  1037780,
+                      "sha256":  "be8af2d140a9f6048c1703b28dc5531714d0d66c111c87c5527bc78c6255ef36"
+                  },
+                  {
+                      "path":  "sbom-v1.0-pip-inspect.json",
+                      "bytes":  1037631,
+                      "sha256":  "ceb9e3397069ce8509b4362dcc0fa2b00e4d8b45c567fecacac641b2b9685bef"
                   },
                   {
                       "path":  "sbom-v1.0-rc-main-3c4c34c-pip-inspect.json",
-                      "bytes":  1042663,
-                      "sha256":  "71e01ecddf2bd309cd9730b3630904465be8d6428c608965f28cc8b7f0aa3c6a"
+                      "bytes":  1038080,
+                      "sha256":  "e6dd1c06647c11da15508e0fa36ceb063760fd42eb7c723f63502093a7339fc6"
                   },
                   {
                       "path":  "sovereignty-proof.md",
@@ -83,13 +89,13 @@
                   },
                   {
                       "path":  "threat-model-signature.allowed_signers",
-                      "bytes":  147,
-                      "sha256":  "c3efb9f2f543de68829e0933e4b76c9d2d060ab5040adff11acb68807e82fe45"
+                      "bytes":  146,
+                      "sha256":  "43cacbf2dd61fccbfc7d8433af0c2258c9008a5c5a5b06ce37d9d1a2fd006e53"
                   },
                   {
                       "path":  "threat-model-signing-public.pem",
-                      "bytes":  120,
-                      "sha256":  "b5432bcdcb97a0032d8212910baef2dc9380e857527a1691dfed3dce24efef08"
+                      "bytes":  119,
+                      "sha256":  "0eebcd925a09a4b6991a00aa75a0aa6ace1e38d8e07486c7593ad9b730937fa0"
                   }
               ]
 }

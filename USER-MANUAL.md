@@ -1,6 +1,6 @@
 # CivicCore User Manual
 
-Version: v0.22.1 (first attested baseline release)
+Version: v1.0 (downstream productization release)
 Repository: https://github.com/CivicSuite/civiccore
 License: Apache 2.0
 
@@ -60,8 +60,11 @@ shared foundation those applications import.
 ### What the current development line does not ship yet
 
 The following namespaces remain planned extraction targets:
-`civiccore.catalog`, `civiccore.exemptions`, `civiccore.ingest`,
-and `civiccore.scaffold`.
+`civiccore.catalog`, `civiccore.exemptions`, and `civiccore.scaffold`.
+
+`civiccore.ingest` ships reusable discovery/fetch contracts and cited-source
+validation helpers, but not a full document ingestion pipeline, parser stack,
+or worker runtime.
 
 `civiccore.onboarding` now ships shared profile interview helpers, but
 full web onboarding flows and persistence orchestration are still not
@@ -90,7 +93,7 @@ not promote those behaviors as shipped CivicCore capability.
 CivicCore is distributed as GitHub release artifacts, not PyPI packages:
 
 ```bash
-pip install https://github.com/CivicSuite/civiccore/releases/download/v0.22.1/civiccore-0.22.1-py3-none-any.whl
+pip install https://github.com/CivicSuite/civiccore/releases/download/v1.0/civiccore-1.0.0-py3-none-any.whl
 ```
 
 Each release publishes `SHA256SUMS.txt` next to the wheel and source
@@ -98,11 +101,12 @@ distribution. Verify checksums before promoting a release artifact:
 
 ```bash
 curl -L -o SHA256SUMS.txt \
-  https://github.com/CivicSuite/civiccore/releases/download/v0.22.1/SHA256SUMS.txt
+  https://github.com/CivicSuite/civiccore/releases/download/v1.0/SHA256SUMS.txt
 sha256sum -c SHA256SUMS.txt
 ```
 
-`v0.22.1` is the first CivicCore release with a Sigstore-signed
+`v1.0` is the downstream productization release. `v0.22.1` is the first
+CivicCore release with a Sigstore-signed
 `release-attestation.json` and bundle. Earlier CivicCore releases are retained
 for historical installs only and must not be treated as provenance baselines
 unless a future additive attestation is explicitly authorized, published, and
@@ -301,7 +305,7 @@ them.
 ### Compatibility
 
 Current v0.1.0 module foundations still pin older civiccore lines.
-Production-depth consumers can move to `civiccore==0.22.1` when the suite
+Production-depth consumers can move to `civiccore==1.0.0` when the suite
 compatibility matrix is updated.
 
 The suite-wide matrix lives at:

@@ -147,6 +147,9 @@ jobs:
           Release provenance:
           - The Git tag is a release pointer; the trust artifact is release-attestation.json plus release-attestation.json.bundle.
           - Pre-flight provenance fixtures and live attestation verification ran before publication in workflow run ${{ github.run_id }}.
+          - Procurement evidence pack: https://github.com/${{ github.repository }}/blob/${{ github.sha }}/docs/evidence/co8-civiccore-procurement-evidence-pack/index.md
+          - Historical provenance policy: https://github.com/${{ github.repository }}/blob/${{ github.sha }}/docs/ops/historical-provenance.md
+          - CO-9 closeout report, when present for the release tag: https://github.com/${{ github.repository }}/blob/${{ github.sha }}/docs/ops/co-9-civiccore-v1-closeout.md
           - Verify with:
 
           ```bash
@@ -156,6 +159,12 @@ jobs:
             --certificate-oidc-issuer https://token.actions.githubusercontent.com
 
           sha256sum -c SHA256SUMS.txt
+
+          python scripts/verify-release-provenance.py ${{ github.ref_name }} \
+            --repo ${{ github.repository }} \
+            --attestation release-attestation.json \
+            --bundle release-attestation.json.bundle \
+            --artifacts-dir .
           ```
           EOF
           gh release create "${{ github.ref_name }}" \

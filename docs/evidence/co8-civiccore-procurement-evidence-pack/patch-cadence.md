@@ -16,6 +16,7 @@ work completed on 2026-05-05.
 | CO-6 | [`docs/ops/cleanroom-harness.md`](../../ops/cleanroom-harness.md) | Cleanroom verification harness proves release, Sigstore, SHA256SUMS, and offline runtime paths. |
 | CO-7 | [`civiccore-m1-freeze`](https://github.com/CivicSuite/civiccore/releases/tag/civiccore-m1-freeze) | Freeze-line release is signed and verified for downstream productization. |
 | CO-8 | This evidence pack | Procurement evidence links load-bearing claims to verification artifacts. |
+| CO-9 | [`v1.0`](https://github.com/CivicSuite/civiccore/releases/tag/v1.0) | Downstream productization release adds final SBOM and closeout report. |
 
 ## Release And CI Evidence
 
@@ -40,8 +41,9 @@ The current gate checks:
 - SHA256SUMS verification; and
 - fresh virtualenv wheel-install smoke.
 
-## Known Follow-Up
+## CO-9 Closeout
 
-CO-9 must publish the final v1.0 release and append the final v1.0 SBOM to this
-evidence pack. That is intentionally deferred because CO-9 is the release-class
-operation that creates the final tag and assets.
+CO-9 publishes the final v1.0 release and appends the final v1.0 SBOM to this
+evidence pack. The release-class operation creates the final tag and assets;
+post-publication verification follows the commands in
+[`README-install-verify-worked-example.md`](README-install-verify-worked-example.md).

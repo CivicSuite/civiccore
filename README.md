@@ -62,10 +62,13 @@ Phase work and must not be relied on by downstream modules until they ship.
 
 ## Status
 
-**v0.22.1 is the first attested baseline release.** This line adds
-the canonical Sigstore release-provenance helper, versioned attestation schema,
+**v1.0 is the CivicCore downstream productization release.** It carries the
+CO-7 freeze-line trust anchor, the CO-8 procurement evidence pack, and the
+CO-9 closeout trail for modules that need a procurement-grade platform pin.
+`v0.22.1` remains the first attested baseline release. This line carries the
+canonical Sigstore release-provenance helper, versioned attestation schema,
 fixture-driven gate, and tag-driven release workflow that signs and verifies
-`release-attestation.json` before publication. It also carries the shared
+`release-attestation.json` before publication, plus the shared
 connector source-list status projection that combines circuit health, active
 failure counts, pause state, actionable operator copy, and next-run calculation
 for module workspaces on top of shared cron schedule validation helpers for
@@ -117,10 +120,10 @@ shared-schema baseline extracted from CivicRecords AI).
 
 ## Install
 
-From the current GitHub release wheel (`v0.22.1`):
+From the current GitHub release wheel (`v1.0`):
 
 ```bash
-pip install https://github.com/CivicSuite/civiccore/releases/download/v0.22.1/civiccore-0.22.1-py3-none-any.whl
+pip install https://github.com/CivicSuite/civiccore/releases/download/v1.0/civiccore-1.0.0-py3-none-any.whl
 ```
 
 Each GitHub release also publishes `SHA256SUMS.txt` alongside the wheel and
@@ -136,9 +139,11 @@ the annotated tag object is unsigned. Treat the release-page badge as a commit
 signal only; use `scripts/verify-release-provenance.py` and
 `docs/ops/release-signing.md` for release-tag provenance.
 
-`v0.22.1` is the current attested baseline release. `v0.22.0` and earlier
-CivicCore releases predate the Sigstore attestation baseline and are retained
-for historical installs only. Their Tier 1 status is published in
+`v1.0` is the current downstream productization release. `v0.22.1` remains
+the first attested baseline release, and `civiccore-m1-freeze` remains the
+CO-7 freeze-line tag downstream modules use as their initial trust anchor.
+`v0.22.0` and earlier CivicCore releases predate the Sigstore attestation
+baseline and are retained for historical installs only. Their Tier 1 status is published in
 [`docs/ops/civiccore-tier1-retrofit-ledger.md`](docs/ops/civiccore-tier1-retrofit-ledger.md).
 The operative historical disclosure is published in
 [`docs/ops/historical-provenance.md`](docs/ops/historical-provenance.md).
@@ -149,7 +154,11 @@ The CO-8 procurement evidence pack in
 [`docs/evidence/co8-civiccore-procurement-evidence-pack/index.md`](docs/evidence/co8-civiccore-procurement-evidence-pack/index.md)
 links the threat model, SBOMs, license manifest, incident drills,
 sovereignty proof, patch cadence, claims registry, and worked install-and-verify
-commands that an outside auditor needs before evaluating the v1.0 release gate.
+commands that an outside auditor needs to evaluate the v1.0 release gate.
+The CO-9 closeout report in
+[`docs/ops/co-9-civiccore-v1-closeout.md`](docs/ops/co-9-civiccore-v1-closeout.md)
+maps the release authorization, attested releases, freeze-line tag, retrofit
+decisions, placeholder ADRs, cleanroom evidence, and final audit gate.
 Do not promote any pre-baseline release as the corrected provenance baseline
 unless a future additive attestation is explicitly authorized, published, and
 recorded in that ledger.
@@ -534,7 +543,7 @@ Extraction Spec** in
 
 Every CivicSuite module's README declares its CivicCore dependency contract.
 Current v0.1.0 module foundations pin older civiccore lines. Production-depth
-consumers can move to `==0.22.1` when their compatibility matrix is updated.
+consumers can move to `==1.0.0` when their compatibility matrix is updated.
 The suite-wide compatibility matrix — which
 module versions work with which CivicCore versions — is maintained at
 [CivicSuite/civicsuite/docs/compatibility/](https://github.com/CivicSuite/civicsuite/tree/main/docs/compatibility).

@@ -89,7 +89,7 @@ def validate_ledger(ledger: dict[str, Any]) -> list[dict[str, Any]]:
     return entries
 
 
-def fetch_live_release_tags(repo: str) -> set[str]:
+def fetch_live_releases(repo: str) -> dict[str, set[str]]:
     result = subprocess.run(
         [
             "gh",
@@ -97,13 +97,38 @@ def fetch_live_release_tags(repo: str) -> set[str]:
             f"repos/{repo}/releases",
             "--paginate",
             "--jq",
-            ".[].tag_name",
+            '.[] | {tag_name, assets: [.assets[].name]} | @json',
         ],
         check=True,
         capture_output=True,
         text=True,
     )
-    return {line.strip() for line in result.stdout.splitlines() if line.strip()}
+    releases: dict[str, set[str]] = {}
+    for line in result.stdout.splitlines():
+        if not line.strip():
+            continue
+        release = json.loads(line)
+        releases[str(release["tag_name"])] = {str(asset) for asset in release.get("assets", [])}
+    return releases
+
+
+def validate_live_release_parity(
+    entries: list[dict[str, Any]], live_releases: dict[str, set[str]]
+) -> list[str]:
+    ledger_tags = set(_entry_tags(entries))
+    live_tags = set(live_releases)
+    missing = sorted(live_tags - ledger_tags)
+    stale = sorted(ledger_tags - live_tags)
+    unattested_missing = [
+        tag for tag in missing if not ATTESTATION_ASSETS.issubset(live_releases[tag])
+    ]
+
+    if stale or unattested_missing:
+        raise LedgerError(
+            f"live release parity failed; missing={unattested_missing or 'none'} "
+            f"stale={stale or 'none'}"
+        )
+    return missing
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -124,17 +149,16 @@ def main(argv: list[str] | None = None) -> int:
     try:
         ledger = load_ledger(args.ledger)
         entries = validate_ledger(ledger)
+        post_baseline_attested: list[str] = []
         if args.live:
-            live_tags = fetch_live_release_tags(args.repo)
-            ledger_tags = set(_entry_tags(entries))
-            missing = sorted(live_tags - ledger_tags)
-            stale = sorted(ledger_tags - live_tags)
-            if missing or stale:
-                raise LedgerError(
-                    f"live release parity failed; missing={missing or 'none'} "
-                    f"stale={stale or 'none'}"
-                )
+            live_releases = fetch_live_releases(args.repo)
+            post_baseline_attested = validate_live_release_parity(entries, live_releases)
         print(f"PASS: {len(entries)} CivicCore release tags are ledgered")
+        if post_baseline_attested:
+            print(
+                "PASS: post-baseline attested release tags verified live: "
+                + ", ".join(post_baseline_attested)
+            )
         return 0
     except (LedgerError, subprocess.CalledProcessError) as exc:
         print(f"FAIL: {exc}", file=sys.stderr)

@@ -13,12 +13,20 @@ MINOR; bug fixes ship as PATCH.
 
 ## [Unreleased]
 
+## [1.0.0] - 2026-05-05
+
 ### Added
+- Added the CO-9 CivicCore v1.0 closeout report tying together release
+  authorization, attested releases, retrofit decisions, placeholder ADRs,
+  freeze-line tag, cleanroom evidence, procurement pack, and audit gate.
+- Added the final `v1.0` SBOM to the CO-8 procurement evidence pack and
+  extended regression coverage so the pack verifies both pre-release and final
+  release package inventories.
 - Added the CO-8 CivicCore procurement evidence pack with a signed threat
   model, generated SBOM inputs for `v0.22.1`, `civiccore-m1-freeze`, and the
-  current v1.0 release-candidate tree, dependency license manifest, incident
-  drills, patch cadence evidence, sovereignty proof, claims registry, and
-  worked install-and-verify commands.
+  v1.0 release-candidate and final release trees, dependency license manifest,
+  incident drills, patch cadence evidence, sovereignty proof, claims registry,
+  and worked install-and-verify commands.
 - Added the CO-7 placeholder ADRs and freeze-readiness evidence for the
   `civiccore.catalog`, `civiccore.exemptions`, and `civiccore.scaffold`
   deferrals.
@@ -38,13 +46,18 @@ MINOR; bug fixes ship as PATCH.
   unledgered.
 
 ### Changed
+- Promoted package metadata, smoke tests, README, text README, user manual, and
+  docs landing page to the `1.0.0` package / `v1.0` release surface.
+- Release workflow notes now point auditors to the procurement evidence pack,
+  historical-provenance policy, closeout report, SHA256SUMS path, Sigstore
+  verification command, and `scripts/verify-release-provenance.py` command.
 - Promoted `docs/ops/historical-provenance.md` from draft disclosure to
   operative policy with the dated `v0.22.1` baseline, live attestation URL,
   retrofit evidence, release verification result, and no-historical-asset-edit
   boundary.
-- README, text README, user manual, and docs landing page now describe
-  `v0.22.1` as the current attested baseline instead of a staged release
-  candidate.
+- README, text README, user manual, and docs landing page now distinguish
+  `v1.0` as the current downstream productization release from `v0.22.1` as
+  the first attested baseline.
 
 ## [0.22.1] - 2026-05-05
 

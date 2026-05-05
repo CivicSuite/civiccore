@@ -42,8 +42,9 @@ What ships in the current development line:
 
 Still planned extraction targets:
 
-  civiccore.catalog, civiccore.exemptions, civiccore.ingest,
-  civiccore.scaffold.
+  civiccore.catalog, civiccore.exemptions, civiccore.scaffold.
+  civiccore.ingest ships reusable discovery/fetch contracts and cited-source
+  validation helpers, but not a full document ingestion pipeline.
   civiccore.onboarding now ships storage-neutral profile interview
   helpers, but not a web onboarding UI or persistence router.
 
@@ -54,8 +55,10 @@ determinations are still not shipped platform behaviors.
 Status
 ------
 
-v0.22.1 is the current attested baseline release. The current line now
-includes shared connector source-list status projection helpers, cron schedule validation helpers, startup config validation helpers, vendor delta planning,
+v1.0 is the current downstream productization release. It carries the CO-7
+freeze-line trust anchor, the CO-8 procurement evidence pack, and the CO-9
+closeout trail. v0.22.1 remains the first attested baseline release. The
+current line includes shared connector source-list status projection helpers, cron schedule validation helpers, startup config validation helpers, vendor delta planning,
 reusable mock-city proof contracts, live connector sync retry/circuit-breaker
 primitives, and persisted audit-log hash and verification helpers on top of
 shared connector security/config helpers, onboarding profile helpers, auth helpers,
@@ -70,12 +73,12 @@ Install
 
 From the current published GitHub release wheel:
 
-    pip install https://github.com/CivicSuite/civiccore/releases/download/v0.22.1/civiccore-0.22.1-py3-none-any.whl
+    pip install https://github.com/CivicSuite/civiccore/releases/download/v1.0/civiccore-1.0.0-py3-none-any.whl
 
 CivicCore is distributed as versioned GitHub release artifacts (not on PyPI).
 Each release publishes SHA256SUMS.txt alongside the wheel and sdist. Verify
 checksums before promoting an artifact downstream. v0.22.0 and earlier releases
-are retained for historical installs only; use v0.22.1 or a later
+are retained for historical installs only; use v1.0, v0.22.1, or another later
 Sigstore-attested release when procurement-grade provenance is required.
 
 For development from a clone:
@@ -133,7 +136,7 @@ Compatibility
 -------------
 
 Current v0.1.0 module foundations still pin older civiccore lines.
-Production-depth consumers can move to civiccore==0.22.1 when the suite
+Production-depth consumers can move to civiccore==1.0.0 when the suite
 compatibility matrix is updated.
 
 The suite-wide compatibility matrix is maintained at:

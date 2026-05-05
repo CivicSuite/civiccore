@@ -12,6 +12,7 @@ Current live release anchors:
 
 - Attested baseline release: [`v0.22.1`](https://github.com/CivicSuite/civiccore/releases/tag/v0.22.1)
 - Freeze-line release: [`civiccore-m1-freeze`](https://github.com/CivicSuite/civiccore/releases/tag/civiccore-m1-freeze)
+- Productization release: [`v1.0`](https://github.com/CivicSuite/civiccore/releases/tag/v1.0)
 - Freeze workflow run: [`25405991283`](https://github.com/CivicSuite/civiccore/actions/runs/25405991283)
 - Freeze target commit: `3c4c34ccd153eeae705a57139f6713c356328b6d`
 - Freeze target tree: `1e92d8b900b3d0134c4e8bc5b9133becff7822e6`
@@ -40,6 +41,7 @@ Recommended order:
 5. Review the SBOM files:
    [`sbom-v0.22.1-pip-inspect.json`](sbom-v0.22.1-pip-inspect.json),
    [`sbom-civiccore-m1-freeze-pip-inspect.json`](sbom-civiccore-m1-freeze-pip-inspect.json),
+   [`sbom-v1.0-pip-inspect.json`](sbom-v1.0-pip-inspect.json),
    and
    [`sbom-v1.0-rc-main-3c4c34c-pip-inspect.json`](sbom-v1.0-rc-main-3c4c34c-pip-inspect.json).
 6. Review dependency licensing:
@@ -70,11 +72,13 @@ Recommended order:
 | `sbom-*.json` | SBOM-style package inventory for release anchors. | Generated from isolated installs with `pip inspect --local`. |
 | `README-install-verify-worked-example.md` | Worked install and provenance verification path. | Uses live release assets and exact verifier commands. |
 
-## Current CO-8 Limits
+## CO-9 Completion Update
 
-CO-8 lands before the authorized CO-9 `v1.0` publication. The file
-`sbom-v1.0-rc-main-3c4c34c-pip-inspect.json` is therefore a release-candidate
-SBOM for the current freeze tree, not the final `v1.0` release SBOM. CO-9 must
-append the final `v1.0` SBOM after the `v1.0` tag and release assets exist.
+CO-8 landed before the authorized CO-9 `v1.0` publication, so the original pack
+included `sbom-v1.0-rc-main-3c4c34c-pip-inspect.json` as a release-candidate
+inventory. CO-9 adds `sbom-v1.0-pip-inspect.json` from the final `1.0.0`
+package tree and records the release closeout in
+[`../../ops/co-9-civiccore-v1-closeout.md`](../../ops/co-9-civiccore-v1-closeout.md).
 
-This is an explicit sequencing limit, not a hidden gap.
+The release-candidate SBOM remains in the pack as a sequencing record; the
+final SBOM is the load-bearing `v1.0` package inventory.
