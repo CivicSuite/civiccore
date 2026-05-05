@@ -3,8 +3,13 @@ from __future__ import annotations
 import subprocess
 import sys
 from pathlib import Path
+from typing import Any
 
-from civiccore.release_provenance import build_release_attestation, canonical_json_bytes
+from civiccore.release_provenance import (
+    GitHubProvenanceClient,
+    build_release_attestation,
+    canonical_json_bytes,
+)
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -68,3 +73,36 @@ def test_release_attestation_builder_uses_exact_workflow_identity(tmp_path: Path
     assert canonical_json_bytes(attestation).decode("utf-8").startswith(
         '{"artifacts":[{"name":"civiccore-0.22.1-py3-none-any.whl"'
     )
+
+
+def test_github_provenance_client_uses_public_api_without_gh_cli(
+    monkeypatch: Any,
+) -> None:
+    captured: dict[str, Any] = {}
+
+    class FakeResponse:
+        def __enter__(self) -> "FakeResponse":
+            return self
+
+        def __exit__(self, *args: object) -> None:
+            return None
+
+        def read(self) -> bytes:
+            return b'{"object":{"type":"commit","sha":"abc123"}}'
+
+    def fake_urlopen(request: Any, timeout: int) -> FakeResponse:
+        captured["url"] = request.full_url
+        captured["headers"] = dict(request.header_items())
+        captured["timeout"] = timeout
+        return FakeResponse()
+
+    monkeypatch.setenv("GH_TOKEN", "token-for-test")
+    monkeypatch.setattr("urllib.request.urlopen", fake_urlopen)
+
+    result = GitHubProvenanceClient().tag_ref("CivicSuite/civiccore", "v0.22.1")
+
+    assert result["object"]["sha"] == "abc123"
+    assert captured["url"] == "https://api.github.com/repos/CivicSuite/civiccore/git/ref/tags/v0.22.1"
+    assert captured["headers"]["Authorization"] == "Bearer token-for-test"
+    assert captured["headers"]["User-agent"] == "civiccore-release-provenance"
+    assert captured["timeout"] == 30

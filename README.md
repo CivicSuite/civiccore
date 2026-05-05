@@ -141,6 +141,9 @@ for historical installs only. Their Tier 1 status is published in
 [`docs/ops/civiccore-tier1-retrofit-ledger.md`](docs/ops/civiccore-tier1-retrofit-ledger.md).
 The operative historical disclosure is published in
 [`docs/ops/historical-provenance.md`](docs/ops/historical-provenance.md).
+Outside auditors can reproduce the release gate and public install-and-verify
+paths with the CO-6 cleanroom harness in
+[`docs/ops/cleanroom-harness.md`](docs/ops/cleanroom-harness.md).
 Do not promote any pre-baseline release as the corrected provenance baseline
 unless a future additive attestation is explicitly authorized, published, and
 recorded in that ledger.

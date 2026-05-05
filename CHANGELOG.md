@@ -14,6 +14,10 @@ MINOR; bug fixes ship as PATCH.
 ## [Unreleased]
 
 ### Added
+- Added the CO-6 CivicCore cleanroom harness with a pinned Docker base image,
+  no-cache build orchestrator, live `v0.22.1` Sigstore/SHA256 verification
+  paths, offline runtime proof, signed evidence manifests, and CI artifact
+  upload.
 - Added `docs/ops/co-4-cross-module-retrofit-report.md` as the CivicCore
   closeout index for the merged CivicRecords AI, CivicClerk, and CivicCode
   Tier 1 retrofit ledgers.

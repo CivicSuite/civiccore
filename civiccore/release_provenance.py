@@ -11,8 +11,11 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import os
 import subprocess
 import sys
+import urllib.error
+import urllib.request
 from pathlib import Path
 from typing import Any, Protocol
 
@@ -50,13 +53,27 @@ class GitHubProvenanceClient:
     """Network-backed client for GitHub release provenance objects."""
 
     def _gh_api(self, path: str) -> dict[str, Any]:
-        result = subprocess.run(
-            ["gh", "api", path],
-            check=True,
-            capture_output=True,
-            text=True,
-        )
-        return json.loads(result.stdout)
+        url = f"https://api.github.com/{path}"
+        headers = {
+            "Accept": "application/vnd.github+json",
+            "User-Agent": "civiccore-release-provenance",
+            "X-GitHub-Api-Version": "2022-11-28",
+        }
+        token = os.environ.get("GH_TOKEN") or os.environ.get("GITHUB_TOKEN")
+        if token:
+            headers["Authorization"] = f"Bearer {token}"
+
+        request = urllib.request.Request(url, headers=headers)
+        try:
+            with urllib.request.urlopen(request, timeout=30) as response:
+                return json.loads(response.read().decode("utf-8"))
+        except urllib.error.HTTPError as exc:
+            detail = exc.read().decode("utf-8", errors="replace")
+            raise ProvenanceError(
+                f"GitHub API request failed for {path}: HTTP {exc.code} {detail}"
+            ) from exc
+        except (urllib.error.URLError, TimeoutError, json.JSONDecodeError) as exc:
+            raise ProvenanceError(f"GitHub API request failed for {path}: {exc}") from exc
 
     def tag_ref(self, repo: str, tag_name: str) -> dict[str, Any]:
         return self._gh_api(f"repos/{repo}/git/ref/tags/{tag_name}")
