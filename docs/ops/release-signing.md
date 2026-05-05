@@ -224,12 +224,14 @@ actual file.
 
 ## Historical Disclosure Publication
 
-The historical provenance disclosure now lives at
-`docs/ops/historical-provenance.md`, but it remains a draft until the final
-policy-promotion step lands.
+The historical provenance disclosure is operative policy as of 2026-05-05 and
+lives at `docs/ops/historical-provenance.md`.
 
-Before publishing it as operative policy, remove draft-specific language and
-fill the authorized baseline date and baseline tag in a verified PR.
+The policy names `civiccore v0.22.1`, released 2026-05-05 at 16:23:36Z, as the
+first attested CivicCore baseline release and links the live release
+attestation, CivicCore Tier 1 retrofit ledger, and CO-4 cross-module retrofit
+report.
 
-Do not publish the disclosure as operative policy until that policy-promotion
-step lands and the auditor explicitly authorizes publication.
+Do not change the baseline release, edit historical public release notes, or
+publish new attestations for earlier releases unless a future release-class
+authorization explicitly approves that additive evidence.
