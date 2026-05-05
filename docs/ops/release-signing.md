@@ -222,14 +222,12 @@ actual file.
 
 ## Historical Disclosure Publication
 
-The historical provenance disclosure remains a draft while it is named
-`docs/ops/historical-provenance-draft.md`. Final policy publication is a
-two-step operation in one verified PR:
+The historical provenance disclosure now lives at
+`docs/ops/historical-provenance.md`, but it remains a draft until the final
+policy-promotion step lands.
 
-1. Remove draft-specific language and fill the authorized baseline date and
-   baseline tag.
-2. Rename the file to `docs/ops/historical-provenance.md` so the canonical
-   public disclosure is discoverable without the `-draft` suffix.
+Before publishing it as operative policy, remove draft-specific language and
+fill the authorized baseline date and baseline tag in a verified PR.
 
-Do not publish the disclosure as operative policy until both steps land
-together and the auditor explicitly authorizes publication.
+Do not publish the disclosure as operative policy until that policy-promotion
+step lands and the auditor explicitly authorizes publication.
