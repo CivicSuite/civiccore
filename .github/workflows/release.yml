@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - "v*"
+      - "civiccore-*-freeze"
 
 permissions:
   contents: write
@@ -136,6 +137,10 @@ jobs:
           GH_REPO: ${{ github.repository }}
           GH_TOKEN: ${{ github.token }}
         run: |
+          latest_flag=()
+          case "${{ github.ref_name }}" in
+            civiccore-*-freeze) latest_flag=(--latest=false) ;;
+          esac
           cat > release-notes.md <<'EOF'
           CivicCore ${{ github.ref_name }} release.
 
@@ -159,4 +164,5 @@ jobs:
             release-assets/release-attestation.json.bundle \
             --repo "$GH_REPO" \
             --title "civiccore ${{ github.ref_name }}" \
+            "${latest_flag[@]}" \
             --notes-file release-notes.md
