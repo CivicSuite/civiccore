@@ -145,6 +145,11 @@ The operative historical disclosure is published in
 Outside auditors can reproduce the release gate and public install-and-verify
 paths with the CO-6 cleanroom harness in
 [`docs/ops/cleanroom-harness.md`](docs/ops/cleanroom-harness.md).
+The CO-8 procurement evidence pack in
+[`docs/evidence/co8-civiccore-procurement-evidence-pack/index.md`](docs/evidence/co8-civiccore-procurement-evidence-pack/index.md)
+links the threat model, SBOMs, license manifest, incident drills,
+sovereignty proof, patch cadence, claims registry, and worked install-and-verify
+commands that an outside auditor needs before evaluating the v1.0 release gate.
 Do not promote any pre-baseline release as the corrected provenance baseline
 unless a future additive attestation is explicitly authorized, published, and
 recorded in that ledger.
