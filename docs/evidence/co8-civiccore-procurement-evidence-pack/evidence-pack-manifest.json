@@ -1,101 +1,101 @@
 {
-    "schema_version":  1,
-    "sprint_id":  "CO-8/CO-9",
-    "repo":  "CivicSuite/civiccore",
-    "generated_on":  "2026-05-05",
-    "target_commit":  "3c4c34ccd153eeae705a57139f6713c356328b6d",
-    "freeze_tag":  "civiccore-m1-freeze",
-    "release_tag":  "v1.0",
-    "files":  [
-                  {
-                      "path":  "claims-registry.md",
-                      "bytes":  4760,
-                      "sha256":  "6dc5ed1f7e7c40b3aa66503703390201942ec3d0b99517e527e3737943f0d584"
-                  },
-                  {
-                      "path":  "incident-response-runbook.md",
-                      "bytes":  4096,
-                      "sha256":  "1f968d189c23d7329d9e006ab26bdaf4eab34cd9e47dbbf455b5e343c177579d"
-                  },
-                  {
-                      "path":  "index.md",
-                      "bytes":  4523,
-                      "sha256":  "5c25894bf90dad6ad0e8dc51b11f275d9815840d81435f87bc98f0d32053b064"
-                  },
-                  {
-                      "path":  "license-manifest.json",
-                      "bytes":  42312,
-                      "sha256":  "b1709d749e467e3ea342ea0d655641a13f97a78def0e226bfd9fc8c9d9374fff"
-                  },
-                  {
-                      "path":  "license-manifest.md",
-                      "bytes":  10171,
-                      "sha256":  "2ff8cd439b4146218d597b3028bdae9da5abd76206e079c3ca726aeeeedc3b46"
-                  },
-                  {
-                      "path":  "patch-cadence.md",
-                      "bytes":  2584,
-                      "sha256":  "a4b62e745d0115af9de92cad002dc01c59cbad858fae476a36104a6402de36ad"
-                  },
-                  {
-                      "path":  "preflight.md",
-                      "bytes":  2759,
-                      "sha256":  "41c21b6433afa0f36fa2a66bde739ba6c6b77a41cb9f1bfdec53de6d207e12a5"
-                  },
-                  {
-                      "path":  "README-install-verify-worked-example.md",
-                      "bytes":  4109,
-                      "sha256":  "aa0cba0dee599c5e1fbdcd68748ad1f695ddea3f24648af3333259434c021cc4"
-                  },
-                  {
-                      "path":  "sbom-civiccore-m1-freeze-pip-inspect.json",
-                      "bytes":  1038447,
-                      "sha256":  "17a3a870a7010b9e0d0e82ed7592b2cad9d5aeee87ac365fbf3ab231faf5f9e0"
-                  },
-                  {
-                      "path":  "sbom-v0.22.1-pip-inspect.json",
-                      "bytes":  1037780,
-                      "sha256":  "be8af2d140a9f6048c1703b28dc5531714d0d66c111c87c5527bc78c6255ef36"
-                  },
-                  {
-                      "path":  "sbom-v1.0-pip-inspect.json",
-                      "bytes":  1037631,
-                      "sha256":  "ceb9e3397069ce8509b4362dcc0fa2b00e4d8b45c567fecacac641b2b9685bef"
-                  },
-                  {
-                      "path":  "sbom-v1.0-rc-main-3c4c34c-pip-inspect.json",
-                      "bytes":  1038080,
-                      "sha256":  "e6dd1c06647c11da15508e0fa36ceb063760fd42eb7c723f63502093a7339fc6"
-                  },
-                  {
-                      "path":  "sovereignty-proof.md",
-                      "bytes":  2411,
-                      "sha256":  "838df957ec004569360598fc33f7de8875decf9137079aec7582a3d32d6f1978"
-                  },
-                  {
-                      "path":  "threat-model.md",
-                      "bytes":  6331,
-                      "sha256":  "1a7303f1e09d7a568c503fda9b5b6bb2d5dc2eb75fbbc0f0aea18d8398873063"
-                  },
-                  {
-                      "path":  "threat-model.md.sha256",
-                      "bytes":  82,
-                      "sha256":  "d5e945879b9a35e71f79f66d3599b06a3b9d5bed90318e2a951a2531b6c432ee"
-                  },
-                  {
-                      "path":  "threat-model.md.sig",
-                      "bytes":  294,
-                      "sha256":  "2d2a34655809c87ba86274807b9b3b992ca9e7e29768fb8e575ea121977432bc"
-                  },
-                  {
-                      "path":  "threat-model-signature.allowed_signers",
-                      "bytes":  146,
-                      "sha256":  "43cacbf2dd61fccbfc7d8433af0c2258c9008a5c5a5b06ce37d9d1a2fd006e53"
-                  },
-                  {
-                      "path":  "threat-model-signing-public.pem",
-                      "bytes":  119,
-                      "sha256":  "0eebcd925a09a4b6991a00aa75a0aa6ace1e38d8e07486c7593ad9b730937fa0"
-                  }
-              ]
+  "schema_version": 1,
+  "sprint_id": "CO-8/CO-9",
+  "repo": "CivicSuite/civiccore",
+  "generated_on": "2026-05-05",
+  "target_commit": "3c4c34ccd153eeae705a57139f6713c356328b6d",
+  "freeze_tag": "civiccore-m1-freeze",
+  "release_tag": "v1.0",
+  "files": [
+    {
+      "path": "claims-registry.md",
+      "bytes": 4760,
+      "sha256": "6dc5ed1f7e7c40b3aa66503703390201942ec3d0b99517e527e3737943f0d584"
+    },
+    {
+      "path": "incident-response-runbook.md",
+      "bytes": 4096,
+      "sha256": "1f968d189c23d7329d9e006ab26bdaf4eab34cd9e47dbbf455b5e343c177579d"
+    },
+    {
+      "path": "index.md",
+      "bytes": 4523,
+      "sha256": "5c25894bf90dad6ad0e8dc51b11f275d9815840d81435f87bc98f0d32053b064"
+    },
+    {
+      "path": "license-manifest.json",
+      "bytes": 40848,
+      "sha256": "20d04c869dd7e90e95a0a7aa98c759a44afb91c9cbbe91c3138cb2185ff1aa3e"
+    },
+    {
+      "path": "license-manifest.md",
+      "bytes": 10082,
+      "sha256": "f8b9255ed7fbbbea05b2995b67968a60c0d15225a16aa0517df083d9aafc38e1"
+    },
+    {
+      "path": "patch-cadence.md",
+      "bytes": 2584,
+      "sha256": "a4b62e745d0115af9de92cad002dc01c59cbad858fae476a36104a6402de36ad"
+    },
+    {
+      "path": "preflight.md",
+      "bytes": 2759,
+      "sha256": "41c21b6433afa0f36fa2a66bde739ba6c6b77a41cb9f1bfdec53de6d207e12a5"
+    },
+    {
+      "path": "README-install-verify-worked-example.md",
+      "bytes": 4109,
+      "sha256": "aa0cba0dee599c5e1fbdcd68748ad1f695ddea3f24648af3333259434c021cc4"
+    },
+    {
+      "path": "sbom-civiccore-m1-freeze-pip-inspect.json",
+      "bytes": 1038447,
+      "sha256": "17a3a870a7010b9e0d0e82ed7592b2cad9d5aeee87ac365fbf3ab231faf5f9e0"
+    },
+    {
+      "path": "sbom-v0.22.1-pip-inspect.json",
+      "bytes": 1037780,
+      "sha256": "be8af2d140a9f6048c1703b28dc5531714d0d66c111c87c5527bc78c6255ef36"
+    },
+    {
+      "path": "sbom-v1.0-pip-inspect.json",
+      "bytes": 1037631,
+      "sha256": "ceb9e3397069ce8509b4362dcc0fa2b00e4d8b45c567fecacac641b2b9685bef"
+    },
+    {
+      "path": "sbom-v1.0-rc-main-3c4c34c-pip-inspect.json",
+      "bytes": 1038080,
+      "sha256": "e6dd1c06647c11da15508e0fa36ceb063760fd42eb7c723f63502093a7339fc6"
+    },
+    {
+      "path": "sovereignty-proof.md",
+      "bytes": 2411,
+      "sha256": "838df957ec004569360598fc33f7de8875decf9137079aec7582a3d32d6f1978"
+    },
+    {
+      "path": "threat-model.md",
+      "bytes": 6331,
+      "sha256": "1a7303f1e09d7a568c503fda9b5b6bb2d5dc2eb75fbbc0f0aea18d8398873063"
+    },
+    {
+      "path": "threat-model.md.sha256",
+      "bytes": 82,
+      "sha256": "d5e945879b9a35e71f79f66d3599b06a3b9d5bed90318e2a951a2531b6c432ee"
+    },
+    {
+      "path": "threat-model.md.sig",
+      "bytes": 294,
+      "sha256": "2d2a34655809c87ba86274807b9b3b992ca9e7e29768fb8e575ea121977432bc"
+    },
+    {
+      "path": "threat-model-signature.allowed_signers",
+      "bytes": 146,
+      "sha256": "43cacbf2dd61fccbfc7d8433af0c2258c9008a5c5a5b06ce37d9d1a2fd006e53"
+    },
+    {
+      "path": "threat-model-signing-public.pem",
+      "bytes": 119,
+      "sha256": "0eebcd925a09a4b6991a00aa75a0aa6ace1e38d8e07486c7593ad9b730937fa0"
+    }
+  ]
 }
