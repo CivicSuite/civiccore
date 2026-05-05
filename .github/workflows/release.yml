@@ -129,7 +129,7 @@ jobs:
       - uses: actions/download-artifact@v8
         with:
           name: civiccore-dist
-          path: dist/
+          path: release-assets/
 
       - name: Create GitHub release with wheel + sdist
         env:
@@ -153,7 +153,10 @@ jobs:
           sha256sum -c SHA256SUMS.txt
           ```
           EOF
-          gh release create "${{ github.ref_name }}" dist/* \
+          gh release create "${{ github.ref_name }}" \
+            release-assets/dist/* \
+            release-assets/release-attestation.json \
+            release-assets/release-attestation.json.bundle \
             --repo "$GH_REPO" \
             --title "civiccore ${{ github.ref_name }}" \
             --notes-file release-notes.md

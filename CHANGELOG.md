@@ -40,6 +40,9 @@ MINOR; bug fixes ship as PATCH.
   tag is published.
 - Test coverage now parses every GitHub workflow file to catch release-workflow
   YAML regressions before tag-push release operations.
+- Release publication now passes explicit downloaded artifact paths to
+  `gh release create` so the nested artifact directory is not uploaded as a
+  release asset.
 
 ## [0.22.0] - 2026-05-03
 
