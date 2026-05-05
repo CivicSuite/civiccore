@@ -190,3 +190,23 @@ burden for CivicSuite.
 Historical releases are disclosed honestly rather than mass-deleted. The new
 baseline begins with releases that include Sigstore-signed release attestations
 and exact workflow-identity verification commands.
+
+## Maintainer Environment Hygiene
+
+Maintainer desktops and cloud-synced folders are scratchpads, not audit
+surfaces. Drafts, runbooks, schemas, fixture analyses, defect statements, and
+other artifacts under audit review must live in a CivicSuite repository on a
+branch and move through a verified PR before review. If an artifact is too
+sensitive for a public repository, it must live in an appropriate private
+organization repository with the same verified-merge discipline.
+
+Do not store signing keys, sensitive seed data, realistic PII-shaped mock data,
+or release evidence requiring custody controls in consumer cloud-sync folders.
+Public documentation drafts are not sensitive, but the pattern is still a
+hygiene signal.
+
+Maintainer notes copied from auditor conversations are auditor input, not
+auditor output. Auditor decisions become operative only when explicitly written
+in the chat as directives, approvals, or authorizations. Code, PRs, fixtures,
+and runbooks produced by the development swarm are separate artifact classes
+and must preserve that distinction in the audit trail.

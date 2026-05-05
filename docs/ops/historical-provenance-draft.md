@@ -4,6 +4,12 @@ Status: draft for auditor review. This document is not yet the umbrella
 CivicSuite disclosure and must not be treated as published policy until it lands
 through the authorized CivicSuite documentation path.
 
+Baseline placeholder: the final policy version must name the first attested
+baseline release and date before publication. Expected format:
+`civiccore v0.22.1, released YYYY-MM-DD, is the baseline release under the
+attested provenance model.` Until that value is filled and separately
+authorized, this document remains a draft.
+
 ## Summary
 
 CivicSuite strengthened its release provenance model during the synthetic
@@ -18,10 +24,20 @@ The new model treats tags as release pointers and makes a Sigstore-signed
 must include the attestation, cosign bundle, artifact checksums, evidence bundle
 hashes, and an exact per-repo/per-tag verification command.
 
+This model shift was driven by the CivicSuite synthetic-phase adversarial audit
+contract. The external auditor flagged that the release-page "Verified" signal
+was misleading for release provenance, the development team built a
+fixture-driven gate, the gate surfaced an organization-wide historical baseline
+issue, and the project chose transparent disclosure and forward correction over
+rewriting release history.
+
 ## Historical State
 
 - Historical releases before the baseline date were produced under a weaker
   GitHub-native provenance model.
+- The backfill scan covered CivicSuite release tags across the organization as
+  of 2026-05-04 and found 119 historical releases failing the strengthened
+  gate: 83 lightweight tags and 36 unsigned annotated tag objects.
 - Those releases are not retroactively deleted or rewritten.
 - Current/latest live-surface releases receive additive attestations only after
   per-release authorization.
@@ -40,6 +56,46 @@ A post-baseline release is independently verifiable when:
   identity for the repo and tag,
 - the cosign bundle verifies with the documented issuer and trust roots, and
 - release notes include the exact verification command.
+
+Worked example placeholder for the first attested CivicCore baseline release:
+
+```bash
+cosign verify-blob release-attestation.json \
+  --bundle release-attestation.json.bundle \
+  --certificate-identity "https://github.com/CivicSuite/civiccore/.github/workflows/release.yml@refs/tags/v0.22.1" \
+  --certificate-oidc-issuer https://token.actions.githubusercontent.com
+
+sha256sum -c SHA256SUMS.txt
+python scripts/verify-release-provenance.py v0.22.1 \
+  --repo CivicSuite/civiccore \
+  --attestation release-attestation.json \
+  --bundle release-attestation.json.bundle \
+  --artifacts-dir .
+```
+
+Replace `v0.22.1` with the final baseline tag if the authorized baseline
+release uses a different version.
+
+## Canonical Sources
+
+- Gate implementation:
+  [`civiccore/release_provenance.py`](../../civiccore/release_provenance.py)
+- Thin CLI wrapper:
+  [`scripts/verify-release-provenance.py`](../../scripts/verify-release-provenance.py)
+- Versioned attestation schema:
+  [`docs/ops/release-attestation.schema.json`](release-attestation.schema.json)
+- Adversarial fixture suite:
+  [`tests/fixtures/release_provenance/`](../../tests/fixtures/release_provenance/)
+- Release-signing runbook:
+  [`docs/ops/release-signing.md`](release-signing.md)
+
+## Verification Support
+
+If a procurement reviewer or city IT reviewer cannot verify a post-baseline
+release with the documented commands, report it through
+[`SECURITY.md`](../../SECURITY.md). Treat unverifiable provenance as a release
+verification failure until the project provides a corrected evidence bundle or
+a documented explanation.
 
 ## Audit Interpretation
 
