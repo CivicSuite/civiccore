@@ -1,7 +1,6 @@
-"""CivicCore: the `civiccore scaffold-module <name>` CLI generator.
+"""Reserved placeholder for the future CivicCore scaffold extraction.
 
-STUB ONLY — Phase 0 scaffold. The v0.1 success criterion (spec section 17)
-requires that `civiccore scaffold-module civicclerk` produces a working
-new-module skeleton that boots, authenticates, and appears in the admin
-shell. Implementation lands with Phase 4.
+See docs/adr/ADR-0003-defer-civiccore-scaffold.md. No downstream module may
+depend on this namespace until scaffold behavior ships in a versioned CivicCore
+release artifact.
 """

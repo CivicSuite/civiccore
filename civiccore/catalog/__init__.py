@@ -1,1 +1,6 @@
-"""CivicCore: municipal systems catalog — domains, recognized vendor systems, connector recommendations. Phase 4 extraction target."""
+"""Reserved placeholder for the future CivicCore catalog extraction.
+
+See docs/adr/ADR-0001-defer-civiccore-catalog.md. No downstream module may
+depend on this namespace until catalog behavior ships in a versioned CivicCore
+release artifact.
+"""
