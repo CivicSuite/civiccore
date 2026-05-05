@@ -14,6 +14,9 @@ MINOR; bug fixes ship as PATCH.
 ## [Unreleased]
 
 ### Added
+- Added the CO-7 placeholder ADRs and freeze-readiness evidence for the
+  `civiccore.catalog`, `civiccore.exemptions`, and `civiccore.scaffold`
+  deferrals.
 - Added the CO-6 CivicCore cleanroom harness with a pinned Docker base image,
   no-cache build orchestrator, live `v0.22.1` Sigstore/SHA256 verification
   paths, offline runtime proof, signed evidence manifests, and CI artifact

@@ -55,9 +55,10 @@ verification: Git tags are treated as release pointers, while
 `release-attestation.json` plus its Sigstore/cosign bundle are the verifiable
 trust artifacts. The exact workflow identity is pinned per repo and per tag;
 org-wide wildcard identities are not accepted.
-Unshipped
-namespaces are reserved for future Phase work and must not be relied on
-by downstream modules until they ship.
+The CO-7 placeholder ADRs in [`docs/adr/index.md`](docs/adr/index.md) record
+the deferral rationale, target phase, and downstream consumption rule for the
+reserved placeholder namespaces. Unshipped namespaces are reserved for future
+Phase work and must not be relied on by downstream modules until they ship.
 
 ## Status
 
