@@ -47,6 +47,8 @@ def test_cleanroom_ci_uploads_evidence_artifact() -> None:
     workflow = read(".github/workflows/cleanroom.yml")
 
     assert "TARGET_COMMIT" in workflow
+    assert "github.event.pull_request.head.sha" in workflow
+    assert "fetch-depth: 0" in workflow
     assert "bash scripts/run-civiccore-cleanroom.sh" in workflow
     assert "actions/upload-artifact" in workflow
     assert "CLEANROOM_RUN_COUNT: \"2\"" in workflow

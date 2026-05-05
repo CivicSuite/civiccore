@@ -31,6 +31,9 @@ jobs:
     steps:
       - name: Check out harness
         uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
       - name: Verify Docker is available
         run: docker version
       - name: Run CivicCore cleanroom harness
