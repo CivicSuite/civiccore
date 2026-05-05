@@ -17,6 +17,20 @@ if ! command -v docker >/dev/null 2>&1; then
     exit 1
 fi
 
+PYTHON_CMD=()
+if command -v python >/dev/null 2>&1; then
+    PYTHON_CMD=(python)
+elif command -v python.exe >/dev/null 2>&1; then
+    PYTHON_CMD=(python.exe)
+elif command -v py >/dev/null 2>&1; then
+    PYTHON_CMD=(py -3)
+elif command -v python3 >/dev/null 2>&1; then
+    PYTHON_CMD=(python3)
+else
+    echo "No Python interpreter found on PATH (checked python, python.exe, py, python3)." >&2
+    exit 1
+fi
+
 if [ "${RUN_COUNT}" -lt 1 ]; then
     echo "CLEANROOM_RUN_COUNT must be at least 1." >&2
     exit 1
@@ -79,7 +93,7 @@ for idx in $(seq 1 "${RUN_COUNT}"); do
         "${IMAGE_TAG}" finalize
 done
 
-python - "${EVIDENCE_ROOT}" "${TARGET_COMMIT}" "${RUN_COUNT}" <<'PY'
+"${PYTHON_CMD[@]}" - "${EVIDENCE_ROOT}" "${TARGET_COMMIT}" "${RUN_COUNT}" <<'PY'
 from __future__ import annotations
 
 import hashlib
