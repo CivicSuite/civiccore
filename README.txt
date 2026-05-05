@@ -54,7 +54,7 @@ determinations are still not shipped platform behaviors.
 Status
 ------
 
-v0.22.0 is the current development-line release target. The current line now
+v0.22.1 is the current attested baseline release. The current line now
 includes shared connector source-list status projection helpers, cron schedule validation helpers, startup config validation helpers, vendor delta planning,
 reusable mock-city proof contracts, live connector sync retry/circuit-breaker
 primitives, and persisted audit-log hash and verification helpers on top of
@@ -70,11 +70,13 @@ Install
 
 From the current published GitHub release wheel:
 
-    pip install https://github.com/CivicSuite/civiccore/releases/download/v0.22.0/civiccore-0.22.0-py3-none-any.whl
+    pip install https://github.com/CivicSuite/civiccore/releases/download/v0.22.1/civiccore-0.22.1-py3-none-any.whl
 
 CivicCore is distributed as versioned GitHub release artifacts (not on PyPI).
 Each release publishes SHA256SUMS.txt alongside the wheel and sdist. Verify
-checksums before promoting an artifact downstream.
+checksums before promoting an artifact downstream. v0.22.0 and earlier releases
+are retained for historical installs only; use v0.22.1 or a later
+Sigstore-attested release when procurement-grade provenance is required.
 
 For development from a clone:
 
@@ -131,8 +133,8 @@ Compatibility
 -------------
 
 Current v0.1.0 module foundations still pin older civiccore lines.
-Production-depth consumers can move to civiccore ==0.22.0 once the release is published and the suite
-compatibility matrix are updated.
+Production-depth consumers can move to civiccore==0.22.1 when the suite
+compatibility matrix is updated.
 
 The suite-wide compatibility matrix is maintained at:
 https://github.com/CivicSuite/civicsuite/tree/main/docs/compatibility

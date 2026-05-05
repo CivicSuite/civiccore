@@ -130,9 +130,9 @@ review environment cannot validate the bundle, the auditor treats that as
   offline reviewer can distinguish "signature invalid" from "reviewer lacks
   the required trust-root material."
 
-## CivicCore v0.22.0 Defect Statement
+## CivicCore v0.22.0 Historical Defect Statement
 
-Current public artifact: `v0.22.0`
+Historical pre-baseline artifact: `v0.22.0`
 
 Defect an outside auditor can verify:
 
@@ -160,9 +160,11 @@ Expected current result until an authorized attestation is added:
 FAIL: Live release verification requires --attestation and --bundle under the Sigstore attestation provenance model.
 ```
 
-This release is part of the Tier 1 live-surface attestation window. Do not add
-attestation assets, edit release notes, delete, or recreate it without explicit
-chat authorization for that specific release.
+This release is ledgered as pre-gate, no attestation, do not promote as
+baseline in
+[`docs/ops/civiccore-tier1-retrofit-ledger.md`](civiccore-tier1-retrofit-ledger.md).
+Do not add attestation assets, edit release notes, delete, or recreate it
+without explicit chat authorization for that specific release.
 
 ## v0.1.17 Correction Note
 
