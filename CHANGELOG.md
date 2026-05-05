@@ -14,6 +14,9 @@ MINOR; bug fixes ship as PATCH.
 ## [Unreleased]
 
 ### Added
+- Added `docs/ops/co-4-cross-module-retrofit-report.md` as the CivicCore
+  closeout index for the merged CivicRecords AI, CivicClerk, and CivicCode
+  Tier 1 retrofit ledgers.
 - Published `docs/ops/civiccore-tier1-retrofit-ledger.md` and its structured
   JSON source so every live CivicCore release tag is explicitly marked either
   as the `v0.22.1` attested baseline or as pre-gate/no-attestation historical
