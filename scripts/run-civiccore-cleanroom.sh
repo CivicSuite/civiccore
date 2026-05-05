@@ -18,16 +18,25 @@ if ! command -v docker >/dev/null 2>&1; then
 fi
 
 PYTHON_CMD=()
-if command -v python >/dev/null 2>&1; then
-    PYTHON_CMD=(python)
-elif command -v python.exe >/dev/null 2>&1; then
-    PYTHON_CMD=(python.exe)
-elif command -v py >/dev/null 2>&1; then
-    PYTHON_CMD=(py -3)
-elif command -v python3 >/dev/null 2>&1; then
-    PYTHON_CMD=(python3)
+pick_python() {
+    local -a candidate=("$@")
+    if command -v "${candidate[0]}" >/dev/null 2>&1 && "${candidate[@]}" -c "import json, pathlib" >/dev/null 2>&1; then
+        PYTHON_CMD=("${candidate[@]}")
+        return 0
+    fi
+    return 1
+}
+
+if pick_python python; then
+    :
+elif pick_python python3; then
+    :
+elif pick_python python.exe; then
+    :
+elif pick_python py -3; then
+    :
 else
-    echo "No Python interpreter found on PATH (checked python, python.exe, py, python3)." >&2
+    echo "No usable Python interpreter found on PATH (checked python, python3, python.exe, py -3)." >&2
     exit 1
 fi
 

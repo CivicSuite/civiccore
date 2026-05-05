@@ -37,6 +37,8 @@ def test_cleanroom_orchestrator_uses_no_cache_two_runs_and_offline_network() -> 
 
     assert "docker build --no-cache --pull --platform linux/amd64" in orchestrator
     assert "RUN_COUNT=\"${CLEANROOM_RUN_COUNT:-2}\"" in orchestrator
+    assert "pick_python" in orchestrator
+    assert '"${candidate[@]}" -c "import json, pathlib"' in orchestrator
     assert "--network none" in orchestrator
     assert "cleanroom stable manifests differ" in orchestrator
 

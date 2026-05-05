@@ -17,6 +17,11 @@ From a fresh clone:
 bash scripts/run-civiccore-cleanroom.sh <commit-sha>
 ```
 
+The host must have Docker and a usable Python interpreter on `PATH`. The
+orchestrator probes `python`, `python3`, `python.exe`, and `py -3` by executing
+a short Python import before it uses an interpreter for the final manifest
+comparison.
+
 The script defaults to two runs so auditors can compare stable manifests:
 
 ```bash
