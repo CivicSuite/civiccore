@@ -19,13 +19,18 @@ def test_release_workflow_uploads_explicit_downloaded_asset_files() -> None:
     workflow = yaml.safe_load(
         Path(".github/workflows/release.yml").read_text(encoding="utf-8")
     )
+    tag_triggers = workflow[True]["push"]["tags"]
     release_steps = workflow["jobs"]["release"]["steps"]
     download_step = release_steps[0]
     create_release_script = release_steps[1]["run"]
 
+    assert "v*" in tag_triggers
+    assert "civiccore-*-freeze" in tag_triggers
     assert download_step["uses"] == "actions/download-artifact@v8"
     assert download_step["with"]["name"] == "civiccore-dist"
     assert download_step["with"]["path"] == "release-assets/"
+    assert "civiccore-*-freeze) latest_flag=(--latest=false)" in create_release_script
+    assert '"${latest_flag[@]}" \\' in create_release_script
     assert "release-assets/dist/*" in create_release_script
     assert "release-assets/release-attestation.json \\" in create_release_script
     assert "release-assets/release-attestation.json.bundle \\" in create_release_script
