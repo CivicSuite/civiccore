@@ -139,6 +139,8 @@ signal only; use `scripts/verify-release-provenance.py` and
 CivicCore releases predate the Sigstore attestation baseline and are retained
 for historical installs only. Their Tier 1 status is published in
 [`docs/ops/civiccore-tier1-retrofit-ledger.md`](docs/ops/civiccore-tier1-retrofit-ledger.md).
+The operative historical disclosure is published in
+[`docs/ops/historical-provenance.md`](docs/ops/historical-provenance.md).
 Do not promote any pre-baseline release as the corrected provenance baseline
 unless a future additive attestation is explicitly authorized, published, and
 recorded in that ledger.

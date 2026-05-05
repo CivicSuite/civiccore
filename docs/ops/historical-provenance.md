@@ -1,14 +1,18 @@
-# Historical Provenance Disclosure Draft
+# Historical Provenance Disclosure Policy
 
-Status: draft for auditor review. This document is not yet the umbrella
-CivicSuite disclosure and must not be treated as published policy until it lands
-through the authorized CivicSuite documentation path.
+Status: operative CivicSuite policy, effective 2026-05-05.
 
-Baseline placeholder: the final policy version must name the first attested
-baseline release and date before publication. Expected format:
-`civiccore v0.22.1, released YYYY-MM-DD, is the baseline release under the
-attested provenance model.` Until that value is filled and separately
-authorized, this document remains a draft.
+Baseline: `civiccore v0.22.1`, released 2026-05-05 at 16:23:36Z, is the
+baseline release under the attested provenance model. The live release and trust
+artifacts are:
+
+- Release: [`v0.22.1`](https://github.com/CivicSuite/civiccore/releases/tag/v0.22.1)
+- Attestation:
+  [`release-attestation.json`](https://github.com/CivicSuite/civiccore/releases/download/v0.22.1/release-attestation.json)
+- Cosign bundle:
+  [`release-attestation.json.bundle`](https://github.com/CivicSuite/civiccore/releases/download/v0.22.1/release-attestation.json.bundle)
+- Checksums:
+  [`SHA256SUMS.txt`](https://github.com/CivicSuite/civiccore/releases/download/v0.22.1/SHA256SUMS.txt)
 
 ## Summary
 
@@ -31,9 +35,24 @@ fixture-driven gate, the gate surfaced an organization-wide historical baseline
 issue, and the project chose transparent disclosure and forward correction over
 rewriting release history.
 
+## Promotion Evidence
+
+The 2026-05-05 policy promotion is anchored to the following evidence:
+
+- The live `v0.22.1` release attestation URL listed above.
+- CivicCore's Tier 1 retrofit ledger:
+  [`docs/ops/civiccore-tier1-retrofit-ledger.md`](civiccore-tier1-retrofit-ledger.md)
+- The cross-module retrofit closeout report:
+  [`docs/ops/co-4-cross-module-retrofit-report.md`](co-4-cross-module-retrofit-report.md)
+- Release verification command and result: `bash scripts/verify-release.sh`,
+  result `VERIFY-RELEASE: PASSED` on 2026-05-05.
+- No historical public release notes, tags, release assets, checksums, or
+  attestations were edited. CO-3 and CO-4 used additive current documentation,
+  ledgers, QA evidence, and dependency alignment only.
+
 ## Historical State
 
-- Historical releases before the baseline date were produced under a weaker
+- Historical releases before 2026-05-05 were produced under a weaker
   GitHub-native provenance model.
 - The backfill scan covered CivicSuite release tags across the organization as
   of 2026-05-04 and found 119 historical releases failing the strengthened
@@ -57,7 +76,7 @@ A post-baseline release is independently verifiable when:
 - the cosign bundle verifies with the documented issuer and trust roots, and
 - release notes include the exact verification command.
 
-Worked example placeholder for the first attested CivicCore baseline release:
+Worked example for the first attested CivicCore baseline release:
 
 ```bash
 cosign verify-blob release-attestation.json \
@@ -73,11 +92,10 @@ python scripts/verify-release-provenance.py v0.22.1 \
   --artifacts-dir .
 ```
 
-Replace `v0.22.1` with the final baseline tag if the authorized baseline
-release uses a different version.
-
 ## Canonical Sources
 
+- Live attested baseline release:
+  [`v0.22.1`](https://github.com/CivicSuite/civiccore/releases/tag/v0.22.1)
 - Gate implementation:
   [`civiccore/release_provenance.py`](../../civiccore/release_provenance.py)
 - Thin CLI wrapper:
@@ -86,6 +104,8 @@ release uses a different version.
   [`docs/ops/release-attestation.schema.json`](release-attestation.schema.json)
 - CivicCore Tier 1 retrofit ledger:
   [`docs/ops/civiccore-tier1-retrofit-ledger.md`](civiccore-tier1-retrofit-ledger.md)
+- CO-4 cross-module retrofit report:
+  [`docs/ops/co-4-cross-module-retrofit-report.md`](co-4-cross-module-retrofit-report.md)
 - Adversarial fixture suite:
   [`tests/fixtures/release_provenance/`](../../tests/fixtures/release_provenance/)
 - Release-signing runbook:

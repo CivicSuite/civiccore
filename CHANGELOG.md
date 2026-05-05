@@ -26,6 +26,10 @@ MINOR; bug fixes ship as PATCH.
   unledgered.
 
 ### Changed
+- Promoted `docs/ops/historical-provenance.md` from draft disclosure to
+  operative policy with the dated `v0.22.1` baseline, live attestation URL,
+  retrofit evidence, release verification result, and no-historical-asset-edit
+  boundary.
 - README, text README, user manual, and docs landing page now describe
   `v0.22.1` as the current attested baseline instead of a staged release
   candidate.
