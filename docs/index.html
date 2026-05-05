@@ -178,14 +178,14 @@
 
     <section aria-labelledby="install">
       <h2 id="install">Install</h2>
-      <p>From the current GitHub release wheel (<code>v0.22.1</code>, once published) - civiccore is GitHub-wheel-only, not on PyPI:</p>
+      <p>From the current GitHub release wheel (<code>v0.22.1</code>) - civiccore is GitHub-wheel-only, not on PyPI:</p>
       <pre><code>pip install https://github.com/CivicSuite/civiccore/releases/download/v0.22.1/civiccore-0.22.1-py3-none-any.whl</code></pre>
       <p>For development from a clone:</p>
       <pre><code>git clone https://github.com/CivicSuite/civiccore.git
 cd civiccore
 pip install -e .[dev]</code></pre>
       <p>Each release publishes <code>SHA256SUMS.txt</code> alongside the wheel and sdist. Verify the checksum before promoting an artifact downstream.</p>
-      <p><strong>Release provenance note:</strong> GitHub release pages can show a target commit as Verified even when the release tag itself is lightweight or unsigned. CivicCore now treats tags as release pointers and verifies <code>release-attestation.json</code> plus its Sigstore/cosign bundle as the trust artifact. The exact workflow identity is pinned per repo and per tag; see <code>docs/ops/release-signing.md</code> and <code>docs/ops/release-attestation.schema.json</code>. The staged <code>v0.22.1</code> baseline release candidate is expected to publish that attestation through the release workflow. The current public <code>v0.22.0</code> artifact is held for an additive Tier 1 attestation operation; no release notes or assets may be modified without explicit per-release authorization.</p>
+      <p><strong>Release provenance note:</strong> GitHub release pages can show a target commit as Verified even when the release tag itself is lightweight or unsigned. CivicCore treats tags as release pointers and verifies <code>release-attestation.json</code> plus its Sigstore/cosign bundle as the trust artifact. The exact workflow identity is pinned per repo and per tag; see <code>docs/ops/release-signing.md</code>, <code>docs/ops/release-attestation.schema.json</code>, and <code>docs/ops/civiccore-tier1-retrofit-ledger.md</code>. The published <code>v0.22.1</code> release is the first attested baseline. Earlier CivicCore releases are retained for historical installs only and must not be promoted as provenance baselines unless a future additive attestation is explicitly authorized, published, and ledgered.</p>
       <figure style="margin: 2em 0;">
         <img src="diagrams/migration-order.svg" alt="Consumer apps invoke civiccore migrations before their own Alembic chain." style="max-width: 100%; height: auto; display: block; margin: 0 auto;">
         <figcaption style="text-align: center; color: #666; font-size: 0.9em; margin-top: 0.5em;">Migration order - civiccore runs first; consumer chain runs second.</figcaption>
@@ -196,7 +196,7 @@ pip install -e .[dev]</code></pre>
       <h2 id="status">Status</h2>
       <div class="status">
         <p>
-          <strong>v0.22.1 is staged as the first attested baseline release.</strong>
+          <strong>v0.22.1 is the first attested baseline release.</strong>
           The current development line adds the canonical Sigstore release-provenance helper,
           versioned attestation schema, fixture-driven gate, and release workflow that signs and verifies
           <code>release-attestation.json</code> before publication, plus source-list status projection helpers for connector workspaces,
@@ -249,7 +249,7 @@ pip install -e .[dev]</code></pre>
       <h2 id="compat">Compatibility</h2>
       <p>
         <strong>Current module foundations span older civiccore lines while newer product-depth consumers already target later releases.</strong>
-          Production-depth consumers can target civiccore v0.22.1 once the compatibility matrix is updated. Every CivicSuite
+          Production-depth consumers can target civiccore v0.22.1 when their compatibility matrix is updated. Every CivicSuite
           module's README declares a CivicCore version range.
         </p>
     </section>
@@ -261,6 +261,7 @@ pip install -e .[dev]</code></pre>
         <li><a href="https://github.com/CivicSuite/civiccore/blob/main/README.md">README</a> - quick start and public API surface.</li>
         <li><a href="https://github.com/CivicSuite/civiccore/blob/main/USER-MANUAL.md">USER-MANUAL</a> - non-technical overview, integrator guide, architecture reference.</li>
         <li><a href="https://github.com/CivicSuite/civiccore/blob/main/CHANGELOG.md">CHANGELOG</a> - Keep a Changelog format.</li>
+        <li><a href="https://github.com/CivicSuite/civiccore/blob/main/docs/ops/civiccore-tier1-retrofit-ledger.md">Tier 1 retrofit ledger</a> - live CivicCore release-tag provenance decisions.</li>
       </ul>
     </section>
 

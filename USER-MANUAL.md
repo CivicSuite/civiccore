@@ -1,6 +1,6 @@
 # CivicCore User Manual
 
-Version: v0.22.0 (current development-line release)
+Version: v0.22.1 (first attested baseline release)
 Repository: https://github.com/CivicSuite/civiccore
 License: Apache 2.0
 
@@ -90,7 +90,7 @@ not promote those behaviors as shipped CivicCore capability.
 CivicCore is distributed as GitHub release artifacts, not PyPI packages:
 
 ```bash
-pip install https://github.com/CivicSuite/civiccore/releases/download/v0.22.0/civiccore-0.22.0-py3-none-any.whl
+pip install https://github.com/CivicSuite/civiccore/releases/download/v0.22.1/civiccore-0.22.1-py3-none-any.whl
 ```
 
 Each release publishes `SHA256SUMS.txt` next to the wheel and source
@@ -98,9 +98,15 @@ distribution. Verify checksums before promoting a release artifact:
 
 ```bash
 curl -L -o SHA256SUMS.txt \
-  https://github.com/CivicSuite/civiccore/releases/download/v0.22.0/SHA256SUMS.txt
+  https://github.com/CivicSuite/civiccore/releases/download/v0.22.1/SHA256SUMS.txt
 sha256sum -c SHA256SUMS.txt
 ```
+
+`v0.22.1` is the first CivicCore release with a Sigstore-signed
+`release-attestation.json` and bundle. Earlier CivicCore releases are retained
+for historical installs only and must not be treated as provenance baselines
+unless a future additive attestation is explicitly authorized, published, and
+recorded in `docs/ops/civiccore-tier1-retrofit-ledger.md`.
 
 For local development:
 
@@ -295,8 +301,8 @@ them.
 ### Compatibility
 
 Current v0.1.0 module foundations still pin older civiccore lines.
-Production-depth consumers can move to `civiccore==0.22.0` once the release is published
-and the suite compatibility matrix is updated.
+Production-depth consumers can move to `civiccore==0.22.1` when the suite
+compatibility matrix is updated.
 
 The suite-wide matrix lives at:
 https://github.com/CivicSuite/civicsuite/tree/main/docs/compatibility

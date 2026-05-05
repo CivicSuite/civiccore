@@ -13,6 +13,20 @@ MINOR; bug fixes ship as PATCH.
 
 ## [Unreleased]
 
+### Added
+- Published `docs/ops/civiccore-tier1-retrofit-ledger.md` and its structured
+  JSON source so every live CivicCore release tag is explicitly marked either
+  as the `v0.22.1` attested baseline or as pre-gate/no-attestation historical
+  release material.
+- Added `scripts/check-tier1-ledger.py` and regression coverage for the CO-3
+  ledger so future release-surface edits cannot silently leave CivicCore tags
+  unledgered.
+
+### Changed
+- README, text README, user manual, and docs landing page now describe
+  `v0.22.1` as the current attested baseline instead of a staged release
+  candidate.
+
 ## [0.22.1] - 2026-05-05
 
 ### Added

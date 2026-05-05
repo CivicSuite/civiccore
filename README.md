@@ -61,7 +61,7 @@ by downstream modules until they ship.
 
 ## Status
 
-**v0.22.1 is staged as the first attested baseline release.** This line adds
+**v0.22.1 is the first attested baseline release.** This line adds
 the canonical Sigstore release-provenance helper, versioned attestation schema,
 fixture-driven gate, and tag-driven release workflow that signs and verifies
 `release-attestation.json` before publication. It also carries the shared
@@ -116,7 +116,7 @@ shared-schema baseline extracted from CivicRecords AI).
 
 ## Install
 
-From the current GitHub release wheel (`v0.22.1`, once published):
+From the current GitHub release wheel (`v0.22.1`):
 
 ```bash
 pip install https://github.com/CivicSuite/civiccore/releases/download/v0.22.1/civiccore-0.22.1-py3-none-any.whl
@@ -135,11 +135,13 @@ the annotated tag object is unsigned. Treat the release-page badge as a commit
 signal only; use `scripts/verify-release-provenance.py` and
 `docs/ops/release-signing.md` for release-tag provenance.
 
-The current public `v0.22.0` release is in the Tier 1 correction window because
-it predates the Sigstore attestation baseline. Treat `v0.22.1` as the staged
-baseline release candidate until the release workflow publishes its attestation
-and bundle. Do not republish, mirror, or rely on `v0.22.0` as the corrected
-provenance baseline until the Tier 1 correction is complete.
+`v0.22.1` is the current attested baseline release. `v0.22.0` and earlier
+CivicCore releases predate the Sigstore attestation baseline and are retained
+for historical installs only. Their Tier 1 status is published in
+[`docs/ops/civiccore-tier1-retrofit-ledger.md`](docs/ops/civiccore-tier1-retrofit-ledger.md).
+Do not promote any pre-baseline release as the corrected provenance baseline
+unless a future additive attestation is explicitly authorized, published, and
+recorded in that ledger.
 
 For development from a clone:
 
@@ -521,8 +523,8 @@ Extraction Spec** in
 
 Every CivicSuite module's README declares its CivicCore dependency contract.
 Current v0.1.0 module foundations pin older civiccore lines. Production-depth
-consumers can move to `==0.22.1` once the release is published and the
-compatibility matrix is updated. The suite-wide compatibility matrix — which
+consumers can move to `==0.22.1` when their compatibility matrix is updated.
+The suite-wide compatibility matrix — which
 module versions work with which CivicCore versions — is maintained at
 [CivicSuite/civicsuite/docs/compatibility/](https://github.com/CivicSuite/civicsuite/tree/main/docs/compatibility).
 

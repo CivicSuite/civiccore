@@ -84,6 +84,8 @@ release uses a different version.
   [`scripts/verify-release-provenance.py`](../../scripts/verify-release-provenance.py)
 - Versioned attestation schema:
   [`docs/ops/release-attestation.schema.json`](release-attestation.schema.json)
+- CivicCore Tier 1 retrofit ledger:
+  [`docs/ops/civiccore-tier1-retrofit-ledger.md`](civiccore-tier1-retrofit-ledger.md)
 - Adversarial fixture suite:
   [`tests/fixtures/release_provenance/`](../../tests/fixtures/release_provenance/)
 - Release-signing runbook:
