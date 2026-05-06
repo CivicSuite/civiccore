@@ -38,3 +38,21 @@ def test_release_workflow_uploads_explicit_downloaded_asset_files() -> None:
     assert "release-assets/release-attestation.json \\" in create_release_script
     assert "release-assets/release-attestation.json.bundle \\" in create_release_script
     assert "release-assets/*" not in create_release_script
+
+
+def test_ci_workflow_runs_full_release_verification_gate() -> None:
+    workflow = yaml.safe_load(Path(".github/workflows/ci.yml").read_text(encoding="utf-8"))
+    steps = workflow["jobs"]["tests"]["steps"]
+    run_commands = [step.get("run", "") for step in steps]
+
+    assert "bash scripts/verify-release.sh" in run_commands
+    assert not any(command.startswith("pytest tests/test_smoke.py") for command in run_commands)
+
+
+def test_co9_audit_report_has_post_publication_status() -> None:
+    report = Path("docs/ops/co-9-audit-full-release-gate.md").read_text(encoding="utf-8")
+
+    assert "Post-publication addendum" in report
+    assert "| v1.0 release is published. | GitHub release page | True |" in report
+    assert "Release tag is intentionally not created until after PR/main CI." not in report
+    assert "Final `v1.0` Sigstore bundle cannot be verified until" not in report

@@ -108,7 +108,7 @@ def test_authorize_bearer_roles_rejects_token_without_allowed_role(
     assert exc_info.value.status_code == 403
     assert exc_info.value.detail["message"] == "Bearer token lacks an allowed role."
     assert exc_info.value.detail["required_roles"] == ["workpaper_reader"]
-    assert exc_info.value.detail["token_roles"] == ["budget_viewer"]
+    assert "token_roles" not in exc_info.value.detail
 
 
 def test_authorize_bearer_roles_returns_principal_for_allowed_token(
@@ -248,9 +248,9 @@ def test_authorize_trusted_header_roles_rejects_underprivileged_identity() -> No
 
     assert exc_info.value.status_code == 403
     assert exc_info.value.detail["message"] == "Trusted identity lacks an allowed role."
-    assert exc_info.value.detail["principal"] == "clerk@example.gov"
-    assert exc_info.value.detail["principal_roles"] == ["records_viewer"]
     assert exc_info.value.detail["required_roles"] == ["clerk_admin", "meeting_editor"]
+    assert "principal" not in exc_info.value.detail
+    assert "principal_roles" not in exc_info.value.detail
     assert "CivicClerk" in exc_info.value.detail["fix"]
     assert "staff workflow access" in exc_info.value.detail["fix"]
 
@@ -424,8 +424,8 @@ def test_enforce_trusted_proxy_source_rejects_untrusted_host() -> None:
     assert (
         exc_info.value.detail["message"] == "Trusted staff headers were not received from an approved proxy."
     )
-    assert exc_info.value.detail["client_host"] == "203.0.113.22"
-    assert exc_info.value.detail["trusted_proxy_cidrs"] == ["10.20.30.0/24"]
+    assert "client_host" not in exc_info.value.detail
+    assert "trusted_proxy_cidrs" not in exc_info.value.detail
 
 
 def test_enforce_trusted_proxy_source_accepts_allowed_host() -> None:

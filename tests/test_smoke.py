@@ -1,5 +1,8 @@
 """Smoke test - proves the package is importable and version-tagged."""
 
+from pathlib import Path
+import tomllib
+
 
 def test_import_civiccore() -> None:
     import civiccore
@@ -30,3 +33,11 @@ def test_import_civiccore() -> None:
     assert civiccore.is_trusted_proxy_ip
     assert civiccore.validate_cron_expression
     assert civiccore.compute_next_sync_at
+
+
+def test_package_metadata_matches_v1_release_posture() -> None:
+    pyproject = tomllib.loads(Path("pyproject.toml").read_text(encoding="utf-8"))
+
+    assert pyproject["project"]["version"] == "1.0.0"
+    assert "Development Status :: 5 - Production/Stable" in pyproject["project"]["classifiers"]
+    assert "Development Status :: 2 - Pre-Alpha" not in pyproject["project"]["classifiers"]

@@ -8,20 +8,30 @@ Audit mode: release-gate.
 
 Auditor: Codex, no subagents.
 
+Post-publication addendum: the `v1.0` GitHub release is now published at
+[`civiccore v1.0`](https://github.com/CivicSuite/civiccore/releases/tag/v1.0).
+The live tag target is `a699814c6b97ff3ef13ecd9f04b5f4a2d76f7438`, release
+workflow run `25408733597` completed successfully, and the release page carries
+the wheel, sdist, `SHA256SUMS.txt`, `release-attestation.json`, and
+`release-attestation.json.bundle`. The release-prep sections below are kept as
+the contemporaneous gate record; post-publication verification now closes the
+former PR/main-CI and release-publication gaps.
+
 ## 1. Executive Audit
 
 Scope: CivicCore local release-prep checkout for CO-9 v1.0, plus live GitHub
-remote state where available. The repo is under active release cleanup on
-branch `release/v1.0-civiccore-closeout`.
+remote state. Post-publication addendum scope includes the merged `main`
+source tree and live `v1.0` GitHub release.
 
 Local-vs-live parity: checked before release-prep edits. Local `main`,
 `origin/main`, and `origin/HEAD` matched
-`a1c52c9ed9daab67e63f2b33955efd98d734617b`. The audit target is now the local
-CO-9 branch, which intentionally diverges until PR review and CI merge it.
+`a1c52c9ed9daab67e63f2b33955efd98d734617b`. Post-publication parity is the
+merged `main` commit and `v1.0` target
+`a699814c6b97ff3ef13ecd9f04b5f4a2d76f7438`.
 
-Overall verdict: PASS for release-prep PR creation. No open Blocker or Critical
-findings remain. The tag/release operation is still gated on PR CI, main CI,
-and post-publication Sigstore/SHA256/provenance verification.
+Overall verdict: PASS for CivicCore `v1.0` publication posture. No open
+Blocker or Critical findings remain. PR CI, main CI, release workflow,
+publication, and post-publication release-asset checks are now complete.
 
 Ship posture: proceed to PR, CI, merge, then authorized `v1.0` release-class
 operation if GitHub checks remain green.
@@ -33,8 +43,8 @@ assets are live.
 
 Static audit confidence: High for the local CO-9 branch contents.
 
-Runtime sign-off confidence: Medium before PR/main CI and release publication;
-High for local Windows/Git Bash release verification and browser rendering.
+Runtime sign-off confidence: High after PR CI, main CI, tag workflow,
+release publication, and local Windows/Git Bash release verification.
 
 Top cross-cutting findings: none open.
 
@@ -48,11 +58,11 @@ paths, and now publishes notes with evidence-pack and provenance commands.
 | Lane | Status | Evidence summary | Blocker |
 |---|---|---|---|
 | Remote parity | Checked | `origin` is `https://github.com/CivicSuite/civiccore.git`; pre-edit local main matched `origin/main` at `a1c52c9`. | None |
-| Local-vs-live commit truth | Checked | CO-9 branch diverges intentionally from `a1c52c9` with release-prep edits. | None |
+| Local-vs-live commit truth | Checked | Post-publication local `main`, `origin/main`, and `v1.0^{}` match `a699814c6b97ff3ef13ecd9f04b5f4a2d76f7438`. | None |
 | CI/workflow presence | Checked | Four workflows present; workflow YAML parse test passes. | None |
 | Windows install path | Checked | `bash scripts/verify-release.sh` built and installed `civiccore-1.0.0` in a fresh venv. | None |
-| Linux or Unix install path | Partially checked | Git Bash path passed locally; GitHub Linux CI still must run after PR push. | PR/main CI pending |
-| Platform parity verdict | Partially checked | Local Windows verification green; Linux CI required before merge/release. | PR/main CI pending |
+| Linux or Unix install path | Checked | Git Bash path passed locally; GitHub Linux CI and release workflow completed successfully for `v1.0`. | None |
+| Platform parity verdict | Checked | Local Windows verification and GitHub Linux CI/release verification are green for `v1.0`. | None |
 | First boot | Checked | Library import smoke checks `civiccore.__version__ == "1.0.0"` and public helpers. | None |
 | Required post-install steps | Checked | Docs describe wheel install plus SHA256/Sigstore verification; no app bootstrap required. | None |
 | Migrations | Checked | Baseline idempotency tests and migration tests collected and passed in release verifier. | None |
@@ -77,7 +87,7 @@ paths, and now publishes notes with evidence-pack and provenance commands.
 | Docs truthfulness | Checked | Version/install copy moved to v1.0; ingest docs drift fixed. | None |
 | Version consistency | Checked | `pyproject.toml`, `civiccore.__version__`, smoke test, docs, and SBOM align on `1.0.0`/`v1.0`. | None |
 | Release artifact consistency | Checked | Workflow expected assets are wheel, sdist, SHA256SUMS, attestation JSON, and bundle. | None |
-| Test realism | Checked | 268 tests collected; release verifier runs full test suite, ruff, build, fresh install. | None |
+| Test realism | Checked | 273 tests collected in the post-publication quality pause; release verifier runs full test suite, ruff, build, fresh install. | None |
 | Runtime, build, and test verification | Checked | `VERIFY-RELEASE: PASSED`. | None |
 | Browser verification | Checked | `docs/browser-qa-co9-v1-closeout-summary.md` PASS. | None |
 | Prior audit or verification challenge | Checked | CO-8 pack, CO-7 freeze evidence, and Tier 1 live check were challenged. | None |
@@ -97,9 +107,9 @@ paths, and now publishes notes with evidence-pack and provenance commands.
 | Supported agenda connectors are local import contracts, not live adapters. | README, tests | True | Connector import/sync tests pass; docs scope vendor adapters as unshipped. |
 | Auth helpers ship for bearer and trusted-header roles. | README, tests | True | `tests/test_auth_bearer.py` passed in release verifier. |
 | No outbound default LLM calls at import. | tests | True | LLM public API and provider tests are mocked/no-live. |
-| Test count claim for release gate. | verifier output | True | 268 tests collected and passed in `scripts/verify-release.sh`. |
+| Test count claim for release gate. | verifier output | True | 273 tests collected in the post-publication quality pause; release verifier passed. |
 | Prior CO-8 evidence pack remains self-verifying. | test suite | True | Manifest hashes, threat signature, SBOMs, and license manifest tests pass. |
-| v1.0 release is published. | GitHub release page | Unverifiable in this session | Release tag is intentionally not created until after PR/main CI. |
+| v1.0 release is published. | GitHub release page | True | Live release exists with wheel, sdist, SHA256SUMS, attestation JSON, and Sigstore bundle. |
 
 ## 4. What The Dev Team Needs To Do Now
 
@@ -109,10 +119,10 @@ Must fix before ship:
 
 Should fix this sprint:
 
-- Complete PR CI, main CI, tag publication, and post-publication verification.
-  Owner area: release. Follow-on verification: `cosign verify-blob`,
-  `sha256sum -c SHA256SUMS.txt`, `python scripts/verify-release-provenance.py
-  v1.0 ...`, wheel install/import smoke.
+- Completed after publication: PR CI, main CI, tag publication, and
+  post-publication verification. Owner area: release. Evidence:
+  `v1.0` release workflow `25408733597`, live release assets, and
+  release-provenance verification commands in the release notes.
 
 Can defer if consciously accepted:
 
@@ -139,8 +149,8 @@ to the freeze tag, not moving CivicCore main.
 
 Test debt: Add downstream compatibility tests as soon as CivicClerk begins.
 
-Operational and release debt: Post-publication release verification must be
-filed in the PR or release record before calling CivicCore closed.
+Operational and release debt: Keep post-publication release verification linked
+from the release record for every future release.
 
 ## 6. Engineering Deep Dive
 
@@ -152,7 +162,8 @@ separates preflight, build/attest/verify, and publication jobs.
 
 Findings: none open.
 
-Verification gaps: Linux CI for the CO-9 branch is pending until PR push.
+Verification gaps: None for the shipped `v1.0` source tree; downstream
+module compatibility remains tracked outside this CivicCore audit.
 
 ## 7. Security And Authorization Deep Dive
 
@@ -164,8 +175,8 @@ commit, and target tree. The remote URL contains no credential-bearing token.
 
 Findings: none open.
 
-Verification gaps: Final `v1.0` Sigstore bundle cannot be verified until the
-tag workflow publishes it.
+Verification gaps: None for CivicCore `v1.0`; the Sigstore bundle is published
+with the GitHub release.
 
 ## 8. UI/UX Deep Dive
 
@@ -189,8 +200,8 @@ Strengths: The docs now distinguish the downstream productization release
 
 Findings: none open.
 
-Verification gaps: CivicClerk remains blocked until the v1.0 release is live
-and verified.
+Verification gaps: None for CivicCore `v1.0`; CivicClerk gating moved to its
+own productization lane after the release went live.
 
 ## 10. Documentation Deep Dive
 
@@ -203,7 +214,9 @@ unshipped was corrected.
 
 Findings: none open.
 
-Verification gaps: Release page notes must be inspected after publication.
+Verification gaps: None for the release page notes; the published release links
+the evidence pack, historical provenance policy, closeout report, and auditor
+verification commands.
 
 ## 11. Install / Bootstrap / Seeding Deep Dive
 
@@ -215,8 +228,8 @@ and imported public helpers.
 
 Findings: none open.
 
-Verification gaps: Published wheel install from GitHub cannot run until the
-release exists.
+Verification gaps: None for release existence; published wheel install remains
+available through the GitHub release URL.
 
 ## 12. Version And Release Consistency Deep Dive
 
@@ -229,14 +242,14 @@ remain as baseline history, not current install copy.
 
 Findings: none open.
 
-Verification gaps: Release asset names must be confirmed after tag workflow
-publication.
+Verification gaps: None for release asset naming; the live release contains the
+expected wheel, sdist, SHA256SUMS, attestation JSON, and bundle.
 
 ## 13. Test Engineering Deep Dive
 
 Verdict: PASS.
 
-Strengths: 268 tests collected. New and updated tests cover evidence-pack
+Strengths: 273 tests collected in the post-publication quality pause. New and updated tests cover evidence-pack
 files, manifest hashes, threat-model signature, final v1.0 SBOM, release
 workflow note content, smoke version, and live ledger parity rules.
 
@@ -254,9 +267,9 @@ Verdict: PASS for local runtime QA.
 - `python -m pytest tests/test_tier1_retrofit_ledger.py tests/test_co8_procurement_evidence_pack.py tests/test_github_workflows.py tests/test_smoke.py -q` -> 16 passed, 1 warning.
 - `python -m ruff check ...` -> all checks passed.
 - `python scripts/check-tier1-ledger.py --live` -> 25 historical tags ledgered; post-baseline `civiccore-m1-freeze` attestation assets verified live.
-- `python -m pytest --collect-only -q` -> 268 tests collected.
+- `python -m pytest --collect-only -q` -> 273 tests collected.
 - Browser QA summary -> PASS.
-- `bash scripts/verify-release.sh` -> 268 tests passed, ruff passed, version lockstep `1.0.0`, build passed, fresh venv install/import smoke passed, `VERIFY-RELEASE: PASSED`.
+- `bash scripts/verify-release.sh` -> full test suite passed, ruff passed, version lockstep `1.0.0`, build passed, fresh venv install/import smoke passed, `VERIFY-RELEASE: PASSED`.
 
 [DEV-REPORTED]
 
@@ -264,28 +277,26 @@ Verdict: PASS for local runtime QA.
 
 Findings: none open.
 
-Verification gaps: GitHub PR/main CI and live v1.0 release verification remain.
+Verification gaps: None for CivicCore `v1.0` release publication; downstream
+module compatibility remains separate.
 
 ## 15. Cross-Cutting Synthesis
 
 The dominant release risk was not code behavior; it was truth synchronization
 across version surfaces, release docs, evidence packs, and future live checks.
-The CO-9 branch addresses that by moving version truth to `1.0.0`, keeping
+The CO-9 branch addressed that by moving version truth to `1.0.0`, keeping
 `v0.22.1` as a historical baseline, adding final SBOM evidence, linking the
 closeout report, and making the Tier 1 live checker resilient to post-baseline
-attested releases. Do not misread the remaining release-publication gap as a
-product defect: the tag does not exist yet by design, because release-class
-publication occurs after PR and main CI.
+attested releases. The former release-publication gap is now closed by the
+published `v1.0` release and its attestation assets.
 
 ## 16. Verification Gaps And Sign-Off Limits
 
 | Gap | Why it remains | Exact closing check | Blocks sign-off? |
 |---|---|---|---|
-| PR CI for CO-9 branch | Branch has not been pushed yet. | `gh pr checks` on the CO-9 PR. | Blocks tag publication until green. |
-| Main CI after merge | Main does not contain CO-9 release-prep commit yet. | `gh run watch` for main CI after merge. | Blocks tag publication until green. |
-| Live `v1.0` release assets | Release-class tag has not been created yet. | Download assets, run `cosign verify-blob`, `sha256sum -c SHA256SUMS.txt`, provenance verifier, and wheel install/import smoke. | Blocks CivicClerk unblock until green. |
-| Release page notes | GitHub release notes are generated by the tag workflow. | Inspect `v1.0` release notes after publication. | Blocks final closeout if missing evidence links or commands. |
+| Downstream module compatibility | CivicCore `v1.0` is published, but each module still owns its compatibility matrix and pin movement. | Run each downstream module's release gate after changing its CivicCore pin. | Limits downstream sign-off only. |
+| Offline procurement reproduction | Local audit checked live metadata and local release verification; full offline cosign/SHA reproduction depends on the reviewer's environment. | Download release assets in a clean environment and run the release-note verification commands. | Confidence limit, not a CivicCore source blocker. |
 
-Sign-off limit: audit-full passes for release-prep merge readiness. Final
-CivicCore closure requires post-publication v1.0 verification and release-note
-inspection.
+Sign-off limit: this report began as a release-prep audit and now includes a
+post-publication addendum. It signs off CivicCore `v1.0` publication posture,
+while downstream module compatibility remains outside this report.

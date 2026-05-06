@@ -25,7 +25,7 @@ keywords = [
     "civicsuite",
 ]
 classifiers = [
-    "Development Status :: 2 - Pre-Alpha",
+    "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Developers",
     "Intended Audience :: Other Audience",
     "Operating System :: OS Independent",
