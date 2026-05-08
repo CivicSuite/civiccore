@@ -49,6 +49,15 @@ def test_ci_workflow_runs_full_release_verification_gate() -> None:
     assert not any(command.startswith("pytest tests/test_smoke.py") for command in run_commands)
 
 
+def test_release_gate_prefers_native_unix_python_before_windows_launcher() -> None:
+    script = Path("scripts/verify-release.sh").read_text(encoding="utf-8")
+
+    python3_index = script.index("command -v python3")
+    python_exe_index = script.index("command -v python.exe")
+
+    assert python3_index < python_exe_index
+
+
 def test_co9_audit_report_has_post_publication_status() -> None:
     report = Path("docs/ops/co-9-audit-full-release-gate.md").read_text(encoding="utf-8")
 

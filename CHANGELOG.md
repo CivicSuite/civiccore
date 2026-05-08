@@ -13,6 +13,12 @@ MINOR; bug fixes ship as PATCH.
 
 ## [Unreleased]
 
+### Changed
+- Marked the published `v1.0` line as provisional during suite-wide release
+  recovery instead of advertising it as production/stable.
+- Updated the release verification script to prefer native Unix `python3`
+  before Windows launchers so WSL evidence exercises Linux Python.
+
 ## [1.0.0] - 2026-05-05
 
 ### Added

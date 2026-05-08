@@ -1,6 +1,6 @@
 # CivicCore User Manual
 
-Version: v1.0 (downstream productization release)
+Version: v1.0 (published downstream productization label; provisional during release recovery)
 Repository: https://github.com/CivicSuite/civiccore
 License: Apache 2.0
 
@@ -105,7 +105,8 @@ curl -L -o SHA256SUMS.txt \
 sha256sum -c SHA256SUMS.txt
 ```
 
-`v1.0` is the downstream productization release. `v0.22.1` is the first
+`v1.0` is a published downstream productization label under release-recovery
+review, not a freshly re-earned production/stable claim. `v0.22.1` is the first
 CivicCore release with a Sigstore-signed
 `release-attestation.json` and bundle. Earlier CivicCore releases are retained
 for historical installs only and must not be treated as provenance baselines

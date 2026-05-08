@@ -35,9 +35,10 @@ def test_import_civiccore() -> None:
     assert civiccore.compute_next_sync_at
 
 
-def test_package_metadata_matches_v1_release_posture() -> None:
+def test_package_metadata_marks_v1_as_provisional_recovery_line() -> None:
     pyproject = tomllib.loads(Path("pyproject.toml").read_text(encoding="utf-8"))
 
     assert pyproject["project"]["version"] == "1.0.0"
-    assert "Development Status :: 5 - Production/Stable" in pyproject["project"]["classifiers"]
+    assert "Development Status :: 4 - Beta" in pyproject["project"]["classifiers"]
+    assert "Development Status :: 5 - Production/Stable" not in pyproject["project"]["classifiers"]
     assert "Development Status :: 2 - Pre-Alpha" not in pyproject["project"]["classifiers"]
