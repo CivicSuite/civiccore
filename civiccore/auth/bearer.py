@@ -135,7 +135,6 @@ def authorize_bearer_roles(
                     f"{', '.join(sorted(normalized_allowed))}."
                 ),
                 "required_roles": sorted(normalized_allowed),
-                "token_roles": sorted(token_roles),
             },
         )
 

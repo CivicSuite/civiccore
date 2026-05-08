@@ -19,16 +19,16 @@ REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$REPO_ROOT"
 
 PYTHON_CMD=()
-if command -v python >/dev/null 2>&1; then
+if command -v python3 >/dev/null 2>&1; then
+    PYTHON_CMD=(python3)
+elif command -v python >/dev/null 2>&1; then
     PYTHON_CMD=(python)
-elif command -v python.exe >/dev/null 2>&1; then
-    PYTHON_CMD=(python.exe)
 elif command -v py >/dev/null 2>&1; then
     PYTHON_CMD=(py -3)
-elif command -v python3 >/dev/null 2>&1; then
-    PYTHON_CMD=(python3)
+elif command -v python.exe >/dev/null 2>&1; then
+    PYTHON_CMD=(python.exe)
 else
-    echo "No Python interpreter found on PATH (checked python, python3, py)." >&2
+    echo "No Python interpreter found on PATH (checked python3, python, py, python.exe)." >&2
     exit 1
 fi
 

@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="CivicCore v1.0 - shared platform library for the open-source CivicSuite municipal operations suite. Not an end-user app. Apache 2.0.">
-<title>CivicCore v1.0 - CivicSuite shared platform library</title>
+<meta name="description" content="CivicCore v1.0 - shared platform library for the open-source CivicSuite municipal operations suite. Provisional during release recovery. Not an end-user app. Apache 2.0.">
+<title>CivicCore v1.0 - CivicSuite shared platform library (provisional)</title>
   <style>
     :root {
       --text: #1f2328;
@@ -185,7 +185,7 @@
 cd civiccore
 pip install -e .[dev]</code></pre>
       <p>Each release publishes <code>SHA256SUMS.txt</code> alongside the wheel and sdist. Verify the checksum before promoting an artifact downstream.</p>
-      <p><strong>Release provenance note:</strong> GitHub release pages can show a target commit as Verified even when the release tag itself is lightweight or unsigned. CivicCore treats tags as release pointers and verifies <code>release-attestation.json</code> plus its Sigstore/cosign bundle as the trust artifact. The exact workflow identity is pinned per repo and per tag; see <code>docs/ops/release-signing.md</code>, <code>docs/ops/release-attestation.schema.json</code>, <code>docs/ops/civiccore-tier1-retrofit-ledger.md</code>, and <code>docs/ops/historical-provenance.md</code>. The published <code>v1.0</code> release is the downstream productization release; <code>v0.22.1</code> remains the first attested baseline. Earlier CivicCore releases are retained for historical installs only and must not be promoted as provenance baselines unless a future additive attestation is explicitly authorized, published, and ledgered.</p>
+      <p><strong>Release provenance note:</strong> GitHub release pages can show a target commit as Verified even when the release tag itself is lightweight or unsigned. CivicCore treats tags as release pointers and verifies <code>release-attestation.json</code> plus its Sigstore/cosign bundle as the trust artifact. The exact workflow identity is pinned per repo and per tag; see <code>docs/ops/release-signing.md</code>, <code>docs/ops/release-attestation.schema.json</code>, <code>docs/ops/civiccore-tier1-retrofit-ledger.md</code>, and <code>docs/ops/historical-provenance.md</code>. The published <code>v1.0</code> release is a downstream productization label under release-recovery review; <code>v0.22.1</code> remains the first attested baseline. Earlier CivicCore releases are retained for historical installs only and must not be promoted as provenance baselines unless a future additive attestation is explicitly authorized, published, and ledgered.</p>
       <figure style="margin: 2em 0;">
         <img src="diagrams/migration-order.svg" alt="Consumer apps invoke civiccore migrations before their own Alembic chain." style="max-width: 100%; height: auto; display: block; margin: 0 auto;">
         <figcaption style="text-align: center; color: #666; font-size: 0.9em; margin-top: 0.5em;">Migration order - civiccore runs first; consumer chain runs second.</figcaption>
@@ -196,8 +196,8 @@ pip install -e .[dev]</code></pre>
       <h2 id="status">Status</h2>
       <div class="status">
         <p>
-          <strong>v1.0 is the downstream productization release.</strong>
-          It carries the CO-7 freeze-line trust anchor, the CO-8 procurement evidence pack, and the CO-9 closeout trail.
+          <strong>v1.0 is a published downstream productization label under release-recovery review.</strong>
+          It carries the CO-7 freeze-line trust anchor, the CO-8 procurement evidence pack, and the CO-9 closeout trail, but it is not promoted as freshly re-earned production/stable status until the recovery gates pass.
           <code>v0.22.1</code> remains the first attested baseline release. The current development line includes the canonical Sigstore release-provenance helper,
           versioned attestation schema, fixture-driven gate, and release workflow that signs and verifies
           <code>release-attestation.json</code> before publication, plus source-list status projection helpers for connector workspaces,
@@ -250,7 +250,7 @@ pip install -e .[dev]</code></pre>
       <h2 id="compat">Compatibility</h2>
       <p>
         <strong>Current module foundations span older civiccore lines while newer product-depth consumers already target later releases.</strong>
-          Production-depth consumers can target civiccore v1.0 when their compatibility matrix is updated. Every CivicSuite
+          Production-depth consumers can target civiccore v1.0 only when their compatibility matrix and recovery gates are updated. Every CivicSuite
           module's README declares a CivicCore version range.
         </p>
     </section>

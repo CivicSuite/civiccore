@@ -62,9 +62,12 @@ Phase work and must not be relied on by downstream modules until they ship.
 
 ## Status
 
-**v1.0 is the CivicCore downstream productization release.** It carries the
-CO-7 freeze-line trust anchor, the CO-8 procurement evidence pack, and the
-CO-9 closeout trail for modules that need a procurement-grade platform pin.
+**v1.0 is a published CivicCore downstream productization label under
+release-recovery review.** It carries the CO-7 freeze-line trust anchor, the
+CO-8 procurement evidence pack, and the CO-9 closeout trail for modules that
+need a procurement-grade platform pin, but it is not being promoted as a
+freshly re-earned production/stable line until the suite-wide recovery gates in
+[`docs/release-recovery-status.md`](docs/release-recovery-status.md) pass.
 `v0.22.1` remains the first attested baseline release. This line carries the
 canonical Sigstore release-provenance helper, versioned attestation schema,
 fixture-driven gate, and tag-driven release workflow that signs and verifies
@@ -139,7 +142,8 @@ the annotated tag object is unsigned. Treat the release-page badge as a commit
 signal only; use `scripts/verify-release-provenance.py` and
 `docs/ops/release-signing.md` for release-tag provenance.
 
-`v1.0` is the current downstream productization release. `v0.22.1` remains
+`v1.0` is the current published downstream productization label under
+release-recovery review. `v0.22.1` remains
 the first attested baseline release, and `civiccore-m1-freeze` remains the
 CO-7 freeze-line tag downstream modules use as their initial trust anchor.
 `v0.22.0` and earlier CivicCore releases predate the Sigstore attestation
@@ -154,7 +158,9 @@ The CO-8 procurement evidence pack in
 [`docs/evidence/co8-civiccore-procurement-evidence-pack/index.md`](docs/evidence/co8-civiccore-procurement-evidence-pack/index.md)
 links the threat model, SBOMs, license manifest, incident drills,
 sovereignty proof, patch cadence, claims registry, and worked install-and-verify
-commands that an outside auditor needs to evaluate the v1.0 release gate.
+commands that an outside auditor needs to evaluate the v1.0 release gate. The
+current recovery status is tracked in
+[`docs/release-recovery-status.md`](docs/release-recovery-status.md).
 The CO-9 closeout report in
 [`docs/ops/co-9-civiccore-v1-closeout.md`](docs/ops/co-9-civiccore-v1-closeout.md)
 maps the release authorization, attested releases, freeze-line tag, retrofit

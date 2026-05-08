@@ -119,8 +119,6 @@ def enforce_trusted_proxy_source(
                     f"{config.principal_header_name} and {config.roles_header_name} before they reach "
                     f"{service_name}."
                 ),
-                "client_host": client_host,
-                "trusted_proxy_cidrs": list(config.trusted_proxy_cidrs),
             },
         )
 
@@ -189,8 +187,6 @@ def authorize_trusted_header_roles(
                     f"{', '.join(sorted(normalized_allowed))}."
                 ),
                 "required_roles": sorted(normalized_allowed),
-                "principal_roles": sorted(header_roles),
-                "principal": subject,
             },
         )
 

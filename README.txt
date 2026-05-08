@@ -55,9 +55,11 @@ determinations are still not shipped platform behaviors.
 Status
 ------
 
-v1.0 is the current downstream productization release. It carries the CO-7
-freeze-line trust anchor, the CO-8 procurement evidence pack, and the CO-9
-closeout trail. v0.22.1 remains the first attested baseline release. The
+v1.0 is a published downstream productization label under release-recovery
+review. It carries the CO-7 freeze-line trust anchor, the CO-8 procurement
+evidence pack, and the CO-9 closeout trail, but it is not promoted as freshly
+re-earned production/stable status until the suite-wide recovery gates pass.
+v0.22.1 remains the first attested baseline release. The
 current line includes shared connector source-list status projection helpers, cron schedule validation helpers, startup config validation helpers, vendor delta planning,
 reusable mock-city proof contracts, live connector sync retry/circuit-breaker
 primitives, and persisted audit-log hash and verification helpers on top of
@@ -78,8 +80,8 @@ From the current published GitHub release wheel:
 CivicCore is distributed as versioned GitHub release artifacts (not on PyPI).
 Each release publishes SHA256SUMS.txt alongside the wheel and sdist. Verify
 checksums before promoting an artifact downstream. v0.22.0 and earlier releases
-are retained for historical installs only; use v1.0, v0.22.1, or another later
-Sigstore-attested release when procurement-grade provenance is required.
+are retained for historical installs only. Treat v1.0 as provisional under the
+release-recovery status until the new recovery gates pass.
 
 For development from a clone:
 

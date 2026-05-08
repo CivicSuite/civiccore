@@ -29,6 +29,7 @@ coverage.xml
 # Virtual environments
 venv/
 .venv/
+.venv-wsl/
 env/
 ENV/
 .python-version
@@ -70,3 +71,6 @@ desktop.ini
 
 # Local schema dumps used during baseline authorship — regenerate with pg_dump if needed
 .schema-dump.sql
+
+# Generated release-provenance fixture scratch
+tests/fixtures/release_provenance/.generated/
