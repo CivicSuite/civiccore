@@ -3,12 +3,25 @@
 Date: 2026-05-07
 Repo: `CivicSuite/civiccore`
 
+## v1.0.1 Recovery Patch
+
+`v1.0.1` is the recovery patch for the post-`v1.0` main branch. It includes the
+audit-finding fix and the provisional-status marking from the recovery range.
+
+Security hardening: CivicCore auth errors no longer expose diagnostic role,
+principal, caller-host, or trusted-proxy CIDR fields. The removed fields are
+`token_roles`, `principal`, `principal_roles`, `client_host`, and
+`trusted_proxy_cidrs`. The affected files are `civiccore/auth/bearer.py` and
+`civiccore/auth/trusted_headers.py`. Rationale is recorded in
+`docs/audits/civiccore-audit-full-2026-05-07.md`.
+
+Operator note: if your monitoring or downstream tests assert these field names
+in CivicCore auth error responses, update them before bumping the pin.
+
 ## Current Verdict
 
-`v1.0` exists as a published GitHub release and package version, but it is
-treated as provisional during the CivicSuite release-recovery pass. Do not use
-the label as a public production/stable claim until the recovery gate evidence
-below is complete and current.
+`v1.0.1` is the current recovery patch line. The original `v1.0` GitHub release
+remains historical and should point operators to `v1.0.1`.
 
 ## Recovery Gates
 

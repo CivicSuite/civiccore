@@ -123,10 +123,10 @@ shared-schema baseline extracted from CivicRecords AI).
 
 ## Install
 
-From the current GitHub release wheel (`v1.0`):
+From the current GitHub release wheel (`v1.0.1`):
 
 ```bash
-pip install https://github.com/CivicSuite/civiccore/releases/download/v1.0/civiccore-1.0.0-py3-none-any.whl
+pip install https://github.com/CivicSuite/civiccore/releases/download/v1.0.1/civiccore-1.0.1-py3-none-any.whl
 ```
 
 Each GitHub release also publishes `SHA256SUMS.txt` alongside the wheel and
@@ -142,8 +142,8 @@ the annotated tag object is unsigned. Treat the release-page badge as a commit
 signal only; use `scripts/verify-release-provenance.py` and
 `docs/ops/release-signing.md` for release-tag provenance.
 
-`v1.0` is the current published downstream productization label under
-release-recovery review. `v0.22.1` remains
+`v1.0.1` is the current published downstream productization recovery patch.
+The original `v1.0` release remains historical and superseded. `v0.22.1` remains
 the first attested baseline release, and `civiccore-m1-freeze` remains the
 CO-7 freeze-line tag downstream modules use as their initial trust anchor.
 `v0.22.0` and earlier CivicCore releases predate the Sigstore attestation

@@ -13,6 +13,23 @@ MINOR; bug fixes ship as PATCH.
 
 ## [Unreleased]
 
+## [1.0.1] - 2026-05-10
+
+### Security Hardening
+- Removed diagnostic role and caller details from CivicCore auth error
+  payloads in `civiccore/auth/bearer.py` and
+  `civiccore/auth/trusted_headers.py`.
+- Removed these error-payload fields: `token_roles`, `principal`,
+  `principal_roles`, `client_host`, and `trusted_proxy_cidrs`.
+- Rationale source: `docs/audits/civiccore-audit-full-2026-05-07.md`.
+- Operator note: if your monitoring or downstream tests assert these field
+  names in CivicCore auth error responses, update them before bumping the pin.
+
+### Changed
+- Cut the CivicCore recovery patch from the post-`v1.0` recovery line, keeping
+  the published platform label honest while preserving the audit-fix commit
+  and provisional-status evidence.
+
 ### Changed
 - Marked the published `v1.0` line as provisional during suite-wide release
   recovery instead of advertising it as production/stable.
