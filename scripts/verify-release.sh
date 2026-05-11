@@ -37,6 +37,64 @@ pass() { printf '  \033[0;32m[PASS]\033[0m %s\n' "$*"; }
 fail() { printf '  \033[0;31m[FAIL]\033[0m %s\n' "$*" >&2; FAILED=1; }
 info() { printf '\n\033[1;34m%s\033[0m\n' "$*"; }
 
+RELEASE_VENV=""
+cleanup() {
+    if [ -n "$RELEASE_VENV" ] && [ -d "$RELEASE_VENV" ]; then
+        rm -rf "$RELEASE_VENV"
+    fi
+}
+trap cleanup EXIT
+
+dump_failure_diagnostics() {
+    echo ""
+    echo "============================================"
+    echo "  Release verification diagnostics"
+    echo "============================================"
+    echo ""
+    echo "## python"
+    "${PYTHON_CMD[@]}" -c 'import sys; print(sys.executable); print(sys.version)' || true
+    echo ""
+    echo "## installed release-tool packages"
+    "${PYTHON_CMD[@]}" -m pip show pytest ruff build pydantic 2>/dev/null || true
+    echo ""
+    if [ -f docker-compose.yml ] || [ -f docker-compose.yaml ] || [ -f compose.yml ] || [ -f compose.yaml ]; then
+        echo "## docker compose ps"
+        docker compose ps || true
+        echo ""
+        echo "## docker compose logs --no-color --tail 100"
+        docker compose logs --no-color --tail 100 || true
+        echo ""
+    else
+        echo "## docker compose"
+        echo "No compose file present; CivicCore release verification is package-only."
+        echo ""
+    fi
+    echo "============================================"
+    echo ""
+}
+
+info "0. release verification environment"
+RELEASE_VENV="$(mktemp -d "${TMPDIR:-/tmp}/civiccore-release-env-XXXXXX")"
+if "${PYTHON_CMD[@]}" -m venv "$RELEASE_VENV"; then
+    VENV_PYTHON="$RELEASE_VENV/bin/python"
+    if [ ! -x "$VENV_PYTHON" ] && [ -x "$RELEASE_VENV/Scripts/python.exe" ]; then
+        VENV_PYTHON="$RELEASE_VENV/Scripts/python.exe"
+    fi
+    if [ -x "$VENV_PYTHON" ]; then
+        PYTHON_CMD=("$VENV_PYTHON")
+        if "${PYTHON_CMD[@]}" -m pip install --upgrade pip >/dev/null \
+            && "${PYTHON_CMD[@]}" -m pip install -e ".[dev]" >/dev/null; then
+            pass "temporary release environment bootstrapped"
+        else
+            fail "temporary release environment dependency install failed"
+        fi
+    else
+        fail "temporary release environment python executable missing"
+    fi
+else
+    fail "temporary release environment creation failed"
+fi
+
 # --- 1. pytest ---------------------------------------------------------------
 info "1. pytest"
 if "${PYTHON_CMD[@]}" -m pytest tests/ -v --tb=short; then
@@ -204,5 +262,6 @@ if [ "$FAILED" -eq 0 ]; then
     exit 0
 else
     printf '\033[0;31mVERIFY-RELEASE: FAILED\033[0m\n'
+    dump_failure_diagnostics
     exit 1
 fi
