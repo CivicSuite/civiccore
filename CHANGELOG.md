@@ -13,6 +13,16 @@ MINOR; bug fixes ship as PATCH.
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-05-11
+
+### Added
+- Added `civiccore.auth.staff_key_gate(env_var, header)`, a shared FastAPI
+  dependency factory for lightweight module staff routes.
+- The helper preserves the existing `X-Civic*-Role: staff` plus
+  `X-Civic*-Staff-Key` contract while centralizing staff-key comparison with
+  `hmac.compare_digest`.
+- Closes audit punch-list D2 and B3 for the shared CivicCore primitive.
+
 ## [1.0.1] - 2026-05-10
 
 ### Security Hardening

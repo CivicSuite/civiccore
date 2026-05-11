@@ -45,8 +45,9 @@ shared foundation those applications import.
   agenda vendors, municipal OIDC, and backup-retention/off-host readiness.
 - `civiccore.exports` - static export-bundle manifest and checksum helpers.
 - `civiccore.city_profile` - local city/deployment configuration models.
-- `civiccore.auth` - bearer-token role helpers plus trusted-header config and
-  source-boundary helpers for protected or mixed public/staff FastAPI routes.
+- `civiccore.auth` - bearer-token role helpers, staff-key route gates, and
+  trusted-header config/source-boundary helpers for protected or mixed
+  public/staff FastAPI routes.
 - `civiccore.verification` - content-bound browser release-evidence helpers.
 - `civiccore.search` - deterministic text normalization, matching, and
   reciprocal-rank-fusion helpers.
