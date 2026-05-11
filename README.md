@@ -385,7 +385,7 @@ services that need to protect non-public internal endpoints or support
 mixed public/staff routes without taking on a full first-party
 identity-provider dependency. That surface now includes shared
 trusted-header config loading and proxy-source enforcement helpers in
-addition to bearer-token and trusted-header role checks.
+addition to bearer-token, trusted-header, and staff-key role checks.
 
 ```python
 from fastapi import Depends
@@ -395,6 +395,7 @@ from civiccore.auth import (
     authorize_bearer_roles,
     authorize_trusted_header_roles,
     resolve_optional_bearer_roles,
+    staff_key_gate,
 )
 
 bearer = HTTPBearer(auto_error=False)
@@ -432,6 +433,15 @@ def require_proxy_assertion(request) -> dict[str, str]:
         provider_name="Entra ID proxy",
     )
     return {"subject": principal.subject or "unknown"}
+
+
+require_staff_key = staff_key_gate(
+    "CIVICGRANTS_STAFF_API_KEY",
+    "X-CivicGrants-Staff-Key",
+)
+
+def create_grant_case(_principal = Depends(require_staff_key)) -> dict[str, str]:
+    return {"status": "accepted"}
 ```
 
 Set `CIVICBUDGET_AUTH_TOKEN_ROLES` to a JSON object that maps bearer
@@ -451,6 +461,10 @@ actionable `401` and `403` responses when the proxy assertion is missing,
 malformed, or underprivileged. The optional resolvers return `None` for
 anonymous callers, which lets public endpoints stay public until a caller
 actually presents a bearer token or arrives through a trusted proxy.
+`staff_key_gate()` preserves the existing CivicSuite module convention of
+`X-Civic*-Role: staff` plus `X-Civic*-Staff-Key`, fails closed when the
+configured environment variable is missing, and compares submitted keys with
+`hmac.compare_digest`.
 
 ## Onboarding helper
 

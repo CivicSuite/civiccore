@@ -6,6 +6,7 @@ from civiccore.auth.bearer import (
     parse_token_role_map,
     resolve_optional_bearer_roles,
 )
+from civiccore.auth.staff_key import staff_key_gate
 from civiccore.auth.trusted_headers import (
     authorize_trusted_header_roles,
     enforce_trusted_proxy_source,
@@ -25,5 +26,6 @@ __all__ = [
     "parse_token_role_map",
     "resolve_optional_bearer_roles",
     "resolve_optional_trusted_header_roles",
+    "staff_key_gate",
     "TrustedHeaderAuthConfig",
 ]

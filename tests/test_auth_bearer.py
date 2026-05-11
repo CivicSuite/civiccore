@@ -14,6 +14,7 @@ from civiccore.auth import (
     parse_token_role_map,
     resolve_optional_bearer_roles,
     resolve_optional_trusted_header_roles,
+    staff_key_gate,
     TrustedHeaderAuthConfig,
 )
 
@@ -443,3 +444,73 @@ def test_enforce_trusted_proxy_source_accepts_allowed_host() -> None:
         config=config,
         trusted_proxy_env_var="CIVICCLERK_STAFF_SSO_TRUSTED_PROXIES",
     )
+
+
+def test_staff_key_gate_requires_config(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.delenv("CIVIC_TEST_STAFF_API_KEY", raising=False)
+    dependency = staff_key_gate("CIVIC_TEST_STAFF_API_KEY", "X-CivicTest-Staff-Key")
+
+    with pytest.raises(HTTPException) as exc_info:
+        dependency(role="staff", staff_key="secret")
+
+    assert exc_info.value.status_code == 503
+    assert exc_info.value.detail["message"] == "Staff API key auth is not configured."
+    assert "Set CIVIC_TEST_STAFF_API_KEY" in exc_info.value.detail["fix"]
+
+
+def test_staff_key_gate_rejects_wrong_role(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setenv("CIVIC_TEST_STAFF_API_KEY", "secret")
+    dependency = staff_key_gate("CIVIC_TEST_STAFF_API_KEY", "X-CivicTest-Staff-Key")
+
+    with pytest.raises(HTTPException) as exc_info:
+        dependency(role="resident", staff_key="secret")
+
+    assert exc_info.value.status_code == 403
+    assert exc_info.value.detail["message"] == "Staff role required."
+    assert "X-CivicTest-Role: staff" in exc_info.value.detail["fix"]
+
+
+def test_staff_key_gate_rejects_wrong_key(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setenv("CIVIC_TEST_STAFF_API_KEY", "secret")
+    dependency = staff_key_gate("CIVIC_TEST_STAFF_API_KEY", "X-CivicTest-Staff-Key")
+
+    with pytest.raises(HTTPException) as exc_info:
+        dependency(role="staff", staff_key="wrong")
+
+    assert exc_info.value.status_code == 403
+    assert exc_info.value.detail["message"] == "Staff API key is missing or invalid."
+    assert "X-CivicTest-Staff-Key" in exc_info.value.detail["fix"]
+
+
+def test_staff_key_gate_returns_principal_for_valid_path(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setenv("CIVIC_TEST_STAFF_API_KEY", "secret")
+    dependency = staff_key_gate("CIVIC_TEST_STAFF_API_KEY", "X-CivicTest-Staff-Key")
+
+    principal = dependency(role="staff", staff_key="secret")
+
+    assert principal == AuthenticatedPrincipal(
+        token_fingerprint="2bb80d537b1d",
+        roles=frozenset({"staff"}),
+        auth_method="staff_key",
+    )
+
+
+def test_staff_key_gate_uses_constant_time_compare(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    calls: list[tuple[bytes, bytes]] = []
+
+    def fake_compare_digest(left: bytes, right: bytes) -> bool:
+        calls.append((left, right))
+        return False
+
+    monkeypatch.setenv("CIVIC_TEST_STAFF_API_KEY", "secret")
+    monkeypatch.setattr("civiccore.auth.staff_key.hmac.compare_digest", fake_compare_digest)
+    dependency = staff_key_gate("CIVIC_TEST_STAFF_API_KEY", "X-CivicTest-Staff-Key")
+
+    with pytest.raises(HTTPException):
+        dependency(role="staff", staff_key="wrong")
+
+    assert calls == [(b"wrong", b"secret")]
