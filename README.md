@@ -381,8 +381,12 @@ document = await ingest_file(
 
 The local Longmont proof in
 [`docs/qa/civiccore-longmont-ingest-proof-2026-05-21.md`](docs/qa/civiccore-longmont-ingest-proof-2026-05-21.md)
-parsed the 12.4 MB Longmont Code of Ordinances PDF into 1,789 persisted chunks
-and wrote 1,789 768-dimensional `nomic-embed-text` embeddings.
+parsed the 12.4 MB Longmont Code of Ordinances PDF with `chunk_size=900` /
+`chunk_overlap=90` into 1,789 persisted chunks and wrote 1,789
+768-dimensional `nomic-embed-text` embeddings. Downstream modules may choose
+different chunking parameters; for example CivicCode's active PR #61 proof
+uses `chunk_size=500` / `chunk_overlap=50` and therefore produces a different
+chunk count from the same PDF.
 
 ## Live connector sync primitives
 
