@@ -39,17 +39,19 @@ What ships in the current development line:
     compliance helpers with actionable warning codes.
   - civiccore.scheduling - cron validation and next-run helpers for module
     background jobs.
+  - civiccore.ingest - shared discovery/fetch contracts, cited-source
+    validation helpers, and the document-ingestion pipeline for PDF, DOCX,
+    XLSX, CSV, EML, HTML, and text files with sentence-aware chunking, local
+    Ollama embeddings, and pgvector-backed documents/document_chunks storage.
 
 Still planned extraction targets:
 
   civiccore.catalog, civiccore.exemptions, civiccore.scaffold.
-  civiccore.ingest ships reusable discovery/fetch contracts and cited-source
-  validation helpers, but not a full document ingestion pipeline.
   civiccore.onboarding now ships storage-neutral profile interview
   helpers, but not a web onboarding UI or persistence router.
 
 Credential storage, vendor-specific network adapters, vendor write-back,
-document ingestion, search indexing, scheduler runtimes, notification delivery queues, and legal
+worker scheduler runtimes, notification delivery queues, and legal
 determinations are still not shipped platform behaviors.
 
 Status

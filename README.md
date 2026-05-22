@@ -24,16 +24,19 @@ primitives with actionable operator health copy and shared source-list status
 projection, connector delta request
 planning, reusable mock-city proof contracts for vendor, municipal IdP, and
 backup-retention readiness, shared ingest contracts for connector discovery/fetch
-records and cited-source validation, plus shared notice deadline planning
-and publication compliance helpers with actionable warning codes, plus shared
+records and cited-source validation, shared document ingestion for PDF, DOCX,
+XLSX, CSV, EML, HTML, and text files with sentence-aware chunking, local Ollama
+embeddings, and pgvector-backed `documents` / `document_chunks` storage, plus
+shared notice deadline planning and publication compliance helpers with
+actionable warning codes, plus shared
 cron schedule validation helpers for module background jobs.
 
 **Still planned extraction targets (placeholder packages exist; not yet
 implemented today):** `civiccore.catalog`, `civiccore.exemptions`
 (50-state public-records exemption engine),
 `civiccore.scaffold`. `civiccore.ingest` now ships reusable
-discovery/fetch contracts plus cited-source validation helpers, but not a
-full document ingestion pipeline, parser stack, or worker runtime.
+discovery/fetch contracts, cited-source validation helpers, and the shared
+document ingestion pipeline. It does not ship a worker scheduler/runtime.
 `civiccore.onboarding` now ships storage-neutral
 profile interview helpers, but not a web onboarding UI or persistence
 router. `civiccore.search` now ships normalization and
@@ -86,7 +89,7 @@ on top of shared persisted audit-log hash and verification helpers for
 database-backed module audit rows on top of shared trusted-header auth config
 loading and proxy-source enforcement helpers on top of shipped
 trusted-header auth helpers on top of shipped
-`civiccore.ingest` discovery/fetch and cited-source validation contracts on top of shipped
+`civiccore.ingest` discovery/fetch, cited-source validation, and document-ingestion pipeline on top of shipped
 `civiccore.security` connector host-validation, startup config validation, and encrypted-config helpers on top of shipped
 `civiccore.onboarding` profile interview helpers on top of shipped
 `civiccore.notifications` notice deadline planning and publication
@@ -343,8 +346,43 @@ assert verify_persisted_audit_chain([
 
 These APIs are deliberately offline-first. They do not provide JWT
 issuance, SSO, user directories, credential storage, vendor-specific network
-adapters, document ingestion, search indexing, legal determinations, or vendor
-write-back.
+adapters, worker scheduling, legal determinations, or vendor write-back.
+
+## Document ingestion
+
+`civiccore.ingest` owns the shared document-ingestion path for downstream
+modules. It exposes parser dispatch plus `register_handler()`, `ingest_file()`,
+and `ingest_bytes()` entry points; stores parsed files in the baseline
+`documents` table; writes sentence-aware chunks to `document_chunks`; and
+persists 768-dimensional local Ollama embeddings through pgvector.
+
+```python
+from pathlib import Path
+
+from civiccore.ingest import DataSource, SourceType, ingest_file
+
+source = DataSource(
+    name="Longmont Code of Ordinances proof corpus",
+    source_type=SourceType.FILE_SYSTEM,
+    connection_config={"path": "longmont-code-corpus"},
+    created_by=operator_id,
+)
+session.add(source)
+await session.commit()
+
+document = await ingest_file(
+    session=session,
+    file_path=Path("longmont-code-corpus/Longmont, CO Code of Ordinances.pdf"),
+    source_id=source.id,
+    chunk_size=900,
+    chunk_overlap=90,
+)
+```
+
+The local Longmont proof in
+[`docs/qa/civiccore-longmont-ingest-proof-2026-05-21.md`](docs/qa/civiccore-longmont-ingest-proof-2026-05-21.md)
+parsed the 12.4 MB Longmont Code of Ordinances PDF into 1,789 persisted chunks
+and wrote 1,789 768-dimensional `nomic-embed-text` embeddings.
 
 ## Live connector sync primitives
 

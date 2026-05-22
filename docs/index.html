@@ -153,6 +153,7 @@
         <li><code>civiccore.notifications</code> - deterministic notice deadline planning plus publication-compliance warning helpers.</li>
         <li><code>civiccore.onboarding</code> - storage-neutral profile interview field-order, answer-parsing, completion-state, and next-question helpers.</li>
         <li><code>civiccore.scheduling</code> - cron validation and next-run helpers for module background jobs.</li>
+        <li><code>civiccore.ingest</code> - shared document ingestion for PDF, DOCX, XLSX, CSV, EML, HTML, and text with sentence-aware chunking, local Ollama embeddings, and pgvector-backed document chunks.</li>
       </ul>
 
       <h3>Still planned extraction targets</h3>
@@ -160,7 +161,6 @@
       <ul>
         <li><code>civiccore.catalog</code> - catalog primitives.</li>
         <li><code>civiccore.exemptions</code> - 50-state public-records exemption engine.</li>
-        <li><code>civiccore.ingest</code> - shared discovery/fetch record contracts plus cited-source validation helpers.</li>
         <li><code>civiccore.notifications</code> - delivery queues and outbound notification orchestration.</li>
         <li><code>civiccore.onboarding</code> - web onboarding UI and persistence orchestration.</li>
         <li><code>civiccore.scheduling</code> - scheduler runtime and task queue orchestration.</li>
@@ -206,7 +206,7 @@ pip install -e .[dev]</code></pre>
           vendor delta request planning, reusable mock-city proof contracts, live connector sync retry/circuit-breaker primitives
           and persisted audit-log hash and verification helpers for
           database-backed module audit rows on top of shared <code>civiccore.ingest</code>
-          discovery/fetch and cited-source validation contracts on top of shared <code>civiccore.security</code>
+          discovery/fetch, cited-source validation, and document-ingestion pipeline on top of shared <code>civiccore.security</code>
           connector host-validation and encrypted-config helpers on top of shared <code>civiccore.onboarding</code>
           profile interview helpers on top of shared <code>civiccore.notifications</code>
           notice deadline and publication-compliance helpers on top of the already-shipped

@@ -57,22 +57,22 @@ shared foundation those applications import.
   answer parsing, completion-state, and next-question helpers.
 - `civiccore.scheduling` - storage-neutral cron validation and next-run
   helpers for module background jobs.
+- `civiccore.ingest` - shared discovery/fetch contracts, cited-source
+  validation helpers, and document ingestion for PDF, DOCX, XLSX, CSV, EML,
+  HTML, and text files with sentence-aware chunking, local Ollama embeddings,
+  and pgvector-backed `documents` / `document_chunks` storage.
 
 ### What the current development line does not ship yet
 
 The following namespaces remain planned extraction targets:
 `civiccore.catalog`, `civiccore.exemptions`, and `civiccore.scaffold`.
 
-`civiccore.ingest` ships reusable discovery/fetch contracts and cited-source
-validation helpers, but not a full document ingestion pipeline, parser stack,
-or worker runtime.
-
 `civiccore.onboarding` now ships shared profile interview helpers, but
 full web onboarding flows and persistence orchestration are still not
 shipped platform behavior.
 
 Credential storage, vendor-specific network adapters, vendor write-back,
-document ingestion, search indexing, notification delivery queues, and legal
+worker scheduler runtimes, notification delivery queues, and legal
 determinations are also not shipped platform behaviors. Downstream modules must
 not promote those behaviors as shipped CivicCore capability.
 
@@ -267,6 +267,8 @@ civiccore/
   connectors/   offline manifests, local-first import helpers, live-sync primitives
   db/           shared SQLAlchemy declarative Base
   exports/      static export-bundle helpers
+  ingest/       shared contracts, cited-source validation, document ingestion,
+                sentence-aware chunking, and pgvector embedding storage
   llm/          providers, templates, registry, context, structured output
   migrations/   migration runner and shared schema baseline
   notifications/ notice deadline + compliance helpers
@@ -281,7 +283,6 @@ Still planned namespaces:
 civiccore/
   catalog/       future catalog primitives
   exemptions/    future 50-state public-records exemption engine
-  ingest/        future document ingestion
   notifications/ delivery queues and outbound orchestration remain future work
   onboarding/    future web onboarding UI/persistence flows
   scheduling/    scheduler runtime and task queue remain module-owned

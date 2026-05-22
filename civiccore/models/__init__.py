@@ -1,1 +1,11 @@
-"""CivicCore: shared SQLAlchemy ORM models (User, Role, Department, ServiceAccount, AuditLog, Document, DocumentChunk, ModelRegistry, Connector, NotificationTemplate, CityProfile, ExemptionRule). Phase 1 extraction target for the auth/audit subset."""
+"""CivicCore shared SQLAlchemy ORM model exports."""
+
+from civiccore.ingest.models import DataSource, Document, DocumentChunk, IngestionStatus, SourceType
+
+__all__ = [
+    "DataSource",
+    "Document",
+    "DocumentChunk",
+    "IngestionStatus",
+    "SourceType",
+]

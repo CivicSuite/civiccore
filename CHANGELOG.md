@@ -13,6 +13,20 @@ MINOR; bug fixes ship as PATCH.
 
 ## [Unreleased]
 
+### Added
+- Lifted the shared document-ingestion pipeline into `civiccore.ingest`,
+  including file parser dispatch for PDF, DOCX, XLSX, CSV, EML, HTML, and text,
+  sentence-aware chunking, local Ollama embedding helpers, and SQLAlchemy ORM
+  models for the baseline `data_sources`, `documents`, and `document_chunks`
+  pgvector schema.
+- Added public `register_handler()`, `ingest_file()`, and `ingest_bytes()`
+  entry points so downstream modules can ingest source documents through the
+  CivicCore-owned pipeline instead of rebuilding module-local parser and vector
+  storage paths.
+- Added a Longmont Code of Ordinances PDF proof showing a 12.4 MB municipal
+  code corpus parsed into 1,789 persisted chunks with 1,789 768-dimensional
+  Ollama embeddings.
+
 ## [1.1.0] - 2026-05-11
 
 ### Added

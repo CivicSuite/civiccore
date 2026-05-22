@@ -1,8 +1,8 @@
-"""Shared ingest contracts for current CivicSuite consumers.
+"""Shared ingestion pipeline and contracts for CivicSuite consumers.
 
-This package intentionally ships the smallest honest reusable ingest surface:
-connector discovery/fetch contracts plus cited-source validation primitives for
-LLM-assisted drafts and other document-derived workflows.
+This package exposes connector discovery/fetch contracts, cited-source
+validation primitives, and the shared document-ingestion pipeline used by
+module workflows that parse source files into sentence-aware vector chunks.
 """
 
 from civiccore.ingest.contracts import (
@@ -15,14 +15,40 @@ from civiccore.ingest.contracts import (
     SourceMaterial,
     validate_cited_sentences,
 )
+from civiccore.ingest.models import (
+    DataSource,
+    Document,
+    DocumentChunk,
+    IngestionStatus,
+    SourceType,
+)
+from civiccore.ingest.pipeline import (
+    compute_file_hash,
+    ingest_bytes,
+    ingest_directory,
+    ingest_file,
+    ingest_structured_record,
+    register_handler,
+)
 
 __all__ = [
     "CitedSentence",
     "CitationValidationError",
+    "DataSource",
     "DiscoveredRecord",
+    "Document",
+    "DocumentChunk",
     "FetchedDocument",
     "HealthCheckResult",
     "HealthStatus",
+    "IngestionStatus",
     "SourceMaterial",
+    "SourceType",
+    "compute_file_hash",
+    "ingest_bytes",
+    "ingest_directory",
+    "ingest_file",
+    "ingest_structured_record",
+    "register_handler",
     "validate_cited_sentences",
 ]
