@@ -1,5 +1,6 @@
 import base64
 import logging
+import os
 from pathlib import Path
 
 from civiccore.llm.providers import OllamaProvider
@@ -7,21 +8,24 @@ from civiccore.llm.providers import OllamaProvider
 logger = logging.getLogger(__name__)
 
 _OCR_SYSTEM_PROMPT = "You are an OCR engine. Extract all text from the provided image. Return only the extracted text, no commentary or formatting instructions."
-_provider: OllamaProvider | None = None
+_providers: dict[str, OllamaProvider] = {}
+
+
+def _default_ollama_base_url() -> str:
+    return os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
 
 
 def _get_provider(base_url: str = "http://localhost:11434") -> OllamaProvider:
-    global _provider
-    if _provider is None:
-        _provider = OllamaProvider(base_url=base_url, default_model="gemma4:e4b")
-    return _provider
+    if base_url not in _providers:
+        _providers[base_url] = OllamaProvider(base_url=base_url, default_model="gemma4:e4b")
+    return _providers[base_url]
 
 
 async def extract_text_multimodal(image_path: Path, model: str | None = None) -> str:
     """Extract text from an image using a multimodal LLM via the central client."""
     resolved_model = model or "gemma4:e4b"
     image_b64 = base64.b64encode(image_path.read_bytes()).decode("utf-8")
-    return await _get_provider().generate(
+    return await _get_provider(base_url=_default_ollama_base_url()).generate(
         system_prompt=_OCR_SYSTEM_PROMPT,
         user_content="Extract all text from this image.",
         model=resolved_model,
