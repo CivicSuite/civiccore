@@ -102,3 +102,23 @@ async def test_embed_batch_splits_large_corpus_batches(monkeypatch: pytest.Monke
     assert result == [[1.0], [2.0], [3.0], [4.0], [5.0]]
     assert [batch for batch, _model in calls] == [["a", "bb"], ["ccc", "dddd"], ["eeeee"]]
     assert {model for _batch, model in calls} == {"nomic-embed-text"}
+
+
+@pytest.mark.asyncio
+async def test_embed_batch_uses_ollama_base_url_env(monkeypatch: pytest.MonkeyPatch) -> None:
+    provider_urls = []
+
+    class FakeProvider:
+        async def embed_batch(self, texts, *, model):
+            return [[1.0] for _text in texts]
+
+    def fake_get_provider(base_url="http://localhost:11434"):
+        provider_urls.append(base_url)
+        return FakeProvider()
+
+    monkeypatch.setenv("OLLAMA_BASE_URL", "http://ollama:11434")
+    monkeypatch.setattr(embedder, "_get_provider", fake_get_provider)
+
+    await embedder.embed_batch(["records proof"])
+
+    assert provider_urls == ["http://ollama:11434"]
