@@ -6,9 +6,11 @@ metadata contracts, offline import/export manifests, export bundle helpers,
 local city profile configuration, and small auth helpers for protected or
 mixed public/staff FastAPI routes, including bearer-token and trusted-header
 reverse-proxy bridges, live connector sync retry and circuit-breaker
-primitives, connector delta planning, reusable mock-city proof contracts, and
-startup config validation helpers for placeholder-free module settings, and
-shared cron schedule validation helpers for module background jobs.
+primitives, connector delta planning, reusable mock-city proof contracts, shared
+document ingestion with parser dispatch, sentence-aware chunking, local Ollama
+embeddings, pgvector-backed chunk storage, startup config validation helpers
+for placeholder-free module settings, and shared cron schedule validation
+helpers for module background jobs.
 CivicCore is a library, not an end-user application.
 """
 
@@ -75,11 +77,22 @@ from civiccore.exports import (
 from civiccore.ingest import (
     CitedSentence,
     CitationValidationError,
+    DataSource,
     DiscoveredRecord,
+    Document,
+    DocumentChunk,
     FetchedDocument,
     HealthCheckResult,
     HealthStatus,
+    IngestionStatus,
     SourceMaterial,
+    SourceType,
+    compute_file_hash,
+    ingest_bytes,
+    ingest_directory,
+    ingest_file,
+    ingest_structured_record,
+    register_handler,
     validate_cited_sentences,
 )
 from civiccore.notifications import (
@@ -211,7 +224,10 @@ __all__ = [
     "write_manifest",
     "CitedSentence",
     "CitationValidationError",
+    "DataSource",
     "DiscoveredRecord",
+    "Document",
+    "DocumentChunk",
     "DeadlinePlan",
     "NoticeComplianceResult",
     "NoticeComplianceWarning",
@@ -225,6 +241,7 @@ __all__ = [
     "FetchedDocument",
     "HealthCheckResult",
     "HealthStatus",
+    "IngestionStatus",
     "ModuleEnablement",
     "OnboardingField",
     "OnboardingProgress",
@@ -257,6 +274,13 @@ __all__ = [
     "search_text_matches_query",
     "reciprocal_rank_fusion",
     "SourceMaterial",
+    "SourceType",
+    "compute_file_hash",
+    "ingest_bytes",
+    "ingest_directory",
+    "ingest_file",
+    "ingest_structured_record",
+    "register_handler",
     "validate_cited_sentences",
     "validate_cron_expression",
     "validate_fernet_key_setting",
