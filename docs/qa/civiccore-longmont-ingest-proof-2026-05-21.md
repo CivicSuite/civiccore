@@ -40,4 +40,4 @@ Acceptance facts:
 - Ollama `nomic-embed-text` vectors persisted: `1789`.
 - Vector dimensionality: `768`.
 - Database schema: CivicCore baseline migration `documents` / `document_chunks` on pgvector PostgreSQL.
-- Note: CivicCode PR #61 intentionally uses `chunk_size=500` / `chunk_overlap=50` for its active Longmont proof, so its 2,931 chunk count is not expected to match this CivicCore proof's 1,789 chunk count.
+- Note: CivicCode PR #61 intentionally uses `chunk_size=500` / `chunk_overlap=50` for its active Longmont proof, so its 2,931 chunk count is not expected to match this CivicCore proof's 1,789 chunk count. CivicCode PR #61 commits `scripts/prove-longmont-civiccore-chunk-params.py`, which ingests the same PDF through `civiccore.ingest.ingest_file()` twice in one run and reproduces both counts.

@@ -25,7 +25,9 @@ MINOR; bug fixes ship as PATCH.
   storage paths.
 - Added a Longmont Code of Ordinances PDF proof showing a 12.4 MB municipal
   code corpus parsed with `chunk_size=900` / `chunk_overlap=90` into 1,789
-  persisted chunks with 1,789 768-dimensional Ollama embeddings.
+  persisted chunks with 1,789 768-dimensional Ollama embeddings; CivicCode PR
+  #61 adds a committed dual-run proof script that reproduces this count and the
+  CivicCode `500/50` count through the same CivicCore `ingest_file()` path.
 
 ## [1.1.0] - 2026-05-11
 
