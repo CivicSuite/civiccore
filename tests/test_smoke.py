@@ -7,7 +7,7 @@ import tomllib
 def test_import_civiccore() -> None:
     import civiccore
 
-    assert civiccore.__version__ == "1.1.0"
+    assert civiccore.__version__ == "1.2.0"
     assert civiccore.roles_grant_access
     assert civiccore.access_level_allows
     assert civiccore.filter_records_by_access_level
@@ -38,7 +38,7 @@ def test_import_civiccore() -> None:
 def test_package_metadata_marks_v1_as_provisional_recovery_line() -> None:
     pyproject = tomllib.loads(Path("pyproject.toml").read_text(encoding="utf-8"))
 
-    assert pyproject["project"]["version"] == "1.1.0"
+    assert pyproject["project"]["version"] == "1.2.0"
     assert "Development Status :: 4 - Beta" in pyproject["project"]["classifiers"]
     assert "Development Status :: 5 - Production/Stable" not in pyproject["project"]["classifiers"]
     assert "Development Status :: 2 - Pre-Alpha" not in pyproject["project"]["classifiers"]

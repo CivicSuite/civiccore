@@ -11,7 +11,7 @@ breaking changes to the public API surface (Appendix A of that spec) ship
 as MAJOR releases; new symbols or backward-compatible behavior ship as
 MINOR; bug fixes ship as PATCH.
 
-## [Unreleased]
+## [1.2.0] - 2026-05-22
 
 ### Added
 - Lifted the shared document-ingestion pipeline into `civiccore.ingest`,
