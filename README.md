@@ -65,12 +65,10 @@ Phase work and must not be relied on by downstream modules until they ship.
 
 ## Status
 
-**v1.0 is a published CivicCore downstream productization label under
-release-recovery review.** It carries the CO-7 freeze-line trust anchor, the
-CO-8 procurement evidence pack, and the CO-9 closeout trail for modules that
-need a procurement-grade platform pin, but it is not being promoted as a
-freshly re-earned production/stable line until the suite-wide recovery gates in
-[`docs/release-recovery-status.md`](docs/release-recovery-status.md) pass.
+**v1.2.0 is the current CivicCore downstream productization line.** It carries
+the shared document-ingestion pipeline used by the city-core release train,
+the CO-7 freeze-line trust anchor, the CO-8 procurement evidence pack, and the
+CO-9 closeout trail for modules that need a procurement-grade platform pin.
 `v0.22.1` remains the first attested baseline release. This line carries the
 canonical Sigstore release-provenance helper, versioned attestation schema,
 fixture-driven gate, and tag-driven release workflow that signs and verifies
@@ -126,10 +124,10 @@ shared-schema baseline extracted from CivicRecords AI).
 
 ## Install
 
-From the current GitHub release wheel (`v1.0.1`):
+From the current GitHub release wheel (`v1.2.0`):
 
 ```bash
-pip install https://github.com/CivicSuite/civiccore/releases/download/v1.0.1/civiccore-1.0.1-py3-none-any.whl
+pip install https://github.com/CivicSuite/civiccore/releases/download/v1.2.0/civiccore-1.2.0-py3-none-any.whl
 ```
 
 Each GitHub release also publishes `SHA256SUMS.txt` alongside the wheel and
@@ -145,8 +143,9 @@ the annotated tag object is unsigned. Treat the release-page badge as a commit
 signal only; use `scripts/verify-release-provenance.py` and
 `docs/ops/release-signing.md` for release-tag provenance.
 
-`v1.0.1` is the current published downstream productization recovery patch.
-The original `v1.0` release remains historical and superseded. `v0.22.1` remains
+`v1.2.0` is the current published downstream productization line. It adds the
+shared document-ingestion pipeline used by the city-core release train. The
+original `v1.0` release remains historical and superseded. `v0.22.1` remains
 the first attested baseline release, and `civiccore-m1-freeze` remains the
 CO-7 freeze-line tag downstream modules use as their initial trust anchor.
 `v0.22.0` and earlier CivicCore releases predate the Sigstore attestation
@@ -601,7 +600,8 @@ Extraction Spec** in
 
 Every CivicSuite module's README declares its CivicCore dependency contract.
 Current v0.1.0 module foundations pin older civiccore lines. Production-depth
-consumers can move to `==1.0.0` when their compatibility matrix is updated.
+consumers should move only to the released CivicCore version recorded in their
+compatibility matrix.
 The suite-wide compatibility matrix — which
 module versions work with which CivicCore versions — is maintained at
 [CivicSuite/civicsuite/docs/compatibility/](https://github.com/CivicSuite/civicsuite/tree/main/docs/compatibility).

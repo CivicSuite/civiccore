@@ -1,6 +1,6 @@
 # CivicCore User Manual
 
-Version: v1.0 (published downstream productization label; provisional during release recovery)
+Version: v1.2.0 (current downstream productization line)
 Repository: https://github.com/CivicSuite/civiccore
 License: Apache 2.0
 
@@ -94,7 +94,7 @@ not promote those behaviors as shipped CivicCore capability.
 CivicCore is distributed as GitHub release artifacts, not PyPI packages:
 
 ```bash
-pip install https://github.com/CivicSuite/civiccore/releases/download/v1.0/civiccore-1.0.0-py3-none-any.whl
+pip install https://github.com/CivicSuite/civiccore/releases/download/v1.2.0/civiccore-1.2.0-py3-none-any.whl
 ```
 
 Each release publishes `SHA256SUMS.txt` next to the wheel and source
@@ -102,12 +102,13 @@ distribution. Verify checksums before promoting a release artifact:
 
 ```bash
 curl -L -o SHA256SUMS.txt \
-  https://github.com/CivicSuite/civiccore/releases/download/v1.0/SHA256SUMS.txt
+  https://github.com/CivicSuite/civiccore/releases/download/v1.2.0/SHA256SUMS.txt
 sha256sum -c SHA256SUMS.txt
 ```
 
-`v1.0` is a published downstream productization label under release-recovery
-review, not a freshly re-earned production/stable claim. `v0.22.1` is the first
+`v1.2.0` is the current published downstream productization line and includes
+the shared document-ingestion pipeline used by the city-core release train.
+`v0.22.1` is the first
 CivicCore release with a Sigstore-signed
 `release-attestation.json` and bundle. Earlier CivicCore releases are retained
 for historical installs only and must not be treated as provenance baselines
@@ -308,8 +309,8 @@ them.
 ### Compatibility
 
 Current v0.1.0 module foundations still pin older civiccore lines.
-Production-depth consumers can move to `civiccore==1.0.0` when the suite
-compatibility matrix is updated.
+Production-depth consumers should move only to the released CivicCore version
+recorded in their compatibility matrix.
 
 The suite-wide matrix lives at:
 https://github.com/CivicSuite/civicsuite/tree/main/docs/compatibility

@@ -57,10 +57,10 @@ determinations are still not shipped platform behaviors.
 Status
 ------
 
-v1.0 is a published downstream productization label under release-recovery
-review. It carries the CO-7 freeze-line trust anchor, the CO-8 procurement
-evidence pack, and the CO-9 closeout trail, but it is not promoted as freshly
-re-earned production/stable status until the suite-wide recovery gates pass.
+v1.2.0 is the current CivicCore downstream productization line. It carries the
+shared document-ingestion pipeline used by the city-core release train, the
+CO-7 freeze-line trust anchor, the CO-8 procurement evidence pack, and the
+CO-9 closeout trail.
 v0.22.1 remains the first attested baseline release. The
 current line includes shared connector source-list status projection helpers, cron schedule validation helpers, startup config validation helpers, vendor delta planning,
 reusable mock-city proof contracts, live connector sync retry/circuit-breaker
@@ -77,13 +77,14 @@ Install
 
 From the current published GitHub release wheel:
 
-    pip install https://github.com/CivicSuite/civiccore/releases/download/v1.0/civiccore-1.0.0-py3-none-any.whl
+    pip install https://github.com/CivicSuite/civiccore/releases/download/v1.2.0/civiccore-1.2.0-py3-none-any.whl
 
 CivicCore is distributed as versioned GitHub release artifacts (not on PyPI).
 Each release publishes SHA256SUMS.txt alongside the wheel and sdist. Verify
-checksums before promoting an artifact downstream. v0.22.0 and earlier releases
-are retained for historical installs only. Treat v1.0 as provisional under the
-release-recovery status until the new recovery gates pass.
+checksums before promoting an artifact downstream. v1.2.0 is the current
+published downstream productization line and includes the shared
+document-ingestion pipeline used by the city-core release train. v0.22.0 and
+earlier releases are retained for historical installs only.
 
 For development from a clone:
 
@@ -140,8 +141,8 @@ Compatibility
 -------------
 
 Current v0.1.0 module foundations still pin older civiccore lines.
-Production-depth consumers can move to civiccore==1.0.0 when the suite
-compatibility matrix is updated.
+Production-depth consumers should move only to the released CivicCore version
+recorded in their compatibility matrix.
 
 The suite-wide compatibility matrix is maintained at:
 https://github.com/CivicSuite/civicsuite/tree/main/docs/compatibility
