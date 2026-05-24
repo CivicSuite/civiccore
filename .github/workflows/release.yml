@@ -5,14 +5,90 @@ on:
     tags:
       - "v*"
       - "civiccore-*-freeze"
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: "Published release tag to rehearse from cold caches"
+        required: true
+        default: "v1.2.0"
 
 permissions:
   contents: write
   id-token: write
 
 jobs:
+  cleanroom-rehearsal:
+    name: cleanroom-rehearsal
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    concurrency:
+      group: scott-desktop-cleanroom-${{ github.repository }}
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Set up Python for direct-pip cleanroom
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+
+      - name: Cleanroom cache strip (scoped, CivicSuite-only)
+        shell: bash
+        run: |
+          python - <<'PY'
+          import os
+          import shutil
+
+          runner_temp = os.environ["RUNNER_TEMP"]
+          for rel in (".npm", ".cache/pip"):
+              shutil.rmtree(os.path.join(runner_temp, rel), ignore_errors=True)
+          PY
+          docker builder prune --all --force --filter "label=civicsuite-cleanroom=1" || true
+          docker network ls --filter "label=civicsuite-cleanroom=1" -q \
+            | xargs -r docker network rm || true
+          docker volume ls --filter "label=civicsuite-cleanroom=1" -q \
+            | xargs -r docker volume rm || true
+
+      - name: Install published wheel from release URL
+        shell: bash
+        run: |
+          TAG="${{ inputs.release_tag }}"
+          VERSION="${TAG#v}"
+          WHEEL_URL="https://github.com/CivicSuite/civiccore/releases/download/${TAG}/civiccore-${VERSION}-py3-none-any.whl"
+          echo "Cleanroom wheel URL: ${WHEEL_URL}"
+          python -m venv .cleanroom-venv
+          . .cleanroom-venv/bin/activate
+          python -m pip install --upgrade pip
+          python -m pip install --no-cache-dir --force-reinstall "${WHEEL_URL}"
+          TESTING=1 python - <<PY
+          import civiccore
+          from civiccore.ingest import Document, DocumentChunk, compute_file_hash, ingest_file, ingest_bytes, register_handler
+
+          expected = "${VERSION}"
+          print(f"civiccore.__version__={civiccore.__version__}")
+          if civiccore.__version__ != expected:
+              raise SystemExit(f"Expected CivicCore {expected}, got {civiccore.__version__}")
+          print(
+              "civiccore ingest import ok: "
+              f"{Document.__name__}, {DocumentChunk.__name__}, {compute_file_hash.__name__}, "
+              f"{ingest_file.__name__}, {ingest_bytes.__name__}, {register_handler.__name__}"
+          )
+          PY
+
+      - name: Always-run cleanup
+        if: always()
+        shell: bash
+        run: |
+          docker compose -p civicsuite-cleanroom-${{ github.run_id }} down -v --remove-orphans || true
+          docker ps -a --filter "label=civicsuite-cleanroom=1" -q \
+            | xargs -r docker container rm --force || true
+          docker network ls --filter "label=civicsuite-cleanroom=1" -q \
+            | xargs -r docker network rm || true
+
   preflight:
     name: Preflight release fixtures
+    if: github.event_name == 'push'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -35,6 +111,7 @@ jobs:
 
   build:
     name: Build, attest, and verify release candidate
+    if: github.event_name == 'push'
     runs-on: ubuntu-latest
     needs: preflight
     steps:
@@ -122,8 +199,9 @@ jobs:
             release-attestation.json
             release-attestation.json.bundle
 
-  release:
-    name: Publish GitHub release
+  create-draft-release:
+    name: Create draft GitHub release
+    if: github.event_name == 'push'
     runs-on: ubuntu-latest
     needs: build
     steps:
@@ -132,7 +210,7 @@ jobs:
           name: civiccore-dist
           path: release-assets/
 
-      - name: Create GitHub release with wheel + sdist
+      - name: Create draft GitHub release with wheel + sdist
         env:
           GH_REPO: ${{ github.repository }}
           GH_TOKEN: ${{ github.token }}
@@ -141,33 +219,43 @@ jobs:
           case "${{ github.ref_name }}" in
             civiccore-*-freeze) latest_flag=(--latest=false) ;;
           esac
-          cat > release-notes.md <<'EOF'
-          CivicCore ${{ github.ref_name }} release.
+          export VERSION="${GITHUB_REF_NAME#v}"
+          export REPO="${GITHUB_REPOSITORY}"
+          export TAG="${GITHUB_REF_NAME}"
+          export WORKFLOW_RUN_ID="${GITHUB_RUN_ID}"
+          export WHEEL_URL="https://github.com/${GITHUB_REPOSITORY}/releases/download/${TAG}/civiccore-${VERSION}-py3-none-any.whl"
+          export CLEANROOM_TIMESTAMP="$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
+          cat > release-notes.md <<EOF
+          CivicCore ${TAG} release.
+
+          Cleanroom rehearsal: PASSED in workflow run ${WORKFLOW_RUN_ID}.
+          Verified clean install of ${WHEEL_URL} from cold caches at ${CLEANROOM_TIMESTAMP}.
 
           Release provenance:
           - The Git tag is a release pointer; the trust artifact is release-attestation.json plus release-attestation.json.bundle.
-          - Pre-flight provenance fixtures and live attestation verification ran before publication in workflow run ${{ github.run_id }}.
-          - Procurement evidence pack: https://github.com/${{ github.repository }}/blob/${{ github.sha }}/docs/evidence/co8-civiccore-procurement-evidence-pack/index.md
-          - Historical provenance policy: https://github.com/${{ github.repository }}/blob/${{ github.sha }}/docs/ops/historical-provenance.md
-          - CO-9 closeout report, when present for the release tag: https://github.com/${{ github.repository }}/blob/${{ github.sha }}/docs/ops/co-9-civiccore-v1-closeout.md
+          - Pre-flight provenance fixtures and live attestation verification ran before publication in workflow run ${WORKFLOW_RUN_ID}.
+          - Procurement evidence pack: https://github.com/${REPO}/blob/${GITHUB_SHA}/docs/evidence/co8-civiccore-procurement-evidence-pack/index.md
+          - Historical provenance policy: https://github.com/${REPO}/blob/${GITHUB_SHA}/docs/ops/historical-provenance.md
+          - CO-9 closeout report, when present for the release tag: https://github.com/${REPO}/blob/${GITHUB_SHA}/docs/ops/co-9-civiccore-v1-closeout.md
           - Verify with:
 
           ```bash
           cosign verify-blob release-attestation.json \
             --bundle release-attestation.json.bundle \
-            --certificate-identity "https://github.com/${{ github.repository }}/.github/workflows/release.yml@refs/tags/${{ github.ref_name }}" \
+            --certificate-identity "https://github.com/${REPO}/.github/workflows/release.yml@refs/tags/${TAG}" \
             --certificate-oidc-issuer https://token.actions.githubusercontent.com
 
           sha256sum -c SHA256SUMS.txt
 
-          python scripts/verify-release-provenance.py ${{ github.ref_name }} \
-            --repo ${{ github.repository }} \
+          python scripts/verify-release-provenance.py ${TAG} \
+            --repo ${REPO} \
             --attestation release-attestation.json \
             --bundle release-attestation.json.bundle \
             --artifacts-dir .
           ```
           EOF
           gh release create "${{ github.ref_name }}" \
+            --draft \
             release-assets/dist/* \
             release-assets/release-attestation.json \
             release-assets/release-attestation.json.bundle \
@@ -175,3 +263,108 @@ jobs:
             --title "civiccore ${{ github.ref_name }}" \
             "${latest_flag[@]}" \
             --notes-file release-notes.md
+
+  release-cleanroom-rehearsal:
+    name: cleanroom-rehearsal (release asset)
+    if: github.event_name == 'push'
+    needs: [create-draft-release]
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    concurrency:
+      group: scott-desktop-cleanroom-${{ github.repository }}
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Set up Python for release-asset cleanroom
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+
+      - name: Cleanroom cache strip (scoped, CivicSuite-only)
+        shell: bash
+        run: |
+          python - <<'PY'
+          import os
+          import shutil
+
+          runner_temp = os.environ["RUNNER_TEMP"]
+          for rel in (".npm", ".cache/pip"):
+              shutil.rmtree(os.path.join(runner_temp, rel), ignore_errors=True)
+          PY
+          docker builder prune --all --force --filter "label=civicsuite-cleanroom=1" || true
+          docker network ls --filter "label=civicsuite-cleanroom=1" -q \
+            | xargs -r docker network rm || true
+          docker volume ls --filter "label=civicsuite-cleanroom=1" -q \
+            | xargs -r docker volume rm || true
+
+      - name: Download uploaded wheel from draft release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          mkdir -p .cleanroom-assets
+          gh release download "${{ github.ref_name }}" \
+            --repo "${{ github.repository }}" \
+            --pattern 'civiccore-*-py3-none-any.whl' \
+            --dir .cleanroom-assets
+          find .cleanroom-assets -maxdepth 1 -type f -print
+
+      - name: Install uploaded wheel in cleanroom venv
+        shell: bash
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          WHEEL="$(find .cleanroom-assets -name 'civiccore-*-py3-none-any.whl' -type f | head -1)"
+          if [ -z "$WHEEL" ]; then
+            echo "::error::No CivicCore wheel downloaded from draft release."
+            exit 1
+          fi
+          echo "Cleanroom wheel asset: ${WHEEL}"
+          python -m venv .cleanroom-venv
+          . .cleanroom-venv/bin/activate
+          python -m pip install --upgrade pip
+          python -m pip install --no-cache-dir --force-reinstall "${WHEEL}"
+          TESTING=1 python - <<PY
+          import civiccore
+          from civiccore.ingest import Document, DocumentChunk, compute_file_hash, ingest_file, ingest_bytes, register_handler
+
+          expected = "${VERSION}"
+          print(f"civiccore.__version__={civiccore.__version__}")
+          if civiccore.__version__ != expected:
+              raise SystemExit(f"Expected CivicCore {expected}, got {civiccore.__version__}")
+          print(
+              "civiccore ingest import ok: "
+              f"{Document.__name__}, {DocumentChunk.__name__}, {compute_file_hash.__name__}, "
+              f"{ingest_file.__name__}, {ingest_bytes.__name__}, {register_handler.__name__}"
+          )
+          PY
+
+      - name: Always-run cleanup
+        if: always()
+        shell: bash
+        run: |
+          docker compose -p civicsuite-cleanroom-${{ github.run_id }} down -v --remove-orphans || true
+          docker ps -a --filter "label=civicsuite-cleanroom=1" -q \
+            | xargs -r docker container rm --force || true
+          docker network ls --filter "label=civicsuite-cleanroom=1" -q \
+            | xargs -r docker network rm || true
+
+  publish-release:
+    name: Publish GitHub release
+    if: github.event_name == 'push'
+    needs: [release-cleanroom-rehearsal]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Publish release after cleanroom rehearsal
+        env:
+          GH_REPO: ${{ github.repository }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          latest_flag=()
+          case "${{ github.ref_name }}" in
+            civiccore-*-freeze) latest_flag=(--latest=false) ;;
+          esac
+          gh release edit "${{ github.ref_name }}" \
+            --repo "$GH_REPO" \
+            --draft=false \
+            "${latest_flag[@]}"
