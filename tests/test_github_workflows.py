@@ -19,6 +19,8 @@ def test_release_workflow_uploads_explicit_downloaded_asset_files() -> None:
     workflow = yaml.safe_load(
         Path(".github/workflows/release.yml").read_text(encoding="utf-8")
     )
+    workflow_dispatch = workflow[True]["workflow_dispatch"]
+    release_tag = workflow_dispatch["inputs"]["release_tag"]
     tag_triggers = workflow[True]["push"]["tags"]
     draft_steps = workflow["jobs"]["create-draft-release"]["steps"]
     download_step = draft_steps[0]
@@ -26,6 +28,8 @@ def test_release_workflow_uploads_explicit_downloaded_asset_files() -> None:
     release_cleanroom = workflow["jobs"]["release-cleanroom-rehearsal"]
     publish_script = workflow["jobs"]["publish-release"]["steps"][0]["run"]
 
+    assert release_tag["required"] is True
+    assert release_tag["default"] == "v1.2.0"
     assert "v*" in tag_triggers
     assert "civiccore-*-freeze" in tag_triggers
     assert workflow["jobs"]["cleanroom-rehearsal"]["if"] == "github.event_name == 'workflow_dispatch'"
