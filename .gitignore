@@ -74,3 +74,5 @@ desktop.ini
 
 # Generated release-provenance fixture scratch
 tests/fixtures/release_provenance/.generated/
+
+.agent-runs/
