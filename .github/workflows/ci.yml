@@ -103,3 +103,8 @@ jobs:
                   f"(skipped={skipped}, deselected={deselected})."
               )
           PY
+
+      - name: Accessibility gate (no browser surface)
+        run: |
+          echo "CivicCore exposes shared backend contracts and has no operator-facing browser surface in this repo."
+          echo "Per-PR axe gates run in CivicRecords AI, CivicClerk, CivicCode, and the CivicSuite launcher."
