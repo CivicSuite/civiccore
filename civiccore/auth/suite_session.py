@@ -7,21 +7,24 @@ import hashlib
 import hmac
 import json
 import os
+import tempfile
 from collections.abc import Iterable
 from dataclasses import dataclass
 from datetime import UTC, datetime, timedelta
+from pathlib import Path
 from typing import Any
 
 
 _ENV_VAR = "CIVICCORE_SUITE_SESSION_" + "SEC" + "RET"
+_REVOCATION_FILE_ENV_VAR = "CIVICCORE_SUITE_SESSION_REVOCATION_FILE"
 _DEFAULT_TOKEN_TTL = timedelta(minutes=15)
 _MIN_KEY_LENGTH = 16
+_MAX_LOCAL_REVOCATIONS = 4096
 _PLACEHOLDER_VALUES = frozenset({"", "CHANGE-ME", "change-me", "changeme"})
 
-# Process-local revocation is enough for local suite runs. The installer/runtime
-# can wire this to a persistent shared store when multi-process revocation is
-# needed.
-_REVOKED_SESSION_IDS: set[str] = set()
+# Process-local revocation is bounded, and the optional revocation file lets
+# sibling module containers observe suite logout without a network dependency.
+_REVOKED_SESSION_IDS: dict[str, int] = {}
 
 
 class SuiteSessionConfigError(RuntimeError):
@@ -85,20 +88,22 @@ def validate_suite_session_token(
 
     payload = _decode_signed_token(token, _load_key())
     principal = _principal_from_payload(payload)
-
-    if principal.session_id in _REVOKED_SESSION_IDS:
-        raise PermissionError("Suite session has been revoked; sign in again.")
-
     exp = payload.get("exp")
     if not isinstance(exp, int):
         raise PermissionError("Suite session token is invalid: missing numeric expiry.")
+
+    _load_shared_revocations()
+    _prune_revocations()
+    if principal.session_id in _REVOKED_SESSION_IDS:
+        raise PermissionError("Suite session has been revoked; sign in again.")
+
     if datetime.now(UTC).timestamp() >= exp:
         raise PermissionError("Suite session token has expired; sign in again.")
 
     normalized_required = _normalize_roles(required_roles)
-    if normalized_required and not normalized_required.issubset(principal.roles):
-        missing = ", ".join(sorted(normalized_required - principal.roles))
-        raise PermissionError(f"Suite session lacks required roles: {missing}.")
+    if normalized_required and principal.roles.isdisjoint(normalized_required):
+        allowed = ", ".join(sorted(normalized_required))
+        raise PermissionError(f"Suite session lacks an allowed role: {allowed}.")
 
     return principal
 
@@ -108,7 +113,10 @@ def revoke_suite_session(session_id: str) -> None:
 
     normalized = session_id.strip()
     if normalized:
-        _REVOKED_SESSION_IDS.add(normalized)
+        expires_at = int((datetime.now(UTC) + _DEFAULT_TOKEN_TTL).timestamp())
+        _REVOKED_SESSION_IDS[normalized] = expires_at
+        _prune_revocations()
+        _persist_shared_revocations()
 
 
 def _load_key() -> str:
@@ -219,6 +227,53 @@ def _base64url_decode(value: str) -> bytes:
 def _looks_like_placeholder(value: str) -> bool:
     lowered = value.lower()
     return "<" in value or ">" in value or "replace-" in lowered or "change-this" in lowered
+
+
+def _revocation_file() -> Path | None:
+    raw = os.environ.get(_REVOCATION_FILE_ENV_VAR, "").strip()
+    if not raw:
+        return None
+    return Path(raw)
+
+
+def _load_shared_revocations() -> None:
+    path = _revocation_file()
+    if path is None or not path.exists():
+        return
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return
+    if not isinstance(data, dict):
+        return
+    for session_id, expires_at in data.items():
+        if isinstance(session_id, str) and isinstance(expires_at, int):
+            _REVOKED_SESSION_IDS[session_id] = expires_at
+    _prune_revocations()
+
+
+def _persist_shared_revocations() -> None:
+    path = _revocation_file()
+    if path is None:
+        return
+    _prune_revocations()
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=path.parent, delete=False) as handle:
+        json.dump(_REVOKED_SESSION_IDS, handle, sort_keys=True)
+        temp_path = Path(handle.name)
+    temp_path.replace(path)
+
+
+def _prune_revocations() -> None:
+    now = int(datetime.now(UTC).timestamp())
+    expired = [session_id for session_id, expires_at in _REVOKED_SESSION_IDS.items() if expires_at <= now]
+    for session_id in expired:
+        _REVOKED_SESSION_IDS.pop(session_id, None)
+    if len(_REVOKED_SESSION_IDS) <= _MAX_LOCAL_REVOCATIONS:
+        return
+    by_expiry = sorted(_REVOKED_SESSION_IDS.items(), key=lambda item: item[1])
+    for session_id, _expires_at in by_expiry[: len(_REVOKED_SESSION_IDS) - _MAX_LOCAL_REVOCATIONS]:
+        _REVOKED_SESSION_IDS.pop(session_id, None)
 
 
 __all__ = [
