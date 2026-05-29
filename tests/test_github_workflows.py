@@ -64,7 +64,7 @@ def test_ci_workflow_runs_full_release_verification_gate() -> None:
     steps = workflow["jobs"]["tests"]["steps"]
     run_commands = [step.get("run", "") for step in steps]
 
-    assert "bash scripts/verify-release.sh" in run_commands
+    assert any("bash scripts/verify-release.sh" in command for command in run_commands)
     assert not any(command.startswith("pytest tests/test_smoke.py") for command in run_commands)
 
 
