@@ -43,6 +43,14 @@ router. `civiccore.search` now ships normalization and
 fusion helpers, but not a full search engine or indexer.
 `civiccore.notifications` now ships notice deadline and compliance
 helpers, but not delivery queues or outbound notification orchestration.
+`civiccore.platform` now ships the Windows-local desktop contracts for module
+manifests, install-profile validation, operator health summaries, durable local
+task envelopes, backup/restore manifests, and installer/runtime action results.
+It also ships the PostgreSQL-backed `civiccore_local_tasks` migration, async
+queue helpers, and `python -m civiccore.tasks.worker` entry point for the local
+desktop worker. Product modules still own task handlers and UI, while CivicCore
+owns shared validation, queue state, retry semantics, and plain-English
+operator state.
 `civiccore.verification` now ships the first release-evidence helper
 surface, while sovereignty verification remains future work.
 `civiccore.connectors` now also ships shared local-payload import
@@ -83,7 +91,10 @@ on top of shared vendor delta request planning plus reusable no-network
 mock-city proof contracts for agenda vendors, municipal OIDC, and backup
 retention/off-host storage, on top of shared live connector sync retry/circuit-breaker primitives,
 including run-result normalization, operator health copy, retry delay policy, and async HTTP retry,
-on top of shared persisted audit-log hash and verification helpers for
+on top of shared Windows-local module/runtime contracts for the desktop shell,
+including no-Docker/no-WSL manifest validation, plain-English health summaries,
+PostgreSQL-backed local task queue helpers, and backup/restore checksum
+manifests, on top of shared persisted audit-log hash and verification helpers for
 database-backed module audit rows on top of shared trusted-header auth config
 loading and proxy-source enforcement helpers on top of shipped
 trusted-header auth helpers on top of shipped
@@ -345,7 +356,35 @@ assert verify_persisted_audit_chain([
 
 These APIs are deliberately offline-first. They do not provide JWT
 issuance, SSO, user directories, credential storage, vendor-specific network
-adapters, worker scheduling, legal determinations, or vendor write-back.
+adapters, worker execution, legal determinations, or vendor write-back.
+
+## Windows-local platform contracts
+
+`civiccore.platform` exposes the shared contracts and queue helpers the
+CivicSuite Windows desktop shell uses to keep future modules pluggable without
+making clerks learn infrastructure:
+
+```python
+from civiccore.platform import (
+    ModuleManifest,
+    build_module_registry,
+    PlatformHealthCheck,
+    summarize_platform_health,
+    LocalTaskEnvelope,
+    enqueue_local_task,
+    claim_next_local_task,
+    record_task_attempt,
+    run_one_local_task,
+    build_backup_manifest,
+    plan_restore,
+)
+```
+
+For the `windows_local` install profile, module manifests cannot require
+Docker, WSL, Linux shell setup, or a terminal-only operator path. CivicCore also
+ships task envelopes, a durable PostgreSQL task table, async queue helpers, and
+a worker CLI so downstream modules share retry, health, checksum, and
+restore-safety semantics while registering their own task handlers.
 
 ## Document ingestion
 
@@ -534,9 +573,10 @@ router integration, and persistence orchestration remain future work.
 ## Scheduling helper
 
 `civiccore.scheduling` exposes the shared cron expression contract used by
-module background jobs. Modules keep their own Celery/worker/runtime wiring,
-but should reuse this validation so one-minute accidental or adversarial
-schedules are blocked consistently across CivicSuite.
+module background jobs. `civiccore.platform` exposes the local task envelope,
+PostgreSQL queue helpers, and retry contract. Modules keep their own task
+handlers, but should reuse these helpers so one-minute accidental or adversarial
+schedules and task retry behavior are handled consistently across CivicSuite.
 
 ```python
 from civiccore.scheduling import compute_next_sync_at, validate_cron_expression

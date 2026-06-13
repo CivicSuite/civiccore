@@ -1,6 +1,6 @@
 graph TB
-    subgraph SHIPPED["civiccore v0.2.0 — SHIPPING TODAY"]
-        Mig["civiccore.migrations<br/>runner + idempotent guards<br/>civiccore_0001_baseline_v1<br/>civiccore_0002_llm"]
+    subgraph SHIPPED["civiccore v1.2.0 - shipped core surface"]
+        Mig["civiccore.migrations<br/>runner + idempotent guards<br/>civiccore_0001_baseline_v1<br/>civiccore_0002_llm<br/>civiccore_0003_local_task_queue"]
         DB["civiccore.db.Base<br/>shared SQLAlchemy<br/>declarative base"]
         LLM["civiccore.llm<br/>providers + templates +<br/>registry + context +<br/>structured output"]
     end
