@@ -1,0 +1,88 @@
+"""Windows-local platform contracts for CivicSuite desktop deployments."""
+
+from __future__ import annotations
+
+from civiccore.platform.backup import (
+    BackupItem,
+    BackupManifest,
+    BackupRestoreAction,
+    BackupRestorePlan,
+    BackupValidationResult,
+    build_backup_manifest,
+    plan_restore,
+    validate_backup_manifest,
+)
+from civiccore.platform.health import (
+    PlatformHealthCheck,
+    PlatformHealthStatus,
+    PlatformHealthSummary,
+    summarize_platform_health,
+)
+from civiccore.platform.modules import (
+    WINDOWS_LOCAL_BLOCKED_RUNTIME_KINDS,
+    ModuleBackupHook,
+    ModuleDependency,
+    ModuleHealthCheck,
+    ModuleManifest,
+    ModuleMigration,
+    ModuleModelRequirement,
+    ModulePermission,
+    ModuleRegistryEntry,
+    ModuleRegistryState,
+    ModuleRoute,
+    ModuleRuntimeRequirement,
+    ModuleService,
+    build_module_registry,
+    validate_windows_local_manifest,
+)
+from civiccore.platform.runtime import LocalRuntimeProfile, RuntimeActionResult
+from civiccore.platform.tasks import (
+    LocalTaskEnvelope,
+    LocalTaskResult,
+    TaskQueueSummary,
+    TaskRetryPolicy,
+    can_run_task,
+    next_retry_at,
+    record_task_attempt,
+    summarize_task_queue,
+)
+
+__all__ = [
+    "BackupItem",
+    "BackupManifest",
+    "BackupRestoreAction",
+    "BackupRestorePlan",
+    "BackupValidationResult",
+    "LocalRuntimeProfile",
+    "LocalTaskEnvelope",
+    "LocalTaskResult",
+    "ModuleBackupHook",
+    "ModuleDependency",
+    "ModuleHealthCheck",
+    "ModuleManifest",
+    "ModuleMigration",
+    "ModuleModelRequirement",
+    "ModulePermission",
+    "ModuleRegistryEntry",
+    "ModuleRegistryState",
+    "ModuleRoute",
+    "ModuleRuntimeRequirement",
+    "ModuleService",
+    "PlatformHealthCheck",
+    "PlatformHealthStatus",
+    "PlatformHealthSummary",
+    "RuntimeActionResult",
+    "TaskQueueSummary",
+    "TaskRetryPolicy",
+    "WINDOWS_LOCAL_BLOCKED_RUNTIME_KINDS",
+    "build_backup_manifest",
+    "build_module_registry",
+    "can_run_task",
+    "next_retry_at",
+    "plan_restore",
+    "record_task_attempt",
+    "summarize_platform_health",
+    "summarize_task_queue",
+    "validate_backup_manifest",
+    "validate_windows_local_manifest",
+]
