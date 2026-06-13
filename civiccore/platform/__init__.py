@@ -36,6 +36,16 @@ from civiccore.platform.modules import (
     validate_windows_local_manifest,
 )
 from civiccore.platform.runtime import LocalRuntimeProfile, RuntimeActionResult
+from civiccore.platform.task_queue import (
+    LocalTask,
+    TaskHandler,
+    claim_next_local_task,
+    complete_local_task,
+    enqueue_local_task,
+    fail_local_task,
+    run_one_local_task,
+    task_row_to_envelope,
+)
 from civiccore.platform.tasks import (
     LocalTaskEnvelope,
     LocalTaskResult,
@@ -54,6 +64,7 @@ __all__ = [
     "BackupRestorePlan",
     "BackupValidationResult",
     "LocalRuntimeProfile",
+    "LocalTask",
     "LocalTaskEnvelope",
     "LocalTaskResult",
     "ModuleBackupHook",
@@ -73,16 +84,23 @@ __all__ = [
     "PlatformHealthSummary",
     "RuntimeActionResult",
     "TaskQueueSummary",
+    "TaskHandler",
     "TaskRetryPolicy",
     "WINDOWS_LOCAL_BLOCKED_RUNTIME_KINDS",
     "build_backup_manifest",
     "build_module_registry",
     "can_run_task",
+    "claim_next_local_task",
+    "complete_local_task",
+    "enqueue_local_task",
+    "fail_local_task",
     "next_retry_at",
     "plan_restore",
     "record_task_attempt",
+    "run_one_local_task",
     "summarize_platform_health",
     "summarize_task_queue",
+    "task_row_to_envelope",
     "validate_backup_manifest",
     "validate_windows_local_manifest",
 ]

@@ -7,7 +7,8 @@ sequenceDiagram
     Consumer->>Civic: upgrade_to_head() [subprocess]
     Civic->>Civic: civiccore_0001_baseline_v1
     Civic->>Civic: civiccore_0002_llm (ALTER prompt_templates)
-    Civic->>CivicVer: stamp 'civiccore_0002_llm'
+    Civic->>Civic: civiccore_0003_local_task_queue
+    Civic->>CivicVer: stamp 'civiccore_0003_local_task_queue'
     Civic-->>Consumer: done
     Consumer->>Consumer: run consumer-side alembic chain
     Consumer->>ConsumerVer: stamp '020_phase2_consumer_app_backfill'

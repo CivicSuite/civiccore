@@ -4,8 +4,8 @@ Validates:
 - New columns (template_name, consumer_app, is_override) exist after upgrade_to_head()
 - Old column (name) no longer exists after migration
 - New unique constraint uq_prompt_templates_app_name_version is in place
-- Incremental upgrade path from 0001 → 0002 works correctly
-- Migration is idempotent (running upgrade_to_head() twice is a no-op)
+- Incremental upgrade path from 0001 through 0002 works correctly
+- Migration remains idempotent when the full head chain is run twice
 """
 
 from __future__ import annotations
@@ -29,7 +29,7 @@ from civiccore.migrations.versions.civiccore_0001_baseline_v1 import (  # noqa: 
     _SHARED_TABLE_ORDER,
 )
 
-EXPECTED_HEAD = "civiccore_0002_llm"
+EXPECTED_HEAD = "civiccore_0003_local_task_queue"
 
 _ALEMBIC_INI = Path(civiccore.__file__).parent / "migrations" / "alembic.ini"
 
@@ -119,7 +119,7 @@ def test_0002_prompt_templates_has_new_columns(engine, pg_container):
     """After upgrade_to_head(), prompt_templates has the Phase 2 override columns.
 
     Verifies:
-    - Current revision is civiccore_0002_llm
+    - Current revision is the latest CivicCore head
     - template_name column exists (renamed from name)
     - consumer_app column exists
     - is_override column exists
@@ -158,10 +158,10 @@ def test_0002_prompt_templates_has_new_columns(engine, pg_container):
 
 
 def test_0002_upgrade_from_0001_baseline(pg_container):
-    """Incremental upgrade from 0001 → 0002 transforms prompt_templates correctly.
+    """Incremental upgrade from 0001 through 0002 transforms prompt_templates correctly.
 
     Step 1: Apply only civiccore_0001_baseline_v1 — verify old schema shape (name column).
-    Step 2: Apply upgrade_to_head() — verify 0002 shape (template_name, consumer_app, is_override).
+    Step 2: Apply upgrade_to_head() — verify 0002 shape plus any later head migrations.
     """
     # Step 1: only 0001 applied
     _upgrade_to_revision(pg_container, "civiccore_0001_baseline_v1")
@@ -183,7 +183,7 @@ def test_0002_upgrade_from_0001_baseline(pg_container):
                 f"After 0001 only, 'consumer_app' should not yet exist; found: {sorted(col_names_0001)}"
             )
 
-        # Step 2: upgrade to head (0002 applied)
+        # Step 2: upgrade to head (0002 and later migrations applied)
         with _database_url_env(pg_container):
             upgrade_to_head()
 
@@ -210,7 +210,7 @@ def test_0002_upgrade_from_0001_baseline(pg_container):
 
 
 def test_0002_is_idempotent(engine, pg_container):
-    """Re-running upgrade_to_head() after 0002 is already applied is a no-op.
+    """Re-running upgrade_to_head() after the full head chain is already applied is a no-op.
 
     Proves idempotent guards in the 0002 migration skip existing objects
     rather than raising or mutating schema.

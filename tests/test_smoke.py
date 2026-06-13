@@ -28,6 +28,10 @@ def test_import_civiccore() -> None:
     assert civiccore.build_deadline_plan
     assert civiccore.evaluate_notice_compliance
     assert civiccore.encrypt_json
+    assert civiccore.LocalTask
+    assert civiccore.enqueue_local_task
+    assert civiccore.claim_next_local_task
+    assert civiccore.run_one_local_task
     assert civiccore.validate_url_host
     assert civiccore.normalize_trusted_proxy_cidrs
     assert civiccore.is_trusted_proxy_ip
