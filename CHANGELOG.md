@@ -11,6 +11,20 @@ breaking changes to the public API surface (Appendix A of that spec) ship
 as MAJOR releases; new symbols or backward-compatible behavior ship as
 MINOR; bug fixes ship as PATCH.
 
+## [1.2.1] - 2026-07-04
+
+### Added
+- Published the `civiccore_0003_local_task_queue` Alembic migration and the
+  Windows-local platform contracts (PostgreSQL-backed local task queue/worker)
+  as an installable release. This code was already on `main` and bundled by the
+  CivicSuite Windows Local installer, but the v1.2.0 wheel predates it — so
+  downstream modules whose tests expect migration head
+  `civiccore_0003_local_task_queue` (e.g. civicclerk's alembic-upgrade test)
+  could not pass against the published package. v1.2.1 closes that gap.
+
+### Notes
+- No breaking API changes; consumers on the v1.2.0 line upgrade in place.
+
 ## [1.2.0] - 2026-05-22
 
 ### Added
