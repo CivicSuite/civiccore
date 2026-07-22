@@ -57,7 +57,7 @@ determinations are still not shipped platform behaviors.
 Status
 ------
 
-v1.2.0 is the current CivicCore downstream productization line. It carries the
+v1.2.1 is the current CivicCore downstream productization line. It carries the
 shared document-ingestion pipeline used by the city-core release train, the
 CO-7 freeze-line trust anchor, the CO-8 procurement evidence pack, and the
 CO-9 closeout trail.
@@ -77,11 +77,11 @@ Install
 
 From the current published GitHub release wheel:
 
-    pip install https://github.com/CivicSuite/civiccore/releases/download/v1.2.0/civiccore-1.2.0-py3-none-any.whl
+    pip install https://github.com/CivicSuite/civiccore/releases/download/v1.2.1/civiccore-1.2.1-py3-none-any.whl
 
 CivicCore is distributed as versioned GitHub release artifacts (not on PyPI).
 Each release publishes SHA256SUMS.txt alongside the wheel and sdist. Verify
-checksums before promoting an artifact downstream. v1.2.0 is the current
+checksums before promoting an artifact downstream. v1.2.1 is the current
 published downstream productization line and includes the shared
 document-ingestion pipeline used by the city-core release train. v0.22.0 and
 earlier releases are retained for historical installs only.
