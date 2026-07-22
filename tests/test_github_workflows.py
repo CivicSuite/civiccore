@@ -29,7 +29,7 @@ def test_release_workflow_uploads_explicit_downloaded_asset_files() -> None:
     publish_script = workflow["jobs"]["publish-release"]["steps"][0]["run"]
 
     assert release_tag["required"] is True
-    assert release_tag["default"] == "v1.2.0"
+    assert release_tag["default"] == "v1.2.1"
     assert "v*" in tag_triggers
     assert "civiccore-*-freeze" in tag_triggers
     assert workflow["jobs"]["cleanroom-rehearsal"]["if"] == "github.event_name == 'workflow_dispatch'"
