@@ -73,7 +73,7 @@ Phase work and must not be relied on by downstream modules until they ship.
 
 ## Status
 
-**v1.2.0 is the current CivicCore downstream productization line.** It carries
+**v1.2.1 is the current CivicCore downstream productization line.** It carries
 the shared document-ingestion pipeline used by the city-core release train,
 the CO-7 freeze-line trust anchor, the CO-8 procurement evidence pack, and the
 CO-9 closeout trail for modules that need a procurement-grade platform pin.
@@ -135,10 +135,10 @@ shared-schema baseline extracted from CivicRecords AI).
 
 ## Install
 
-From the current GitHub release wheel (`v1.2.0`):
+From the current GitHub release wheel (`v1.2.1`):
 
 ```bash
-pip install https://github.com/CivicSuite/civiccore/releases/download/v1.2.0/civiccore-1.2.0-py3-none-any.whl
+pip install https://github.com/CivicSuite/civiccore/releases/download/v1.2.1/civiccore-1.2.1-py3-none-any.whl
 ```
 
 Each GitHub release also publishes `SHA256SUMS.txt` alongside the wheel and
@@ -154,7 +154,7 @@ the annotated tag object is unsigned. Treat the release-page badge as a commit
 signal only; use `scripts/verify-release-provenance.py` and
 `docs/ops/release-signing.md` for release-tag provenance.
 
-`v1.2.0` is the current published downstream productization line. It adds the
+`v1.2.1` is the current published downstream productization line. It adds the
 shared document-ingestion pipeline used by the city-core release train. The
 original `v1.0` release remains historical and superseded. `v0.22.1` remains
 the first attested baseline release, and `civiccore-m1-freeze` remains the

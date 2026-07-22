@@ -1,6 +1,6 @@
 # CivicCore User Manual
 
-Version: v1.2.0 (current downstream productization line)
+Version: v1.2.1 (current downstream productization line)
 Repository: https://github.com/CivicSuite/civiccore
 License: Apache 2.0
 
@@ -94,7 +94,7 @@ not promote those behaviors as shipped CivicCore capability.
 CivicCore is distributed as GitHub release artifacts, not PyPI packages:
 
 ```bash
-pip install https://github.com/CivicSuite/civiccore/releases/download/v1.2.0/civiccore-1.2.0-py3-none-any.whl
+pip install https://github.com/CivicSuite/civiccore/releases/download/v1.2.1/civiccore-1.2.1-py3-none-any.whl
 ```
 
 Each release publishes `SHA256SUMS.txt` next to the wheel and source
@@ -102,11 +102,11 @@ distribution. Verify checksums before promoting a release artifact:
 
 ```bash
 curl -L -o SHA256SUMS.txt \
-  https://github.com/CivicSuite/civiccore/releases/download/v1.2.0/SHA256SUMS.txt
+  https://github.com/CivicSuite/civiccore/releases/download/v1.2.1/SHA256SUMS.txt
 sha256sum -c SHA256SUMS.txt
 ```
 
-`v1.2.0` is the current published downstream productization line and includes
+`v1.2.1` is the current published downstream productization line and includes
 the shared document-ingestion pipeline used by the city-core release train.
 `v0.22.1` is the first
 CivicCore release with a Sigstore-signed
