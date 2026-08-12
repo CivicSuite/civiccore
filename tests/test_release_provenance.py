@@ -5,7 +5,7 @@ import sys
 from pathlib import Path
 from typing import Any
 
-from civiccore.release_provenance import (
+from townlight_core.release_provenance import (
     GitHubProvenanceClient,
     build_release_attestation,
     canonical_json_bytes,

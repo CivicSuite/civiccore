@@ -18,8 +18,8 @@ testcontainers = pytest.importorskip(
 )
 PostgresContainer = testcontainers.PostgresContainer
 
-from civiccore.migrations.runner import current_revision, upgrade_to_head  # noqa: E402
-from civiccore.migrations.versions.civiccore_0001_baseline_v1 import (  # noqa: E402
+from townlight_core.migrations.runner import current_revision, upgrade_to_head  # noqa: E402
+from townlight_core.migrations.versions.civiccore_0001_baseline_v1 import (  # noqa: E402
     _SHARED_TABLE_ORDER,
 )
 
@@ -135,9 +135,9 @@ def test_baseline_runs_clean_on_empty_db(engine, pg_container):
 def test_baseline_is_idempotent(engine, pg_container):
     """Re-running the baseline against an already-populated DB is a no-op.
 
-    Proves the ``idempotent_*`` op wrappers (see ``civiccore.migrations.guards``)
+    Proves the ``idempotent_*`` op wrappers (see ``townlight_core.migrations.guards``)
     skip existing objects rather than destructively recreating them — which
-    is what makes the extracted civiccore baseline safe to ship alongside
+    is what makes the extracted townlight_core baseline safe to ship alongside
     already-deployed civicrecords databases (ADR-0003 §3).
     """
     with _database_url_env(pg_container):

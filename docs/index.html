@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="CivicCore v1.2.1 - shared platform library for the open-source CivicSuite municipal operations suite. Not an end-user app. Apache 2.0.">
-<title>CivicCore v1.2.1 - CivicSuite shared platform library</title>
+<meta name="description" content="Townlight Core v1.2.1 - shared platform library for the open-source Townlight municipal operations suite. Not an end-user app. Apache 2.0.">
+<title>Townlight Core v1.2.1 - Townlight shared platform library</title>
   <style>
     :root {
       --text: #1f2328;
@@ -112,18 +112,19 @@
 <body>
   <main>
     <header>
-      <h1>CivicCore</h1>
+      <h1>Townlight Core</h1>
       <p class="tagline">
-        Shared platform <strong>library</strong> for the open-source CivicSuite
-        municipal operations suite. CivicCore is consumed by CivicSuite modules;
-        it is not an end-user municipal app. Apache 2.0.
+        Shared platform <strong>library</strong> for the open-source Townlight
+        municipal operations suite (formerly CivicSuite; the org and its repos
+        moved to townlight on 2026-08-12). Townlight Core is consumed by
+        Townlight modules; it is not an end-user municipal app. Apache 2.0.
       </p>
     </header>
 
     <section aria-labelledby="what">
       <h2 id="what">What it is</h2>
       <ul>
-        <li>A shared Python library every CivicSuite module depends on. Not an end-user product.</li>
+        <li>A shared Python library every Townlight module depends on. Not an end-user product.</li>
         <li>Distributed as versioned GitHub release wheels with strict SemVer against the documented public API.</li>
         <li>Local-first by default: Ollama, PostgreSQL, and offline export primitives stay operator-controlled.</li>
         <li>Designed for downstream modules without tight coupling: migrations, LLMs, audit chains, provenance, manifests, export bundles, and city profiles.</li>
@@ -131,61 +132,62 @@
 
       <h3>Shipped core surface</h3>
       <ul>
-        <li><code>civiccore.migrations</code> - migration runner + idempotent guards + <code>civiccore_0001_baseline_v1</code> + <code>civiccore_0002_llm</code> + <code>civiccore_0003_local_task_queue</code>.</li>
-        <li><code>civiccore.db</code> - shared SQLAlchemy declarative <code>Base</code>.</li>
-        <li><code>civiccore.llm</code> - providers, templates, model registry, context utilities, and structured output.</li>
-        <li><code>civiccore.audit</code> - hash-chained audit primitives plus legacy-compatible persisted audit-log verification helpers.</li>
-        <li><code>civiccore.provenance</code> - source, citation, document, and provenance metadata contracts.</li>
-        <li><code>civiccore.connectors</code> - offline import/export manifest schemas, local-first import helpers, live-sync retry/circuit-breaker primitives, and source-list status projections for supported agenda-platform payloads.</li>
-        <li><code>civiccore.exports</code> - static export-bundle manifest and checksum helpers.</li>
-        <li><code>civiccore.auth</code> - bearer-token auth helpers, staff-key route gates, and trusted-header reverse-proxy config/source-boundary helpers for protected staff routes.</li>
-        <li><code>civiccore.city_profile</code> - local city/deployment configuration models.</li>
+        <li><code>townlight_core.migrations</code> - migration runner + idempotent guards + <code>civiccore_0001_baseline_v1</code> + <code>civiccore_0002_llm</code> + <code>civiccore_0003_local_task_queue</code>.</li>
+        <li><code>townlight_core.db</code> - shared SQLAlchemy declarative <code>Base</code>.</li>
+        <li><code>townlight_core.llm</code> - providers, templates, model registry, context utilities, and structured output.</li>
+        <li><code>townlight_core.audit</code> - hash-chained audit primitives plus legacy-compatible persisted audit-log verification helpers.</li>
+        <li><code>townlight_core.provenance</code> - source, citation, document, and provenance metadata contracts.</li>
+        <li><code>townlight_core.connectors</code> - offline import/export manifest schemas, local-first import helpers, live-sync retry/circuit-breaker primitives, and source-list status projections for supported agenda-platform payloads.</li>
+        <li><code>townlight_core.exports</code> - static export-bundle manifest and checksum helpers.</li>
+        <li><code>townlight_core.auth</code> - bearer-token auth helpers, staff-key route gates, and trusted-header reverse-proxy config/source-boundary helpers for protected staff routes.</li>
+        <li><code>townlight_core.city_profile</code> - local city/deployment configuration models.</li>
       </ul>
 
       <h3>Added across the later development lines</h3>
       <ul>
-        <li><code>civiccore.auth</code> - minimal bearer-token and staff-key role checks for non-public FastAPI routes, with actionable <code>401</code>, <code>403</code>, and <code>503</code> responses.</li>
-        <li><code>civiccore.verification</code> - content-bound browser QA release-evidence validation helpers.</li>
-        <li><code>civiccore.release_provenance</code> - shared release provenance checks for Sigstore-signed release attestations, exact per-repo/per-tag workflow identity, artifact hashes, tag ref, target commit, and target tree.</li>
-        <li><code>civiccore.search</code> - deterministic query normalization, shared text matching, permission-aware access checks, and reciprocal-rank-fusion helpers.</li>
-        <li><code>civiccore.connectors</code> - local-payload meeting import normalization with shared source provenance and actionable fix-path errors.</li>
-        <li><code>civiccore.connectors</code> - storage-neutral live connector sync retry/circuit-breaker primitives with actionable operator health copy and source-list status projection.</li>
-        <li><code>civiccore.notifications</code> - deterministic notice deadline planning plus publication-compliance warning helpers.</li>
-        <li><code>civiccore.onboarding</code> - storage-neutral profile interview field-order, answer-parsing, completion-state, and next-question helpers.</li>
-        <li><code>civiccore.scheduling</code> - cron validation and next-run helpers for module background jobs.</li>
-        <li><code>civiccore.ingest</code> - shared document ingestion for PDF, DOCX, XLSX, CSV, EML, HTML, and text with sentence-aware chunking, local Ollama embeddings, and pgvector-backed document chunks.</li>
+        <li><code>townlight_core.auth</code> - minimal bearer-token and staff-key role checks for non-public FastAPI routes, with actionable <code>401</code>, <code>403</code>, and <code>503</code> responses.</li>
+        <li><code>townlight_core.verification</code> - content-bound browser QA release-evidence validation helpers.</li>
+        <li><code>townlight_core.release_provenance</code> - shared release provenance checks for Sigstore-signed release attestations, exact per-repo/per-tag workflow identity, artifact hashes, tag ref, target commit, and target tree.</li>
+        <li><code>townlight_core.search</code> - deterministic query normalization, shared text matching, permission-aware access checks, and reciprocal-rank-fusion helpers.</li>
+        <li><code>townlight_core.connectors</code> - local-payload meeting import normalization with shared source provenance and actionable fix-path errors.</li>
+        <li><code>townlight_core.connectors</code> - storage-neutral live connector sync retry/circuit-breaker primitives with actionable operator health copy and source-list status projection.</li>
+        <li><code>townlight_core.notifications</code> - deterministic notice deadline planning plus publication-compliance warning helpers.</li>
+        <li><code>townlight_core.onboarding</code> - storage-neutral profile interview field-order, answer-parsing, completion-state, and next-question helpers.</li>
+        <li><code>townlight_core.scheduling</code> - cron validation and next-run helpers for module background jobs.</li>
+        <li><code>townlight_core.ingest</code> - shared document ingestion for PDF, DOCX, XLSX, CSV, EML, HTML, and text with sentence-aware chunking, local Ollama embeddings, and pgvector-backed document chunks.</li>
       </ul>
 
       <h3>Still planned extraction targets</h3>
-      <p>These namespaces or behaviors are not shipped yet. The placeholder namespace ADRs define the downstream consumption rule: no module depends on these namespaces until a future versioned CivicCore release ships them.</p>
+      <p>These namespaces or behaviors are not shipped yet. The placeholder namespace ADRs define the downstream consumption rule: no module depends on these namespaces until a future versioned CivicCore release ships them (see the frozen ADR text, which predates this rename).</p>
       <ul>
-        <li><code>civiccore.catalog</code> - catalog primitives.</li>
-        <li><code>civiccore.exemptions</code> - 50-state public-records exemption engine.</li>
-        <li><code>civiccore.notifications</code> - delivery queues and outbound notification orchestration.</li>
-        <li><code>civiccore.onboarding</code> - web onboarding UI and persistence orchestration.</li>
-        <li><code>civiccore.scheduling</code> - scheduler runtime and task queue orchestration.</li>
-        <li><code>civiccore.scaffold</code> - scaffolding helpers.</li>
-        <li><code>civiccore.search</code> - full search engine, index storage, and database-backed retrieval orchestration.</li>
-        <li><code>civiccore.verification</code> - sovereignty verification.</li>
+        <li><code>townlight_core.catalog</code> - catalog primitives.</li>
+        <li><code>townlight_core.exemptions</code> - 50-state public-records exemption engine.</li>
+        <li><code>townlight_core.notifications</code> - delivery queues and outbound notification orchestration.</li>
+        <li><code>townlight_core.onboarding</code> - web onboarding UI and persistence orchestration.</li>
+        <li><code>townlight_core.scheduling</code> - scheduler runtime and task queue orchestration.</li>
+        <li><code>townlight_core.scaffold</code> - scaffolding helpers.</li>
+        <li><code>townlight_core.search</code> - full search engine, index storage, and database-backed retrieval orchestration.</li>
+        <li><code>townlight_core.verification</code> - sovereignty verification.</li>
         <li>Credential storage, vendor-specific network adapters, vendor write-back, and legal determinations.</li>
       </ul>
 
       <figure style="margin: 2em 0;">
         <img src="diagrams/civiccore-extraction-map.svg" alt="CivicCore extraction map showing shipped and planned namespaces." style="max-width: 100%; height: auto; display: block; margin: 0 auto;">
-        <figcaption style="text-align: center; color: #666; font-size: 0.9em; margin-top: 0.5em;">Shipped vs planned - civiccore development line namespaces.</figcaption>
+        <figcaption style="text-align: center; color: #666; font-size: 0.9em; margin-top: 0.5em;">Shipped vs planned - townlight_core development line namespaces.</figcaption>
       </figure>
     </section>
 
     <section aria-labelledby="install">
       <h2 id="install">Install</h2>
-      <p>From the current GitHub release wheel (<code>v1.2.1</code>) - civiccore is GitHub-wheel-only, not on PyPI:</p>
-      <pre><code>pip install https://github.com/CivicSuite/civiccore/releases/download/v1.2.1/civiccore-1.2.1-py3-none-any.whl</code></pre>
+      <p>From the current GitHub release wheel (<code>v1.2.1</code>) - townlight-core is GitHub-wheel-only, not on PyPI:</p>
+      <pre><code>pip install https://github.com/townlight/core/releases/download/v1.2.1/civiccore-1.2.1-py3-none-any.whl</code></pre>
+      <p><code>v1.2.1</code> predates this rename, so its wheel filename is still <code>civiccore-1.2.1-py3-none-any.whl</code> (a real, already-published artifact). The next release will ship as <code>townlight_core-&lt;version&gt;-py3-none-any.whl</code> under the <code>townlight-core</code> distribution name.</p>
       <p>For development from a clone:</p>
-      <pre><code>git clone https://github.com/CivicSuite/civiccore.git
-cd civiccore
+      <pre><code>git clone https://github.com/townlight/core.git
+cd core
 pip install -e .[dev]</code></pre>
       <p>Each release publishes <code>SHA256SUMS.txt</code> alongside the wheel and sdist. Verify the checksum before promoting an artifact downstream.</p>
-      <p><strong>Release provenance note:</strong> GitHub release pages can show a target commit as Verified even when the release tag itself is lightweight or unsigned. CivicCore treats tags as release pointers and verifies <code>release-attestation.json</code> plus its Sigstore/cosign bundle as the trust artifact. The exact workflow identity is pinned per repo and per tag; see <code>docs/ops/release-signing.md</code>, <code>docs/ops/release-attestation.schema.json</code>, <code>docs/ops/civiccore-tier1-retrofit-ledger.md</code>, and <code>docs/ops/historical-provenance.md</code>. The published <code>v1.2.1</code> release is the current downstream productization line and includes the shared document-ingestion pipeline used by the city-core release train; <code>v0.22.1</code> remains the first attested baseline. Earlier CivicCore releases are retained for historical installs only and must not be promoted as provenance baselines unless a future additive attestation is explicitly authorized, published, and ledgered.</p>
+      <p><strong>Release provenance note:</strong> GitHub release pages can show a target commit as Verified even when the release tag itself is lightweight or unsigned. Townlight Core treats tags as release pointers and verifies <code>release-attestation.json</code> plus its Sigstore/cosign bundle as the trust artifact. The exact workflow identity is pinned per repo and per tag; see <code>docs/ops/release-signing.md</code>, <code>docs/ops/release-attestation.schema.json</code>, <code>docs/ops/civiccore-tier1-retrofit-ledger.md</code>, and <code>docs/ops/historical-provenance.md</code>. The published <code>v1.2.1</code> release is the current downstream productization line and includes the shared document-ingestion pipeline used by the city-core release train; <code>v0.22.1</code> remains the first attested baseline. Earlier Townlight Core releases are retained for historical installs only and must not be promoted as provenance baselines unless a future additive attestation is explicitly authorized, published, and ledgered.</p>
       <figure style="margin: 2em 0;">
         <img src="diagrams/migration-order.svg" alt="Consumer apps invoke civiccore migrations before their own Alembic chain." style="max-width: 100%; height: auto; display: block; margin: 0 auto;">
         <figcaption style="text-align: center; color: #666; font-size: 0.9em; margin-top: 0.5em;">Migration order - civiccore runs first; consumer chain runs second.</figcaption>
@@ -205,15 +207,15 @@ pip install -e .[dev]</code></pre>
           startup config validation helpers,
           vendor delta request planning, reusable mock-city proof contracts, live connector sync retry/circuit-breaker primitives
           and persisted audit-log hash and verification helpers for
-          database-backed module audit rows on top of shared <code>civiccore.ingest</code>
-          discovery/fetch, cited-source validation, and document-ingestion pipeline on top of shared <code>civiccore.security</code>
-          connector host-validation and encrypted-config helpers on top of shared <code>civiccore.onboarding</code>
-          profile interview helpers on top of shared <code>civiccore.notifications</code>
+          database-backed module audit rows on top of shared <code>townlight_core.ingest</code>
+          discovery/fetch, cited-source validation, and document-ingestion pipeline on top of shared <code>townlight_core.security</code>
+          connector host-validation and encrypted-config helpers on top of shared <code>townlight_core.onboarding</code>
+          profile interview helpers on top of shared <code>townlight_core.notifications</code>
           notice deadline and publication-compliance helpers on top of the already-shipped
-          <code>civiccore.auth</code> trusted-header config and proxy-boundary helpers, <code>civiccore.verification</code>,
-          <code>civiccore.search</code> access and ranking helpers, <code>civiccore.connectors</code>, audit,
+          <code>townlight_core.auth</code> trusted-header config and proxy-boundary helpers, <code>townlight_core.verification</code>,
+          <code>townlight_core.search</code> access and ranking helpers, <code>townlight_core.connectors</code>, audit,
           provenance, manifest, export-bundle, and city profile primitives.
-          v0.2.0 shipped the <code>civiccore.llm</code> module; v0.1.0 shipped the migration baseline.
+          v0.2.0 shipped the <code>townlight_core.llm</code> module; v0.1.0 shipped the migration baseline.
         </p>
       </div>
     </section>
@@ -222,7 +224,7 @@ pip install -e .[dev]</code></pre>
       <h2 id="api">Public API overview</h2>
       <p>High-level public surface:</p>
       <ul>
-        <li><strong>Migrations</strong> - <code>civiccore.migrations</code> runner + idempotent guards.</li>
+        <li><strong>Migrations</strong> - <code>townlight_core.migrations</code> runner + idempotent guards.</li>
         <li><strong>db.Base</strong> - shared SQLAlchemy declarative base.</li>
         <li><strong>LLM</strong> - providers, prompt templates, model registry, context utilities, structured output.</li>
         <li><strong>Audit chains</strong> - <code>AuditActor</code>, <code>AuditSubject</code>, <code>AuditEvent</code>, <code>AuditHashChain</code>, <code>PersistedAuditLogEntry</code>, <code>compute_persisted_audit_hash</code>, and <code>verify_persisted_audit_chain</code>.</li>
@@ -230,19 +232,19 @@ pip install -e .[dev]</code></pre>
         <li><strong>Manifests and exports</strong> - <code>ImportManifest</code>, <code>ExportManifest</code>, <code>validate_manifest</code>, <code>ExportBundle</code>, <code>write_manifest</code>, <code>validate_bundle</code>.</li>
         <li><strong>Connector sync</strong> - <code>SyncCircuitState</code>, <code>SyncRunResult</code>, <code>SyncSourceStatus</code>, <code>apply_sync_run_result</code>, <code>build_sync_operator_status</code>, <code>build_sync_source_status</code>, <code>SyncRetryPolicy</code>, <code>with_http_retry</code>, and <code>plan_vendor_delta_request</code>.</li>
         <li><strong>City profiles</strong> - <code>CityProfile</code>, <code>DepartmentProfile</code>, <code>DeploymentProfile</code>, <code>ModuleEnablement</code>, <code>load_city_profile</code>.</li>
-        <li><strong>Auth helper</strong> - <code>civiccore.auth</code> bearer-token role checks, staff-key gates, trusted-header config loading, and proxy-source enforcement for non-public FastAPI routes.</li>
-        <li><strong>Verification helper</strong> - <code>civiccore.verification</code> content-bound browser QA release evidence validation.</li>
-        <li><strong>Release provenance helper</strong> - <code>civiccore.release_provenance</code> pre-flight gate for Sigstore release attestation, exact workflow identity, GitHub tag ref, target commit, release tree, artifact hashes, and adversarial fixture verification.</li>
-        <li><strong>Search helpers</strong> - <code>civiccore.search</code> normalization, deterministic text matching, permission-aware access checks, and reciprocal-rank-fusion.</li>
-        <li><strong>Connector import helpers</strong> - <code>civiccore.connectors</code> local-first meeting import normalization, actionable fix-path errors, and source provenance builders.</li>
-        <li><strong>Notice helpers</strong> - <code>civiccore.notifications</code> deadline planning plus publication-compliance warning contracts.</li>
-        <li><strong>Onboarding helpers</strong> - <code>civiccore.onboarding</code> field order, answer normalization, completion-state, and skip-aware next-question selection.</li>
-        <li><strong>Scheduling helpers</strong> - <code>civiccore.scheduling</code> cron interval validation and next-run calculation for module background jobs.</li>
-        <li><strong>Mock-city contracts</strong> - <code>civiccore.testing.mock_city</code> no-network vendor, municipal OIDC, and backup-retention proof contracts.</li>
+        <li><strong>Auth helper</strong> - <code>townlight_core.auth</code> bearer-token role checks, staff-key gates, trusted-header config loading, and proxy-source enforcement for non-public FastAPI routes.</li>
+        <li><strong>Verification helper</strong> - <code>townlight_core.verification</code> content-bound browser QA release evidence validation.</li>
+        <li><strong>Release provenance helper</strong> - <code>townlight_core.release_provenance</code> pre-flight gate for Sigstore release attestation, exact workflow identity, GitHub tag ref, target commit, release tree, artifact hashes, and adversarial fixture verification.</li>
+        <li><strong>Search helpers</strong> - <code>townlight_core.search</code> normalization, deterministic text matching, permission-aware access checks, and reciprocal-rank-fusion.</li>
+        <li><strong>Connector import helpers</strong> - <code>townlight_core.connectors</code> local-first meeting import normalization, actionable fix-path errors, and source provenance builders.</li>
+        <li><strong>Notice helpers</strong> - <code>townlight_core.notifications</code> deadline planning plus publication-compliance warning contracts.</li>
+        <li><strong>Onboarding helpers</strong> - <code>townlight_core.onboarding</code> field order, answer normalization, completion-state, and skip-aware next-question selection.</li>
+        <li><strong>Scheduling helpers</strong> - <code>townlight_core.scheduling</code> cron interval validation and next-run calculation for module background jobs.</li>
+        <li><strong>Mock-city contracts</strong> - <code>townlight_core.testing.mock_city</code> no-network vendor, municipal OIDC, and backup-retention proof contracts.</li>
       </ul>
       <figure style="margin: 2em 0;">
         <img src="diagrams/provider-abstraction.svg" alt="LLMProvider ABC with decorator-registered Ollama, OpenAI, Anthropic, and third-party providers." style="max-width: 100%; height: auto; display: block; margin: 0 auto;">
-        <figcaption style="text-align: center; color: #666; font-size: 0.9em; margin-top: 0.5em;">civiccore.llm.providers - ABC + decorator registry + factory.</figcaption>
+        <figcaption style="text-align: center; color: #666; font-size: 0.9em; margin-top: 0.5em;">townlight_core.llm.providers - ABC + decorator registry + factory.</figcaption>
       </figure>
     </section>
 
@@ -250,25 +252,25 @@ pip install -e .[dev]</code></pre>
       <h2 id="compat">Compatibility</h2>
       <p>
         <strong>Current module foundations span older civiccore lines while newer product-depth consumers already target later releases.</strong>
-          Production-depth consumers should target only the released CivicCore version recorded in their compatibility matrix. Every CivicSuite
-          module's README declares a CivicCore version range.
+          Production-depth consumers should target only the released Townlight Core version recorded in their compatibility matrix. Every Townlight
+          module's README declares a Townlight Core version range.
         </p>
     </section>
 
     <section aria-labelledby="docs">
       <h2 id="docs">Documentation</h2>
       <ul>
-        <li><a href="https://github.com/CivicSuite/civicsuite/blob/main/docs/CivicSuiteUnifiedSpec.md">CivicSuite Unified Spec</a> - canonical suite reference.</li>
-        <li><a href="https://github.com/CivicSuite/civiccore/blob/main/README.md">README</a> - quick start and public API surface.</li>
-        <li><a href="https://github.com/CivicSuite/civiccore/blob/main/USER-MANUAL.md">USER-MANUAL</a> - non-technical overview, integrator guide, architecture reference.</li>
-        <li><a href="https://github.com/CivicSuite/civiccore/blob/main/CHANGELOG.md">CHANGELOG</a> - Keep a Changelog format.</li>
-        <li><a href="https://github.com/CivicSuite/civiccore/blob/main/docs/adr/index.md">Placeholder ADRs</a> - CO-7 deferral rationale and downstream consumption rules for reserved namespaces.</li>
-        <li><a href="https://github.com/CivicSuite/civiccore/blob/main/docs/evidence/co8-civiccore-procurement-evidence-pack/index.md">CO-8 procurement evidence pack</a> - threat model, SBOMs, license manifest, incident drills, sovereignty proof, patch cadence, claims registry, and worked install-and-verify path.</li>
-        <li><a href="https://github.com/CivicSuite/civiccore/blob/main/docs/ops/co-9-civiccore-v1-closeout.md">CO-9 closeout report</a> - release authorization payload, attested release chain, freeze-line tag, audit gate, and CivicClerk unblock record.</li>
-        <li><a href="https://github.com/CivicSuite/civiccore/blob/main/docs/ops/cleanroom-harness.md">Cleanroom harness</a> - pinned CO-6 container for reproducing release, Sigstore, SHA256SUMS, and offline runtime checks.</li>
-        <li><a href="https://github.com/CivicSuite/civiccore/blob/main/docs/ops/historical-provenance.md">Historical provenance policy</a> - operative disclosure for the attested baseline and historical release boundary.</li>
-        <li><a href="https://github.com/CivicSuite/civiccore/blob/main/docs/ops/civiccore-tier1-retrofit-ledger.md">Tier 1 retrofit ledger</a> - live CivicCore release-tag provenance decisions.</li>
-        <li><a href="https://github.com/CivicSuite/civiccore/blob/main/docs/ops/co-4-cross-module-retrofit-report.md">CO-4 cross-module retrofit report</a> - merged downstream ledger closeout for CivicRecords AI, CivicClerk, and CivicCode.</li>
+        <li><a href="https://github.com/townlight/townlight/blob/main/docs/CivicSuiteUnifiedSpec.md">Townlight Unified Spec</a> - canonical suite reference.</li>
+        <li><a href="https://github.com/townlight/core/blob/main/README.md">README</a> - quick start and public API surface.</li>
+        <li><a href="https://github.com/townlight/core/blob/main/USER-MANUAL.md">USER-MANUAL</a> - non-technical overview, integrator guide, architecture reference.</li>
+        <li><a href="https://github.com/townlight/core/blob/main/CHANGELOG.md">CHANGELOG</a> - Keep a Changelog format.</li>
+        <li><a href="https://github.com/townlight/core/blob/main/docs/adr/index.md">Placeholder ADRs</a> - CO-7 deferral rationale and downstream consumption rules for reserved namespaces.</li>
+        <li><a href="https://github.com/townlight/core/blob/main/docs/evidence/co8-civiccore-procurement-evidence-pack/index.md">CO-8 procurement evidence pack</a> - threat model, SBOMs, license manifest, incident drills, sovereignty proof, patch cadence, claims registry, and worked install-and-verify path.</li>
+        <li><a href="https://github.com/townlight/core/blob/main/docs/ops/co-9-civiccore-v1-closeout.md">CO-9 closeout report</a> - release authorization payload, attested release chain, freeze-line tag, audit gate, and CivicClerk unblock record.</li>
+        <li><a href="https://github.com/townlight/core/blob/main/docs/ops/cleanroom-harness.md">Cleanroom harness</a> - pinned CO-6 container for reproducing release, Sigstore, SHA256SUMS, and offline runtime checks.</li>
+        <li><a href="https://github.com/townlight/core/blob/main/docs/ops/historical-provenance.md">Historical provenance policy</a> - operative disclosure for the attested baseline and historical release boundary.</li>
+        <li><a href="https://github.com/townlight/core/blob/main/docs/ops/civiccore-tier1-retrofit-ledger.md">Tier 1 retrofit ledger</a> - live CivicCore release-tag provenance decisions.</li>
+        <li><a href="https://github.com/townlight/core/blob/main/docs/ops/co-4-cross-module-retrofit-report.md">CO-4 cross-module retrofit report</a> - merged downstream ledger closeout for CivicRecords AI, CivicClerk, and CivicCode.</li>
       </ul>
     </section>
 
@@ -276,15 +278,15 @@ pip install -e .[dev]</code></pre>
       <h2 id="source">Source</h2>
       <p>
         The repository lives at
-        <a href="https://github.com/CivicSuite/civiccore">CivicSuite/civiccore</a>
+        <a href="https://github.com/townlight/core">townlight/core</a>
         on GitHub. Issues, pull requests, and discussions happen there.
       </p>
     </section>
 
     <footer>
       <p>Licensed under the Apache License, Version 2.0.</p>
-      <p>Copyright 2026 Scott Converse and CivicSuite contributors.</p>
-      <p>Maintained at <a href="https://github.com/CivicSuite/civiccore">CivicSuite/civiccore</a> on GitHub.</p>
+      <p>Copyright 2026 Scott Converse and Townlight contributors.</p>
+      <p>Maintained at <a href="https://github.com/townlight/core">townlight/core</a> on GitHub.</p>
     </footer>
   </main>
 </body>

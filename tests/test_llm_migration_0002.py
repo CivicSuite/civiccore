@@ -23,15 +23,15 @@ testcontainers = pytest.importorskip(
 )
 PostgresContainer = testcontainers.PostgresContainer
 
-import civiccore  # noqa: E402
-from civiccore.migrations.runner import current_revision, upgrade_to_head  # noqa: E402
-from civiccore.migrations.versions.civiccore_0001_baseline_v1 import (  # noqa: E402
+import townlight_core  # noqa: E402
+from townlight_core.migrations.runner import current_revision, upgrade_to_head  # noqa: E402
+from townlight_core.migrations.versions.civiccore_0001_baseline_v1 import (  # noqa: E402
     _SHARED_TABLE_ORDER,
 )
 
 EXPECTED_HEAD = "civiccore_0003_local_task_queue"
 
-_ALEMBIC_INI = Path(civiccore.__file__).parent / "migrations" / "alembic.ini"
+_ALEMBIC_INI = Path(townlight_core.__file__).parent / "migrations" / "alembic.ini"
 
 
 def _docker_available() -> bool:
@@ -119,7 +119,7 @@ def test_0002_prompt_templates_has_new_columns(engine, pg_container):
     """After upgrade_to_head(), prompt_templates has the Phase 2 override columns.
 
     Verifies:
-    - Current revision is the latest CivicCore head
+    - Current revision is the latest Townlight Core head
     - template_name column exists (renamed from name)
     - consumer_app column exists
     - is_override column exists

@@ -4,7 +4,7 @@ import hashlib
 
 import pytest
 
-from civiccore.connectors import (
+from townlight_core.connectors import (
     ExportManifest,
     ImportManifest,
     ManifestFile,
@@ -26,7 +26,7 @@ def test_validate_csv_import_manifest_with_file_checksum(tmp_path) -> None:
     manifest = ImportManifest(
         module_name="civicrecords",
         module_version="1.2.3",
-        civiccore_version="0.3.0",
+        townlight_core_version="0.3.0",
         purpose="csv_import",
         source_files=[
             ManifestFile(path="imports/people.csv", byte_size=len(payload), sha256=_sha256(payload))
@@ -50,7 +50,7 @@ def test_validate_geojson_and_file_drop_import_purposes(tmp_path) -> None:
     geojson_manifest = {
         "module_name": "civiczone",
         "module_version": "0.3.0",
-        "civiccore_version": "0.3.0",
+        "townlight_core_version": "0.3.0",
         "purpose": "geojson_import",
         "source_files": [
             {
@@ -64,7 +64,7 @@ def test_validate_geojson_and_file_drop_import_purposes(tmp_path) -> None:
     file_drop_manifest = {
         "module_name": "civicrecords",
         "module_version": "0.3.0",
-        "civiccore_version": "0.3.0",
+        "townlight_core_version": "0.3.0",
         "purpose": "file_drop_import",
         "source_files": [
             {"path": "permit.pdf", "byte_size": len(document), "sha256": _sha256(document)}
@@ -84,7 +84,7 @@ def test_validate_static_export_manifest_with_generated_file(tmp_path) -> None:
     manifest = {
         "module_name": "civicrecords",
         "module_version": "0.3.0",
-        "civiccore_version": "0.3.0",
+        "townlight_core_version": "0.3.0",
         "purpose": "static_export_bundle",
         "generated_files": [
             {"path": "cases.csv", "byte_size": len(content), "sha256": _sha256(content)}
@@ -106,7 +106,7 @@ def test_manifest_detects_checksum_size_missing_and_version_mismatch(tmp_path) -
     manifest = {
         "module_name": "civicrecords",
         "module_version": "0.3.0",
-        "civiccore_version": "0.3.0",
+        "townlight_core_version": "0.3.0",
         "purpose": "csv_import",
         "source_files": [{"path": "data.csv", "byte_size": len(data), "sha256": _sha256(data)}],
         "limitations": ["Offline import only."],
@@ -121,8 +121,8 @@ def test_manifest_detects_checksum_size_missing_and_version_mismatch(tmp_path) -
     with pytest.raises(ManifestValidationError, match="missing"):
         validate_manifest(manifest, base_path=tmp_path)
 
-    with pytest.raises(ManifestValidationError, match="CivicCore version mismatch"):
-        validate_manifest(manifest, expected_civiccore_version="9.9.9")
+    with pytest.raises(ManifestValidationError, match="Townlight Core version mismatch"):
+        validate_manifest(manifest, expected_townlight_core_version="9.9.9")
 
 
 def test_manifest_models_do_not_expose_live_connector_runtime_behavior() -> None:

@@ -3,7 +3,7 @@
 #
 # Use when:
 #   - Bumping a module to a new version
-#   - Releasing a downstream-dependency change (e.g. civiccore pin sweep)
+#   - Releasing a downstream-dependency change (e.g. townlight_core pin sweep)
 #   - Any work whose end-state is a published release artifact
 #
 # DO NOT use for:

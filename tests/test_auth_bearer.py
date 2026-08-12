@@ -4,7 +4,7 @@ import pytest
 from fastapi import HTTPException
 from fastapi.security import HTTPAuthorizationCredentials
 
-from civiccore.auth import (
+from townlight_core.auth import (
     AuthenticatedPrincipal,
     authorize_bearer_roles,
     enforce_trusted_proxy_source,
@@ -507,7 +507,7 @@ def test_staff_key_gate_uses_constant_time_compare(
         return False
 
     monkeypatch.setenv("CIVIC_TEST_STAFF_API_KEY", "secret")
-    monkeypatch.setattr("civiccore.auth.staff_key.hmac.compare_digest", fake_compare_digest)
+    monkeypatch.setattr("townlight_core.auth.staff_key.hmac.compare_digest", fake_compare_digest)
     dependency = staff_key_gate("CIVIC_TEST_STAFF_API_KEY", "X-CivicTest-Staff-Key")
 
     with pytest.raises(HTTPException):

@@ -34,21 +34,21 @@ testcontainers = pytest.importorskip(
 )
 PostgresContainer = testcontainers.PostgresContainer
 
-from civiccore.llm.templates.engine import RenderedPrompt, render_template  # noqa: E402
-from civiccore.llm.templates.exceptions import (  # noqa: E402
+from townlight_core.llm.templates.engine import RenderedPrompt, render_template  # noqa: E402
+from townlight_core.llm.templates.exceptions import (  # noqa: E402
     PromptTemplateNotFoundError,
     PromptTemplateRenderError,
 )
-from civiccore.llm.templates.models import PromptTemplate  # noqa: E402
-from civiccore.llm.templates.overrides import (  # noqa: E402
+from townlight_core.llm.templates.models import PromptTemplate  # noqa: E402
+from townlight_core.llm.templates.overrides import (  # noqa: E402
     register_template_override,
     unregister_template_override,
 )
-from civiccore.llm.templates.resolver import (  # noqa: E402
+from townlight_core.llm.templates.resolver import (  # noqa: E402
     CIVICCORE_DEFAULT_APP,
     resolve_template,
 )
-from civiccore.migrations.runner import upgrade_to_head  # noqa: E402
+from townlight_core.migrations.runner import upgrade_to_head  # noqa: E402
 
 
 # ---------------------------------------------------------------------------

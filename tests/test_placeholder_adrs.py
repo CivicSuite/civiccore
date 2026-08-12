@@ -2,13 +2,18 @@ from __future__ import annotations
 
 from pathlib import Path
 
-import civiccore.catalog
-import civiccore.exemptions
-import civiccore.scaffold
+import townlight_core.catalog
+import townlight_core.exemptions
+import townlight_core.scaffold
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
+# NOTE (CivicSuite -> Townlight rebrand): the dict keys below are intentionally
+# still "civiccore.*". They are matched against docs/adr/ADR-000*.md, which are
+# frozen historical decision records that name the pre-rename import paths and
+# are not rewritten by this PR. The imports above already point at the
+# renamed townlight_core package.
 PLACEHOLDER_ADRS = {
     "civiccore.catalog": REPO_ROOT / "docs/adr/ADR-0001-defer-civiccore-catalog.md",
     "civiccore.exemptions": REPO_ROOT / "docs/adr/ADR-0002-defer-civiccore-exemptions.md",
@@ -16,9 +21,9 @@ PLACEHOLDER_ADRS = {
 }
 
 PLACEHOLDER_MODULES = {
-    "civiccore.catalog": civiccore.catalog,
-    "civiccore.exemptions": civiccore.exemptions,
-    "civiccore.scaffold": civiccore.scaffold,
+    "civiccore.catalog": townlight_core.catalog,
+    "civiccore.exemptions": townlight_core.exemptions,
+    "civiccore.scaffold": townlight_core.scaffold,
 }
 
 

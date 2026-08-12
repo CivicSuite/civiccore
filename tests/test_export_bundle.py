@@ -4,8 +4,8 @@ import socket
 
 import pytest
 
-from civiccore.connectors.manifest import ManifestValidationError
-from civiccore.exports import (
+from townlight_core.connectors.manifest import ManifestValidationError
+from townlight_core.exports import (
     BundleFile,
     ExportBundle,
     build_sha256sums,

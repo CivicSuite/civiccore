@@ -1,6 +1,6 @@
 graph LR
     Caller["Consumer code<br/>(records-ai, future modules)"]
-    subgraph PROVIDERS["civiccore.llm.providers"]
+    subgraph PROVIDERS["townlight_core.llm.providers"]
         ABC["LLMProvider ABC<br/>generate / embed /<br/>embed_batch / name /<br/>supports_images"]
         Reg["PROVIDER_REGISTRY<br/>+ register_provider"]
         Factory["build_provider(name, config)"]

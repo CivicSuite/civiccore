@@ -1,15 +1,16 @@
-# CivicCore
+# Townlight Core
 
 Shared platform package for the
-[CivicSuite](https://github.com/CivicSuite/civicsuite) open-source
-municipal operations suite.
+[Townlight](https://github.com/townlight/townlight) open-source
+municipal operations suite (formerly CivicSuite; the CivicSuite org and its
+repos moved to the townlight org on 2026-08-12).
 
 ## What this is
 
-CivicCore is the Python package every CivicSuite module depends on for
+Townlight Core is the Python package every Townlight module depends on for
 shared platform plumbing. **What ships today:** the migration runner plus
 `civiccore_0001_baseline_v1` shared-schema baseline, a shared SQLAlchemy
-declarative `Base`, the `civiccore.llm` module, hash-chained audit
+declarative `Base`, the `townlight_core.llm` module, hash-chained audit
 primitives, source/provenance metadata contracts, offline import/export
 manifest schemas, static export-bundle helpers, local city profile
 configuration, small auth helpers for downstream FastAPI services,
@@ -32,36 +33,36 @@ actionable warning codes, plus shared
 cron schedule validation helpers for module background jobs.
 
 **Still planned extraction targets (placeholder packages exist; not yet
-implemented today):** `civiccore.catalog`, `civiccore.exemptions`
+implemented today):** `townlight_core.catalog`, `townlight_core.exemptions`
 (50-state public-records exemption engine),
-`civiccore.scaffold`. `civiccore.ingest` now ships reusable
+`townlight_core.scaffold`. `townlight_core.ingest` now ships reusable
 discovery/fetch contracts, cited-source validation helpers, and the shared
 document ingestion pipeline. It does not ship a worker scheduler/runtime.
-`civiccore.onboarding` now ships storage-neutral
+`townlight_core.onboarding` now ships storage-neutral
 profile interview helpers, but not a web onboarding UI or persistence
-router. `civiccore.search` now ships normalization and
+router. `townlight_core.search` now ships normalization and
 fusion helpers, but not a full search engine or indexer.
-`civiccore.notifications` now ships notice deadline and compliance
+`townlight_core.notifications` now ships notice deadline and compliance
 helpers, but not delivery queues or outbound notification orchestration.
-`civiccore.platform` now ships the Windows-local desktop contracts for module
+`townlight_core.platform` now ships the Windows-local desktop contracts for module
 manifests, install-profile validation, operator health summaries, durable local
 task envelopes, backup/restore manifests, and installer/runtime action results.
 It also ships the PostgreSQL-backed `civiccore_local_tasks` migration, async
-queue helpers, and `python -m civiccore.tasks.worker` entry point for the local
-desktop worker. Product modules still own task handlers and UI, while CivicCore
+queue helpers, and `python -m townlight_core.tasks.worker` entry point for the local
+desktop worker. Product modules still own task handlers and UI, while Townlight Core
 owns shared validation, queue state, retry semantics, and plain-English
 operator state.
-`civiccore.verification` now ships the first release-evidence helper
+`townlight_core.verification` now ships the first release-evidence helper
 surface, while sovereignty verification remains future work.
-`civiccore.connectors` now also ships shared local-payload import
+`townlight_core.connectors` now also ships shared local-payload import
 normalization helpers, live-sync retry/circuit-breaker primitives, and source-list
 status projection helpers for supported agenda platforms, while
-`civiccore.security` now ships shared connector-host validation,
+`townlight_core.security` now ships shared connector-host validation,
 startup config validation, and encrypted JSON envelope helpers for secret-bearing config.
-`civiccore.scheduling` now ships storage-neutral cron validation and next-run
+`townlight_core.scheduling` now ships storage-neutral cron validation and next-run
 helpers, but not a scheduler runtime or task queue. Credential
 orchestration, vendor-specific network adapters, and vendor write-back remain unshipped.
-`civiccore.release_provenance` now uses the attestation trust model for release
+`townlight_core.release_provenance` now uses the attestation trust model for release
 verification: Git tags are treated as release pointers, while
 `release-attestation.json` plus its Sigstore/cosign bundle are the verifiable
 trust artifacts. The exact workflow identity is pinned per repo and per tag;
@@ -73,7 +74,7 @@ Phase work and must not be relied on by downstream modules until they ship.
 
 ## Status
 
-**v1.2.1 is the current CivicCore downstream productization line.** It carries
+**v1.2.1 is the current Townlight Core downstream productization line.** It carries
 the shared document-ingestion pipeline used by the city-core release train,
 the CO-7 freeze-line trust anchor, the CO-8 procurement evidence pack, and the
 CO-9 closeout trail for modules that need a procurement-grade platform pin.
@@ -98,20 +99,20 @@ manifests, on top of shared persisted audit-log hash and verification helpers fo
 database-backed module audit rows on top of shared trusted-header auth config
 loading and proxy-source enforcement helpers on top of shipped
 trusted-header auth helpers on top of shipped
-`civiccore.ingest` discovery/fetch, cited-source validation, and document-ingestion pipeline on top of shipped
-`civiccore.security` connector host-validation, startup config validation, and encrypted-config helpers on top of shipped
-`civiccore.onboarding` profile interview helpers on top of shipped
-`civiccore.notifications` notice deadline planning and publication
-compliance helpers on top of the shipped `civiccore.connectors`
-local-first import helpers, the shipped `civiccore.search` helper
+`townlight_core.ingest` discovery/fetch, cited-source validation, and document-ingestion pipeline on top of shipped
+`townlight_core.security` connector host-validation, startup config validation, and encrypted-config helpers on top of shipped
+`townlight_core.onboarding` profile interview helpers on top of shipped
+`townlight_core.notifications` notice deadline planning and publication
+compliance helpers on top of the shipped `townlight_core.connectors`
+local-first import helpers, the shipped `townlight_core.search` helper
 surface for deterministic text matching, permission-aware access checks,
 and reciprocal-rank-fusion, the
-shipped `civiccore.verification` release-evidence helpers, the shipped
-`civiccore.auth` optional bearer resolver for mixed public/staff
+shipped `townlight_core.verification` release-evidence helpers, the shipped
+`townlight_core.auth` optional bearer resolver for mixed public/staff
 endpoints, and the shared audit, provenance, manifest, export-bundle,
 and city profile primitives needed for the first production-depth
-CivicSuite workflows.
-`v0.2.0` shipped the `civiccore.llm` module:
+Townlight workflows.
+`v0.2.0` shipped the `townlight_core.llm` module:
 provider abstraction (Ollama / OpenAI / Anthropic), prompt template engine
 with a 3-step override resolver, model registry service + admin router,
 context utilities with prompt-injection defense, and a Pydantic-validated
@@ -138,8 +139,14 @@ shared-schema baseline extracted from CivicRecords AI).
 From the current GitHub release wheel (`v1.2.1`):
 
 ```bash
-pip install https://github.com/CivicSuite/civiccore/releases/download/v1.2.1/civiccore-1.2.1-py3-none-any.whl
+pip install https://github.com/townlight/core/releases/download/v1.2.1/civiccore-1.2.1-py3-none-any.whl
 ```
+
+`v1.2.1` predates this rename, so its wheel filename is still
+`civiccore-1.2.1-py3-none-any.whl` (a real, already-published artifact — the
+filename is not rewritten after the fact). The next release cut from this
+package will ship as `townlight_core-<version>-py3-none-any.whl` under the
+`townlight-core` distribution name.
 
 Each GitHub release also publishes `SHA256SUMS.txt` alongside the wheel and
 sdist. Verify the checksum before promoting a release artifact into a downstream
@@ -147,8 +154,8 @@ module or internal package mirror.
 
 ### Release Provenance
 
-CivicCore now carries the canonical CivicSuite release-provenance gate in
-`civiccore.release_provenance`. The gate exists because GitHub release pages can
+Townlight Core now carries the canonical Townlight release-provenance gate in
+`townlight_core.release_provenance`. The gate exists because GitHub release pages can
 show the target commit as "Verified" even when the release tag is lightweight or
 the annotated tag object is unsigned. Treat the release-page badge as a commit
 signal only; use `scripts/verify-release-provenance.py` and
@@ -159,7 +166,7 @@ shared document-ingestion pipeline used by the city-core release train. The
 original `v1.0` release remains historical and superseded. `v0.22.1` remains
 the first attested baseline release, and `civiccore-m1-freeze` remains the
 CO-7 freeze-line tag downstream modules use as their initial trust anchor.
-`v0.22.0` and earlier CivicCore releases predate the Sigstore attestation
+`v0.22.0` and earlier Townlight Core releases predate the Sigstore attestation
 baseline and are retained for historical installs only. Their Tier 1 status is published in
 [`docs/ops/civiccore-tier1-retrofit-ledger.md`](docs/ops/civiccore-tier1-retrofit-ledger.md).
 The operative historical disclosure is published in
@@ -185,12 +192,12 @@ recorded in that ledger.
 For development from a clone:
 
 ```bash
-git clone https://github.com/CivicSuite/civiccore.git
-cd civiccore
+git clone https://github.com/townlight/core.git
+cd core
 pip install -e .[dev]
 ```
 
-PyPI publication can come later; CivicCore is distributed as versioned
+PyPI publication can come later; Townlight Core is distributed as versioned
 GitHub release artifacts so CivicRecords AI can stop depending on a Git SHA pin.
 The tag-driven release workflow runs `scripts/verify-release.sh` before
 publishing so the shipped artifact has already passed pytest, ruff,
@@ -199,10 +206,10 @@ test.
 
 ## LLM providers
 
-CivicCore exposes a pluggable LLM provider abstraction for downstream apps. Three providers ship built-in:
+Townlight Core exposes a pluggable LLM provider abstraction for downstream apps. Three providers ship built-in:
 
 ```python
-from civiccore.llm.providers import (
+from townlight_core.llm.providers import (
     LLMProvider,         # ABC
     register_provider,   # decorator for adding new providers
     get_provider,        # construct a provider by name
@@ -224,17 +231,17 @@ Optional cloud-provider SDKs are needed only if you instantiate the correspondin
 pip install openai      # required for OpenAIProvider
 pip install anthropic   # required for AnthropicProvider
 
-# Extras shorthand (works once civiccore is published to PyPI):
-pip install civiccore[openai]
-pip install civiccore[anthropic]
+# Extras shorthand (works once townlight-core is published to PyPI):
+pip install townlight-core[openai]
+pip install townlight-core[anthropic]
 ```
 
 Ollama needs no extra (uses httpx, already a base dependency).
 
-Third-party providers register via the public decorator without modifying civiccore source:
+Third-party providers register via the public decorator without modifying townlight_core source:
 
 ```python
-from civiccore.llm.providers import LLMProvider, register_provider
+from townlight_core.llm.providers import LLMProvider, register_provider
 
 @register_provider("my_provider")
 class MyProvider(LLMProvider):
@@ -243,10 +250,10 @@ class MyProvider(LLMProvider):
 
 ## LLM templates
 
-CivicCore exposes a prompt-template rendering and override-resolution layer for downstream apps.
+Townlight Core exposes a prompt-template rendering and override-resolution layer for downstream apps.
 
 ```python
-from civiccore.llm.templates import (
+from townlight_core.llm.templates import (
     PromptTemplate,             # ORM
     PromptTemplateCreate,       # Pydantic schemas
     PromptTemplateRead,
@@ -277,10 +284,10 @@ Callers passing `consumer_app="civiccore"` skip both override steps (1 and 2) an
 
 ## LLM context utilities and structured output
 
-CivicCore exposes context-budgeting and structured-output helpers at the package root:
+Townlight Core exposes context-budgeting and structured-output helpers at the package root:
 
 ```python
-from civiccore.llm import (
+from townlight_core.llm import (
     TokenBudget, ContextBlock,
     estimate_tokens, count_tokens, sanitize_for_llm,
     assemble_context, blocks_to_prompt, DEFAULT_CONTEXT_WINDOW,
@@ -312,11 +319,11 @@ Per ADR-0004: token counting is context-window math; no cost tracking, no spend 
 
 ## Audit, provenance, manifests, exports, and city profiles
 
-The current CivicCore development line adds storage-neutral primitives
+The current Townlight Core development line adds storage-neutral primitives
 for production-depth municipal workflows:
 
 ```python
-from civiccore import (
+from townlight_core import (
     AuditActor, AuditSubject, AuditHashChain,
     PersistedAuditLogEntry, compute_persisted_audit_hash,
     verify_persisted_audit_chain,
@@ -360,12 +367,12 @@ adapters, worker execution, legal determinations, or vendor write-back.
 
 ## Windows-local platform contracts
 
-`civiccore.platform` exposes the shared contracts and queue helpers the
-CivicSuite Windows desktop shell uses to keep future modules pluggable without
+`townlight_core.platform` exposes the shared contracts and queue helpers the
+Townlight Windows desktop shell uses to keep future modules pluggable without
 making clerks learn infrastructure:
 
 ```python
-from civiccore.platform import (
+from townlight_core.platform import (
     ModuleManifest,
     build_module_registry,
     PlatformHealthCheck,
@@ -381,14 +388,14 @@ from civiccore.platform import (
 ```
 
 For the `windows_local` install profile, module manifests cannot require
-Docker, WSL, Linux shell setup, or a terminal-only operator path. CivicCore also
+Docker, WSL, Linux shell setup, or a terminal-only operator path. Townlight Core also
 ships task envelopes, a durable PostgreSQL task table, async queue helpers, and
 a worker CLI so downstream modules share retry, health, checksum, and
 restore-safety semantics while registering their own task handlers.
 
 ## Document ingestion
 
-`civiccore.ingest` owns the shared document-ingestion path for downstream
+`townlight_core.ingest` owns the shared document-ingestion path for downstream
 modules. It exposes parser dispatch plus `register_handler()`, `ingest_file()`,
 and `ingest_bytes()` entry points; stores parsed files in the baseline
 `documents` table; writes sentence-aware chunks to `document_chunks`; and
@@ -397,7 +404,7 @@ persists 768-dimensional local Ollama embeddings through pgvector.
 ```python
 from pathlib import Path
 
-from civiccore.ingest import DataSource, SourceType, ingest_file
+from townlight_core.ingest import DataSource, SourceType, ingest_file
 
 source = DataSource(
     name="Longmont Code of Ordinances proof corpus",
@@ -424,12 +431,12 @@ and wrote 1,789 768-dimensional `nomic-embed-text` embeddings.
 
 ## Live connector sync primitives
 
-CivicCore ships the storage-neutral pieces of the CivicRecords AI sync pattern
-so every CivicSuite module can share one retry and circuit-breaker contract
+Townlight Core ships the storage-neutral pieces of the CivicRecords AI sync pattern
+so every Townlight module can share one retry and circuit-breaker contract
 without inheriting product-specific tables, credentials, or vendor adapters.
 
 ```python
-from civiccore.connectors import (
+from townlight_core.connectors import (
     SyncCircuitState,
     SyncRunResult,
     apply_sync_run_result,
@@ -456,7 +463,7 @@ source-list projection instead of reimplementing it.
 
 ## Auth helper
 
-`civiccore.auth` now exposes small auth helpers for downstream FastAPI
+`townlight_core.auth` now exposes small auth helpers for downstream FastAPI
 services that need to protect non-public internal endpoints or support
 mixed public/staff routes without taking on a full first-party
 identity-provider dependency. That surface now includes shared
@@ -467,7 +474,7 @@ addition to bearer-token, trusted-header, and staff-key role checks.
 from fastapi import Depends
 from fastapi.security import HTTPBearer
 
-from civiccore.auth import (
+from townlight_core.auth import (
     authorize_bearer_roles,
     authorize_trusted_header_roles,
     resolve_optional_bearer_roles,
@@ -530,25 +537,25 @@ tokens to role strings or role lists:
 }
 ```
 
-If the bearer-token config is missing or malformed, CivicCore raises an
+If the bearer-token config is missing or malformed, Townlight Core raises an
 actionable `503`; missing or invalid bearer headers return `401`; tokens
 without an allowed role return `403`. Trusted-header helpers return
 actionable `401` and `403` responses when the proxy assertion is missing,
 malformed, or underprivileged. The optional resolvers return `None` for
 anonymous callers, which lets public endpoints stay public until a caller
 actually presents a bearer token or arrives through a trusted proxy.
-`staff_key_gate()` preserves the existing CivicSuite module convention of
+`staff_key_gate()` preserves the existing Townlight module convention of
 `X-Civic*-Role: staff` plus `X-Civic*-Staff-Key`, fails closed when the
 configured environment variable is missing, and compares submitted keys with
 `hmac.compare_digest`.
 
 ## Onboarding helper
 
-`civiccore.onboarding` now ships shared storage-neutral helpers for
+`townlight_core.onboarding` now ships shared storage-neutral helpers for
 interview-style city-profile onboarding flows:
 
 ```python
-from civiccore.onboarding import (
+from townlight_core.onboarding import (
     DEFAULT_PROFILE_FIELDS,
     compute_onboarding_status,
     next_profile_prompt,
@@ -572,14 +579,14 @@ router integration, and persistence orchestration remain future work.
 
 ## Scheduling helper
 
-`civiccore.scheduling` exposes the shared cron expression contract used by
-module background jobs. `civiccore.platform` exposes the local task envelope,
+`townlight_core.scheduling` exposes the shared cron expression contract used by
+module background jobs. `townlight_core.platform` exposes the local task envelope,
 PostgreSQL queue helpers, and retry contract. Modules keep their own task
 handlers, but should reuse these helpers so one-minute accidental or adversarial
-schedules and task retry behavior are handled consistently across CivicSuite.
+schedules and task retry behavior are handled consistently across Townlight.
 
 ```python
-from civiccore.scheduling import compute_next_sync_at, validate_cron_expression
+from townlight_core.scheduling import compute_next_sync_at, validate_cron_expression
 
 validate_cron_expression("*/5 * * * *")
 next_run = compute_next_sync_at("0 2 * * *", last_sync_at=None)
@@ -587,7 +594,7 @@ next_run = compute_next_sync_at("0 2 * * *", last_sync_at=None)
 
 ## Verification helper
 
-`civiccore.verification` now ships a small browser-evidence helper for
+`townlight_core.verification` now ships a small browser-evidence helper for
 current-facing release pages. It binds a release screenshot manifest to
 the normalized content hash of a rendered source file, which keeps
 browser QA evidence honest across Windows and Linux checkouts.
@@ -595,7 +602,7 @@ browser QA evidence honest across Windows and Linux checkouts.
 ```python
 from pathlib import Path
 
-from civiccore.verification import validate_release_browser_evidence
+from townlight_core.verification import validate_release_browser_evidence
 
 result = validate_release_browser_evidence(
     repo_root=Path("."),
@@ -607,10 +614,10 @@ print(result.reviewed_at)
 
 ## Public API surface
 
-`civiccore.llm` exposes a single import surface for downstream apps:
+`townlight_core.llm` exposes a single import surface for downstream apps:
 
 ```python
-from civiccore.llm import (
+from townlight_core.llm import (
     # Providers
     LLMProvider, register_provider, get_provider, list_providers,
     OllamaProvider, OpenAIProvider, AnthropicProvider,
@@ -633,18 +640,19 @@ from civiccore.llm import (
 
 The full enumerated list — stable across the v0.x series per the spec's
 semver policy — is also published in **Appendix A of the CivicCore
-Extraction Spec** in
-[CivicSuite/civicsuite](https://github.com/CivicSuite/civicsuite).
+Extraction Spec** (the extraction predates this rename; the document itself
+is historical) in
+[townlight/townlight](https://github.com/townlight/townlight).
 
 ## Compatibility
 
-Every CivicSuite module's README declares its CivicCore dependency contract.
+Every Townlight module's README declares its Townlight Core dependency contract.
 Current v0.1.0 module foundations pin older civiccore lines. Production-depth
-consumers should move only to the released CivicCore version recorded in their
+consumers should move only to the released Townlight Core version recorded in their
 compatibility matrix.
 The suite-wide compatibility matrix — which
-module versions work with which CivicCore versions — is maintained at
-[CivicSuite/civicsuite/docs/compatibility/](https://github.com/CivicSuite/civicsuite/tree/main/docs/compatibility).
+module versions work with which Townlight Core versions — is maintained at
+[townlight/townlight/docs/compatibility/](https://github.com/townlight/townlight/tree/main/docs/compatibility).
 
 ## License
 
@@ -653,4 +661,4 @@ module versions work with which CivicCore versions — is maintained at
 ## Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md), including the decision tree for
-where to file a bug across the CivicSuite multi-repo layout.
+where to file a bug across the Townlight multi-repo layout.
