@@ -1,7 +1,7 @@
 sequenceDiagram
     autonumber
     participant Consumer as Consumer app<br/>(records-ai env.py)
-    participant Civic as civiccore.migrations<br/>.runner.upgrade_to_head
+    participant Civic as townlight_core.migrations<br/>.runner.upgrade_to_head
     participant CivicVer as alembic_version_civiccore
     participant ConsumerVer as alembic_version
     Consumer->>Civic: upgrade_to_head() [subprocess]
@@ -12,4 +12,4 @@ sequenceDiagram
     Civic-->>Consumer: done
     Consumer->>Consumer: run consumer-side alembic chain
     Consumer->>ConsumerVer: stamp '020_phase2_consumer_app_backfill'
-    Note over CivicVer,ConsumerVer: Two separate version tables<br/>prevent revision-name collisions<br/>between civiccore and consumers.
+    Note over CivicVer,ConsumerVer: Two separate version tables<br/>prevent revision-name collisions<br/>between townlight_core and consumers.

@@ -21,8 +21,8 @@ testcontainers = pytest.importorskip(
 )
 PostgresContainer = testcontainers.PostgresContainer
 
-from civiccore.migrations.runner import upgrade_to_head  # noqa: E402
-from civiccore.platform import (  # noqa: E402
+from townlight_core.migrations.runner import upgrade_to_head  # noqa: E402
+from townlight_core.platform import (  # noqa: E402
     LocalTask,
     LocalTaskEnvelope,
     TaskRetryPolicy,
@@ -32,8 +32,8 @@ from civiccore.platform import (  # noqa: E402
     fail_local_task,
     run_one_local_task,
 )
-from civiccore.tasks import register_task_handler  # noqa: E402
-from civiccore.tasks.worker import _run_worker  # noqa: E402
+from townlight_core.tasks import register_task_handler  # noqa: E402
+from townlight_core.tasks.worker import _run_worker  # noqa: E402
 
 
 def _docker_available() -> bool:

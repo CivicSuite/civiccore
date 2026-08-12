@@ -3,15 +3,15 @@ requires = ["setuptools>=68", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "civiccore"
+name = "townlight-core"
 version = "1.2.1"
-description = "CivicSuite shared platform package - migrations, shared SQLAlchemy base, LLM abstraction, audit/provenance, document ingestion, ingest and connector contracts, connector sync primitives, connector delta planning, reusable mock-city proof contracts, connector security helpers, startup config validation helpers, schedule validation helpers, encrypted config primitives, notice helpers, onboarding profile helpers, search access helpers, small auth helpers, manifests, exports, city profile primitives, and Windows-local module/runtime contracts"
+description = "Townlight shared platform package - migrations, shared SQLAlchemy base, LLM abstraction, audit/provenance, document ingestion, ingest and connector contracts, connector sync primitives, connector delta planning, reusable mock-city proof contracts, connector security helpers, startup config validation helpers, schedule validation helpers, encrypted config primitives, notice helpers, onboarding profile helpers, search access helpers, small auth helpers, manifests, exports, city profile primitives, and Windows-local module/runtime contracts"
 readme = "README.md"
 requires-python = ">=3.11"
 license = "Apache-2.0"
 authors = [
     { name = "Scott Converse" },
-    { name = "CivicSuite contributors" },
+    { name = "Townlight contributors" },
 ]
 keywords = [
     "civic-tech",
@@ -22,7 +22,7 @@ keywords = [
     "self-hosted",
     "local-llm",
     "ollama",
-    "civicsuite",
+    "townlight",
 ]
 classifiers = [
     "Development Status :: 4 - Beta",
@@ -36,9 +36,9 @@ classifiers = [
     "Topic :: Software Development :: Libraries :: Application Frameworks",
 ]
 # Dep pins below mirror civicrecords-ai/backend/pyproject.toml exactly for the
-# subsystems CivicCore extracts (auth, audit, LLM, ingest, search, connectors,
+# subsystems Townlight Core extracts (auth, audit, LLM, ingest, search, connectors,
 # notifications, onboarding, exemptions, verification, models, migrations,
-# scaffold). civicrecords-ai pins requires-python = ">=3.12"; CivicCore widens
+# scaffold). civicrecords-ai pins requires-python = ">=3.12"; Townlight Core widens
 # to ">=3.11" because it is a shared library and must support modules that
 # may not have moved to 3.12 yet.
 dependencies = [
@@ -91,16 +91,16 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/CivicSuite/civiccore"
-Documentation = "https://github.com/CivicSuite/civicsuite"
-Issues = "https://github.com/CivicSuite/civiccore/issues"
+Homepage = "https://github.com/townlight/core"
+Documentation = "https://github.com/townlight/townlight"
+Issues = "https://github.com/townlight/core/issues"
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["civiccore*"]
+include = ["townlight_core*"]
 
 [tool.setuptools.package-data]
-civiccore = ["migrations/alembic.ini"]
+townlight_core = ["migrations/alembic.ini"]
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"

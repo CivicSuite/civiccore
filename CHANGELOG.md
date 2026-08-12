@@ -1,15 +1,53 @@
 # Changelog
 
-All notable changes to **civiccore** are documented here. Format follows
+All notable changes to **townlight-core** (formerly **civiccore**) are
+documented here. Format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); this project
 adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-CivicCore is the shared platform package for the
-[CivicSuite](https://github.com/CivicSuite/civicsuite) open-source
-municipal operations suite. Per the CivicCore Extraction Spec section 16,
-breaking changes to the public API surface (Appendix A of that spec) ship
-as MAJOR releases; new symbols or backward-compatible behavior ship as
-MINOR; bug fixes ship as PATCH.
+Townlight Core is the shared platform package for the
+[Townlight](https://github.com/townlight/townlight) open-source
+municipal operations suite (formerly CivicSuite; the CivicSuite org and its
+repos moved to the townlight org on 2026-08-12). Per the CivicCore
+Extraction Spec section 16, breaking changes to the public API surface
+(Appendix A of that spec) ship as MAJOR releases; new symbols or
+backward-compatible behavior ship as MINOR; bug fixes ship as PATCH.
+
+## [Unreleased]
+
+### Changed
+- **Rebrand: CivicSuite -> Townlight.** Renamed the package from `civiccore`
+  to `townlight-core` (distribution name) / `townlight_core` (import path),
+  following the CivicSuite org and repo move to the townlight org on
+  2026-08-12. This is a breaking change for anything that does
+  `import civiccore`, sets `CIVICCORE_*` environment variables, or reads the
+  `civiccore_version` / `civiccore_min_version` / `civiccore_locked` manifest
+  fields — see README.md and USER-MANUAL.md for the new import path and env
+  var names.
+- Renamed `civiccore/` to `townlight_core/` and `civiccore-ui/` to
+  `townlight-core-ui/` (the latter is a frontend CSS/HTML asset directory,
+  not a Python package, so it kept kebab-case rather than adopting a
+  Python-style underscore).
+- Updated CI workflows, the cleanroom Dockerfile/harness scripts, and the
+  release pipeline to build and verify `townlight_core-*` wheels going
+  forward.
+
+### Notes
+- **Not changed, intentionally:** the Alembic version table name
+  (`alembic_version_civiccore`), the three shipped migration revision IDs
+  (`civiccore_0001_baseline_v1`, `civiccore_0002_llm`,
+  `civiccore_0003_local_task_queue`) and their file names, the
+  `civiccore_local_tasks` table name, and the `consumer_app='civiccore'`
+  prompt-template DB default (`CIVICCORE_DEFAULT_APP`). These are already
+  persisted in every consuming module's database; renaming them here would
+  silently break existing deployments with no migration path. Historical/
+  evidence content (`docs/audits/`, `docs/ops/`, `docs/evidence/`,
+  `docs/qa/`, `docs/adr/`, `sprint-phase2-evidence/`, dated release
+  attestations, and this changelog's own pre-2026-08-12 entries) also keeps
+  the old names, since they describe or verify things as they actually were.
+- No functional change to any shipped behavior; this is a packaging/branding
+  rename only. `v1.2.1` remains the latest published release and is
+  unaffected (its wheel is still named `civiccore-1.2.1-py3-none-any.whl`).
 
 ## [1.2.1] - 2026-07-04
 

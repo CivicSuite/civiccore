@@ -1,4 +1,4 @@
-"""Tests for CivicCore Windows-local platform contracts."""
+"""Tests for Townlight Core Windows-local platform contracts."""
 
 from __future__ import annotations
 
@@ -6,7 +6,7 @@ from datetime import UTC, datetime, timedelta
 
 import pytest
 
-from civiccore.platform import (
+from townlight_core.platform import (
     BackupManifest,
     LocalRuntimeProfile,
     LocalTaskEnvelope,
@@ -31,7 +31,7 @@ def _module_manifest(module_id: str = "civicclerk", **overrides) -> ModuleManife
         "name": "CivicClerk",
         "version": "1.0.0",
         "package_name": "civicclerk",
-        "civiccore_min_version": "1.2.0",
+        "townlight_core_min_version": "1.2.0",
         "surfaces": ["staff", "admin"],
         "install_profiles": ["windows_local"],
         "permissions": [
@@ -129,12 +129,12 @@ def test_module_registry_blocks_missing_required_dependencies() -> None:
 
     registry = build_module_registry(
         [manifest],
-        civiccore_version="1.2.0",
+        townlight_core_version="1.2.0",
         selected_module_ids={"civicclerk"},
     )
 
     entry = registry.entries[0]
-    assert registry.civiccore_locked is True
+    assert registry.townlight_core_locked is True
     assert entry.status == "blocked"
     assert entry.enabled is False
     assert "civicrecords-ai" in (entry.reason or "")
@@ -143,7 +143,7 @@ def test_module_registry_blocks_missing_required_dependencies() -> None:
 def test_module_registry_enables_valid_windows_local_module() -> None:
     manifest = _module_manifest()
 
-    registry = build_module_registry([manifest], civiccore_version="1.2.0")
+    registry = build_module_registry([manifest], townlight_core_version="1.2.0")
 
     assert registry.enabled_module_ids == ["civicclerk"]
     assert registry.blocked_module_ids == []
@@ -237,7 +237,7 @@ def test_backup_manifest_validates_hashes_and_restore_safety(tmp_path) -> None:
         files=[payload],
         backup_id="backup-1",
         city_profile_id="sampleville",
-        civiccore_version="1.2.0",
+        townlight_core_version="1.2.0",
         module_id="civicclerk",
     )
 
@@ -272,7 +272,7 @@ def test_restore_plan_blocks_overwrite_by_default(tmp_path) -> None:
         files=[source],
         backup_id="backup-2",
         city_profile_id="sampleville",
-        civiccore_version="1.2.0",
+        townlight_core_version="1.2.0",
         module_id="civiccode",
     )
     plan = plan_restore(manifest, backup_root=backup_root, restore_root=restore_root)
@@ -282,7 +282,7 @@ def test_restore_plan_blocks_overwrite_by_default(tmp_path) -> None:
 
 
 def test_runtime_profile_and_action_result_are_local_first(tmp_path) -> None:
-    registry = build_module_registry([_module_manifest()], civiccore_version="1.2.0")
+    registry = build_module_registry([_module_manifest()], townlight_core_version="1.2.0")
 
     profile = LocalRuntimeProfile(
         profile_id="sampleville",
@@ -296,7 +296,7 @@ def test_runtime_profile_and_action_result_are_local_first(tmp_path) -> None:
         action="first_run",
         status="succeeded",
         title="Setup complete",
-        message="CivicSuite is ready on this computer.",
+        message="Townlight is ready on this computer.",
     )
 
     assert profile.local_only is True

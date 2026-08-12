@@ -1,4 +1,4 @@
-name: civiccore CI
+name: townlight-core CI
 
 on:
   pull_request:
@@ -25,7 +25,7 @@ jobs:
       - name: Pre-pull pgvector image
         run: docker pull pgvector/pgvector:pg17
 
-      - name: Install civiccore (editable, dev extras)
+      - name: Install townlight-core (editable, dev extras)
         run: |
           pip install --upgrade pip
           pip install -e .[dev]
@@ -106,5 +106,5 @@ jobs:
 
       - name: Accessibility gate (no browser surface)
         run: |
-          echo "CivicCore exposes shared backend contracts and has no operator-facing browser surface in this repo."
-          echo "Per-PR axe gates run in CivicRecords AI, CivicClerk, CivicCode, and the CivicSuite launcher."
+          echo "Townlight Core exposes shared backend contracts and has no operator-facing browser surface in this repo."
+          echo "Per-PR axe gates run in CivicRecords AI, CivicClerk, CivicCode, and the Townlight launcher."

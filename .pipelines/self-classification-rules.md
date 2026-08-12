@@ -12,7 +12,7 @@ Every line returned by a release-sweep grep gets exactly ONE classification:
 - `.github/workflows/*.yml` lines that pip-install a versioned URL
 - `README.md`, `USER-MANUAL.md`, install-instruction snippets describing current state
 - Test files asserting current pin URL or current version constant
-- Test fixture dicts like `{"civiccore": "1.0.0"}` (update value to new version)
+- Test fixture dicts like `{"townlight_core": "1.0.0"}` (update value to new version)
 - Compatibility matrix entries describing current pin
 - Source files with `EXPECTED_<DEP>_VERSION = "X.Y.Z"` constants
 
@@ -34,7 +34,7 @@ A grep hit is SHAPE-GUARD when ALL of these hold:
 - Updating X to the new version would pass trivially with no real coverage
 
 Examples:
-- `assert "civiccore==1.0.0" not in dependencies` - asserts no `==` pinning, version-independent
+- `assert "townlight_core==1.0.0" not in dependencies` - asserts no `==` pinning, version-independent
 - `assert "1.0.0.dev0" not in text` - asserts no stale dev marker, version-unrelated
 
 ### OWN-MODULE-VERSION - SKIP (do not edit during a dependency-bump sweep)
@@ -72,7 +72,7 @@ The fix-forward bound is: changes must touch only `.github/workflows/`, `scripts
 ### CONTRACT-CHANGE - HALT AND REPORT
 
 - Any source code change required
-- Any test asserting on dependency-removed behavior (e.g., civicclerk tests asserting on civiccore-removed `token_roles` field) - the auditor must approve the test update before the agent applies it
+- Any test asserting on dependency-removed behavior (e.g., civicclerk tests asserting on townlight_core-removed `token_roles` field) - the auditor must approve the test update before the agent applies it
 - Any cross-module dependency conflict
 - Any failure whose root cause requires a design decision
 
